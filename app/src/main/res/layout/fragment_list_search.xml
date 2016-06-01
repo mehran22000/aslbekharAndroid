@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/silver_light_2">
+
+    <TextView
+        android:id="@+id/verificationTips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/red_light"
+        android:textColor="@color/black"
+        android:padding="10dp"
+        android:visibility="gone"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:text="@string/tips_to_verify_product"/>
+
+
+    <EditText
+        android:id="@+id/searchEditText"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:hint="@string/search"
+        android:paddingRight="40dp"
+        android:paddingLeft="10dp"
+        android:background="@color/silver_light_2"
+        android:layout_below="@+id/verificationTips"/>
+
+    <ImageView
+        android:id="@+id/searchClear"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/searchEditText"
+        android:layout_alignBottom="@+id/searchEditText"
+        android:padding="6dp"
+        android:layout_alignParentRight="true"
+        android:tag="0"
+        android:visibility="visible"
+        android:src="@drawable/search"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_below="@+id/searchEditText"
+        android:layout_above="@+id/offlineLay"
+        android:visibility="visible" />
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/searchEditText"
+        android:src="@drawable/shadow_from_top" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        style="@style/progressBarStyle"
+        android:layout_centerInParent="true" />
+
+    <include
+        android:id="@+id/nodata"
+        layout="@layout/nodata" />
+
+    <RelativeLayout
+        android:id="@+id/offlineLay"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/offlineColor"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/offline_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:gravity="center"
+                android:text="@string/you_are_offline" />
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

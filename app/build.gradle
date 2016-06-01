@@ -1,0 +1,86 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        release {
+            keyAlias 'alias_name'
+            keyPassword 'original4all'
+            storeFile file('C:/Users/Amin/Dropbox/Android/Projects/Key Stores/aslbekhar.keystore')
+            storePassword 'original4all'
+        }
+        debug {
+            keyAlias 'alias_name'
+            keyPassword 'original4all'
+            storeFile file('C:/Users/Amin/Dropbox/Android/Projects/Key Stores/aslbekhar.keystore')
+            storePassword 'original4all'
+        }
+
+//        debug {
+//            keyAlias 'E-Mahd'
+//            keyPassword 'arsewqd'
+//            storeFile file('C:/Users/Amin/Dropbox/Android/Projects/Key Stores/emahd.jks')
+//            storePassword 'arsewqd'
+//        }
+    }
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+    dexOptions {
+        maxProcessCount 2
+        javaMaxHeapSize "2g"
+    }
+
+    defaultConfig {
+        applicationId "com.ionicframework.aslbekhar192325"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "0.1"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
+
+    //google analytics
+    compile 'com.google.android.gms:play-services-analytics:9.0.1'
+
+    // Google Volley for network
+    compile 'com.android.volley:volley:1.0.0'
+
+    // Alibaba fastjson Library for json parsing
+    compile 'com.alibaba:fastjson:1.2.11'
+
+    // Google Gson, alternative json parsing
+    compile 'com.google.code.gson:gson:2.6.2'
+
+    // Glide for image loading
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+
+    // Caligraphy for changing typefaces
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+
+    // Google Maps
+    compile 'com.google.android.gms:play-services-maps:9.0.1'
+    compile 'com.google.android.gms:play-services-location:9.0.1'
+
+    //GCM
+    compile "com.google.android.gms:play-services-gcm:9.0.1"
+
+
+    // Material widgets
+    compile 'com.github.rey5137:material:1.2.2.1-SNAPSHOT'
+}

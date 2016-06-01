@@ -1,0 +1,23 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="tab_max_width">264dp</dimen>
+    <dimen name="tab_padding_bottom">16dp</dimen>
+    <dimen name="tab_label">14sp</dimen>
+    <dimen name="custom_tab_layout_height">72dp</dimen>
+    <dimen name="item_title_ts_smaller">13sp</dimen>
+    <dimen name="item_title_ts_larger">17sp</dimen>
+
+    // city list
+    <dimen name="item_city_margin">8dp</dimen>
+    <dimen name="item_city_image_h">100dp</dimen>
+
+    // store list
+    <dimen name="item_store_h">190dp</dimen>
+    <dimen name="item_store_h_sale">260dp</dimen>
+    <dimen name="item_store_image_h">80dp</dimen>
+    <dimen name="item_store_image_h_sale">110dp</dimen>
+    <dimen name="item_store_sale_percentage_ts">35dp</dimen>
+
+</resources>

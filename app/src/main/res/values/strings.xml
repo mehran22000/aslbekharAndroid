@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Asl Bekhar Android</string>
+    <string name="app_name_persian">اصل بخر</string>
+    <string name="i_allow">اجازه میدم</string>
+
+    <string name="tabExplore">لیست</string>
+    <string name="tabMap">نزدیک من</string>
+    <string name="tabSale">تخفیف ها</string>
+    <string name="tabMyStore">فروشگاه من</string>
+
+    // Strings
+    <string name="no_item_to_show">هیج آیتمی برای نمایش وجود ندارد</string>
+    <string name="call">تماس</string>
+    <string name="show_on_map">نمایش روی نقشه</string>
+    <string name="you_are_offline">شما به اینترنت وصل نیستید</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+    completions."</string>
+    <string name="no_sales_around_you">حراجی در اطراف شما پیدا نشد.</string>
+    <string name="gcm_SenderId">472796603076</string>
+    <string name="search">جست و جو</string>
+    <string name="you_need_yo_turn_on_gps">برای این که بتوانید فروشکاه های اطراف خود را ببینید باید GPS گوشی خود را روشن کنید</string>
+    <string name="location_access_denied">شما اجازه دسترسی به GPS رو ندادید، برای این که بتوانید فروشکاه های اطراف خود را ببینید باید اجازه دسترسی بدهید، آیا می خواهید یک بار دیگر امتحان کنید و دسترسی دهید؟</string>
+    <string name="gps_is_off">GPS خاموش است</string>
+    <string name="ok_lets_turn_it_on">باشه، بریم روشن کنیم</string>
+    <string name="no_idont_want">نه نمیخوام</string>
+    <string name="gps_turned_on_succesfully">شما GPS رو با موفقیت روشن کردید</string>
+    <string name="ok">باشه</string>
+    <string name="gps_didnt_turn_on">متاسفانه GPS روشن نشد، آیا میخواهید دوباره تلاش کنید؟</string>
+    <string name="ok_i_try_again">باشه، دوباره سعی میکنم</string>
+    <string name="tips_to_verify_product">نکاتی برای تشخیص کالای اصل از غیر اصل</string>
+
+</resources>

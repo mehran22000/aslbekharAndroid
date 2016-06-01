@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_centerHorizontal="true"
+        android:padding="1dp"
+        android:background="@drawable/map_infowindow_back">
+
+        <ImageView
+            android:id="@+id/brandLogo"
+            android:layout_width="@dimen/item_store_image_h_sale"
+            android:layout_height="@dimen/item_store_image_h_sale"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/item_store_image_h"
+            android:layout_height="@dimen/item_store_image_h"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/transparent" />
+
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/brandLogo"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="2dp"
+            android:textColor="@color/textColorPrimaryInverse"
+            android:textSize="@dimen/item_title_ts_larger" />
+
+        <TextView
+            android:id="@+id/workHour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/title"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@+id/brandLogo"
+            android:gravity="right"
+            android:maxLines="1"
+            android:padding="2dp"
+            android:textColor="@color/textColorPrimaryInverse"
+            android:textSize="@dimen/item_title_ts_smaller" />
+
+        <TextView
+            android:id="@+id/tell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/workHour"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@+id/brandLogo"
+            android:gravity="right"
+            android:maxLines="1"
+            android:padding="2dp"
+            android:textColor="@color/textColorPrimaryInverse"
+            android:textSize="@dimen/item_title_ts_smaller" />
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tell"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@+id/brandLogo"
+            android:gravity="right"
+            android:maxLines="1"
+            android:padding="2dp"
+            android:textColor="@color/textColorPrimaryInverse"
+            android:textSize="@dimen/item_title_ts_smaller" />
+    </RelativeLayout>
+
+</RelativeLayout>
