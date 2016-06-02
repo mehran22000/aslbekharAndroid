@@ -47,11 +47,13 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     private boolean mResolvingError = false;
     private static int REQUEST_RESOLVE_ERROR = 9003;
     private static final String DIALOG_ERROR = "dialog_error";
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // we will start off by checking for the permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (
                 ActivityCompat.checkSelfPermission(getApplicationContext(),
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -62,6 +64,7 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
             requestForPermission();
 
         } else {
+            // if permissions we are already ok, we will check for if gps is on or not
             checkForGPS();
         }
     }
@@ -149,7 +152,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(getString(R.string.gps_didnt_turn_on))
-                        .setIcon(getResources().getDrawable(R.drawable.icon))
                         .setPositiveButton(getString(R.string.ok_i_try_again), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
