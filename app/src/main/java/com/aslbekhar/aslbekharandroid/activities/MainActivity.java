@@ -17,6 +17,7 @@ import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity implements Interfaces.MainActivityInterface , Interfaces.OfflineInterface{
 
@@ -32,6 +33,10 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     };
     private List<String> tabTitles = null;
     private boolean offlineMode = false;
+
+    // for keeping record of previous tabs, for clicking on back
+    Stack<Integer> tabStack = new Stack<>();
+    int currentTab = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +75,41 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
         tabLayout.getTabAt(1).setIcon(tabIcons[1]);
         tabLayout.getTabAt(2).setIcon(tabIcons[2]);
         tabLayout.getTabAt(3).setIcon(tabIcons[3]);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                // adding previous tab to stack
+                tabStack.push(currentTab);
+                currentTab = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
+
 
     @Override
     public void onBackPressed()
     {
         if(!BackStackFragment.handleBackPressed(getSupportFragmentManager())){
-            super.onBackPressed();
+            if (tabStack.size() > 0){
+                currentTab = tabStack.pop();
+                viewPager.setCurrentItem(currentTab, true);
+                if (tabStack.size() > 0 && tabStack.peek() == currentTab){
+                    tabStack.pop();
+                }
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
