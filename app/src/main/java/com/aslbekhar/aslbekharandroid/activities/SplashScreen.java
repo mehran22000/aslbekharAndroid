@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -19,20 +20,29 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
+import com.alibaba.fastjson.JSON;
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.models.BrandModel;
+import com.aslbekhar.aslbekharandroid.models.CityModel;
+import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
+import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.rey.material.widget.ProgressView;
 
 import static android.provider.Settings.Secure;
 import static android.provider.Settings.SettingNotFoundException;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_LIST;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DATA_PROCESSED_OR_NOT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.GPS_ON_OR_OFF;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.PLAY_SERVICES_ON_OR_OFF;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
-import static com.google.android.gms.common.GooglePlayServicesUtil.isGooglePlayServicesAvailable;
-import static com.google.android.gms.common.GooglePlayServicesUtil.isUserRecoverableError;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 
 /**
  * Created by Amin on 11/30/2015.
@@ -52,20 +62,18 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.splash_layout);
         // we will start off by checking for the permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (
                 ActivityCompat.checkSelfPermission(getApplicationContext(),
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         || ActivityCompat.checkSelfPermission(getApplicationContext(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-
-            setContentView(R.layout.splash_layout);
             requestForPermission();
 
         } else {
             // if permissions we are already ok, we will check for if gps is on or not
-            checkForGPS();
+            continueToCheckGps();
         }
     }
 
@@ -76,7 +84,7 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    private void checkForGPS() {
+    private void continueToCheckGps() {
         if (!isGpsEnabled(this)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(getString(R.string.gps_is_off))
@@ -108,19 +116,31 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         } else {
             Snippets.setSP(GPS_ON_OR_OFF, FALSE);
         }
-        int resultCode = isGooglePlayServicesAvailable(this);
-        if (resultCode == ConnectionResult.SUCCESS || !GPSOnOrOFF){
-            openMainActivity();
-        } else {
-            if (isUserRecoverableError(resultCode)){
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        googleApiClient.connect();
+    }
 
-                googleApiClient = new GoogleApiClient.Builder(this)
-                        .addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this)
-                        .addApi(LocationServices.API)
-                        .build();
-            }
+    private void continueToCheckForData(boolean playServiceOnOrOff) {
+        if (playServiceOnOrOff) {
+            Snippets.setSP(PLAY_SERVICES_ON_OR_OFF, TRUE);
+        } else {
+            Snippets.setSP(PLAY_SERVICES_ON_OR_OFF, FALSE);
         }
+
+        if (getSP(DATA_PROCESSED_OR_NOT).equals(FALSE)){
+            ProgressView progressView = (ProgressView) findViewById(R.id.progressBar);
+            progressView.start();
+
+            DataProcessing dataProcessing = new DataProcessing();
+            dataProcessing.execute();
+        } else {
+            openMainActivity();
+        }
+
     }
 
     private void openMainActivity() {
@@ -221,7 +241,7 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
                                            @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST) {
             if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                checkForGPS();
+                continueToCheckGps();
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(getString(R.string.location_access_denied))
@@ -269,11 +289,12 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        continueToCheckForData(true);
     }
 
     @Override
     public void onConnectionSuspended(int i) {
+        continueToCheckForData(true);
 
     }
 
@@ -310,7 +331,7 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     /* Called from ErrorDialogFragment when the dialog is dismissed. */
     public void onDialogDismissed() {
         mResolvingError = false;
-        openMainActivity();
+        continueToCheckForData(false);
     }
 
     /* A fragment to display an error dialog */
@@ -329,5 +350,45 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         public void onDismiss(DialogInterface dialog) {
             ((SplashScreen) getActivity()).onDialogDismissed();
         }
+    }
+
+    private class DataProcessing extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+
+            String json = getSP(CITY_LIST);
+            if (json.equals(FALSE)) {
+                StaticData.getCityModelList().add(new CityModel("021", "تهران", "Tehran"));
+                StaticData.getCityModelList().add(new CityModel("031", "اصفهان", "Isfahan"));
+                StaticData.getCityModelList().add(new CityModel("076", "کیش", "Kish"));
+                StaticData.getCityModelList().add(new CityModel("071", "شیراز", "Shiraz"));
+                StaticData.getCityModelList().add(new CityModel("041", "تبريز", "Tabriz"));
+                StaticData.getCityModelList().add(new CityModel("051", "مشهد", "Mashhad"));
+                setSP(CITY_LIST, JSON.toJSONString(StaticData.getCityModelList()));
+            } else {
+                StaticData.setCityModelList(JSON.parseArray(json, CityModel.class));
+            }
+
+            StaticData.setBrandModelList(BrandModel.getBrandListFromAssets());
+
+            StoreModel.getStoreListFromAssets();
+
+            setSP(DATA_PROCESSED_OR_NOT, TRUE);
+
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            openMainActivity();
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
     }
 }

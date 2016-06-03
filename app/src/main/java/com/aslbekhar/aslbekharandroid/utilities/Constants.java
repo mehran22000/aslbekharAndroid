@@ -53,6 +53,8 @@ public class Constants {
     public static String SENT_TOKEN_TO_SERVER = "SENT_TOKEN_TO_SERVER";
     public static String REGISTRATION_COMPLETE = "REGISTRATION_COMPLETE";
     public static String GPS_ON_OR_OFF = "GPS_ON_OR_OFF";
+    public static String PLAY_SERVICES_ON_OR_OFF = "PLAY_SERVICES_ON_OR_OFF";
+    public static String DATA_PROCESSED_OR_NOT = "DATA_PROCESSED_OR_NOT";
 
 
 

@@ -69,8 +69,8 @@ public class BrandModel {
 
     public static List<BrandModel> getBrandListFromAssets() {
         List<BrandModel> brandModelList = null;
-        if (getSP(BRAND_LIST).equals(FALSE)) {
-            String json = null;
+        String json = getSP(BRAND_LIST);
+        if (json.equals(FALSE)) {
             try {
                 InputStream is = AppController.getInstance().getAssets().open("BrandList.txt");
                 int size = is.available();
