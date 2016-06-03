@@ -9,6 +9,9 @@ public class CityModel {
     String persianName;
     String englishName;
 
+    public CityModel() {
+    }
+
     public CityModel(String id, String persianName, String englishName) {
         this.id = id;
         this.persianName = persianName;

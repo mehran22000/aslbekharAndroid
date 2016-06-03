@@ -31,6 +31,12 @@ public class Constants {
     // D2
     public static String BRAND_LOGO_URL = WEB_SERVER + "images/logos/";
 
+
+
+    //ADVERTISEMENT LINKS
+    public static String CITY_TO_CAT_ADVERTISEMENT = WEB_SERVER + "/images/ads/fullpage/ad.";
+
+
     //AMIN: Name Strings:
     public static String LOG_TAG = "****AMIN ** DEBUG****";
     public static String BRAND_LIST_DOWNLOAD = "BRAND_LIST_DOWNLOAD";
@@ -109,6 +115,8 @@ public class Constants {
 
     //AMIN Numbers:
     public static int DIFAULT_DISTANCE = 10;
+    public static int ADVERTISEMENT_TIMEOUT = 4000;
+    public static int ADVERTISEMENT_VIEW_TIMEOUT = 3000;
     public static int NOTIFICATION_CHECK_INTERVAL = 30 * 60 * 1000;
     public static final int VOLLEY_TIME_OUT = 25000;
     public static int COUNT = 7;

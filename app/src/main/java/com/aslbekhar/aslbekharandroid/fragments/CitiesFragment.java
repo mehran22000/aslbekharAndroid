@@ -3,6 +3,7 @@ package com.aslbekhar.aslbekharandroid.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -21,11 +22,19 @@ import com.aslbekhar.aslbekharandroid.adapters.CityListAdapter;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.aslbekhar.aslbekharandroid.utilities.StaticData;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.rey.material.widget.ProgressView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
@@ -44,6 +53,12 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
     List<CityModel> modelList = StaticData.getCityModelList();
     List<CityModel> modelListToShow = new ArrayList<>();
     LinearLayoutManager layoutManager;
+
+    boolean fullScreenAdvertiseTimer = false;
+    boolean fullScreenAdvertiseSecondTimer = false;
+    ImageView fullScreenAdImageView;
+    ImageView listOverLay;
+    ProgressView progressView;
 
     public CitiesFragment() {
 
@@ -105,6 +120,10 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
             }
         });
 
+        fullScreenAdImageView = (ImageView) view.findViewById(R.id.fullScreenAdvertise);
+        listOverLay = (ImageView) view.findViewById(R.id.listOverLay);
+        progressView = (ProgressView) view.findViewById(R.id.progressBar);
+
         recyclerView = (RecyclerView) view.findViewById(R.id.listView);
 
         recyclerView.setHasFixedSize(true);
@@ -124,7 +143,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
                     @Override
                     public void onItemClick(View view, int position) {
 
-                        openCityStoreList(modelListToShow.get(position));
+                        checkForAdvertisement(modelListToShow.get(position));
 
                     }
                 })
@@ -181,8 +200,76 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
         }
     }
 
-    private void openCityStoreList(CityModel model) {
+    private void checkForAdvertisement(final CityModel model) {
 
+        fullScreenAdvertiseTimer = true;
+        Snippets.showFade(listOverLay, true, 500);
+        progressView.start();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (fullScreenAdvertiseTimer) {
+                    fullScreenAdvertiseTimer = false;
+                    openCatListFragment(model);
+                }
+            }
+        }, ADVERTISEMENT_TIMEOUT);
+
+
+        Glide.with(this)
+//                .load(CITY_TO_CAT_ADVERTISEMENT + model.getId() + ".png")
+                .load("http://digiato.com/wp-content/uploads/2016/06/LIFAN-1-1.jpg")
+                .listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target, boolean isFirstResource) {
+                if (fullScreenAdvertiseTimer) {
+                    fullScreenAdvertiseTimer = false;
+                    openCatListFragment(model);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                if (fullScreenAdvertiseTimer) {
+                    fullScreenAdvertiseTimer = false;
+                    fullScreenAdImageView.setVisibility(View.VISIBLE);
+                    progressView.stop();
+                    listOverLay.setVisibility(View.GONE);
+                    fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            fullScreenAdvertiseSecondTimer = false;
+                            openCatListFragment(model);
+                        }
+                    });
+                    fullScreenAdvertiseSecondTimer = true;
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (fullScreenAdvertiseSecondTimer) {
+                                fullScreenAdvertiseSecondTimer = false;
+                                openCatListFragment(model);
+                            }
+                        }
+                    }, ADVERTISEMENT_VIEW_TIMEOUT);
+                    return false;
+
+                } else {
+                    return true;
+                }
+            }
+        }).into(fullScreenAdImageView);
+
+
+
+    }
+
+    private void openCatListFragment(CityModel model) {
+
+        fullScreenAdvertiseTimer = false;
+        fullScreenAdvertiseSecondTimer = false;
         Bundle bundle = new Bundle();
         bundle.putString(CITY_CODE, model.getId());
         bundle.putString(CITY_NAME, model.getPersianName());
@@ -192,7 +279,13 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
 
         callBack.openNewContentFragment(fragment);
 
-
+        if (fullScreenAdImageView.getVisibility() == View.VISIBLE){
+            fullScreenAdImageView.setVisibility(View.GONE);
+        }
+        if (listOverLay.getVisibility() == View.VISIBLE) {
+            Snippets.showFade(listOverLay, true, 500);
+        }
+        progressView.stop();
     }
 
     @Override

@@ -68,7 +68,7 @@ public class NetworkRequests {
                 return params;
             }
         };
-        ;
+
 
         strReq.setRetryPolicy(new DefaultRetryPolicy(
                 VOLLEY_TIME_OUT,
