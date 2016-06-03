@@ -21,7 +21,7 @@ public class StaticData {
     private static List<BrandModel> brandModelList = new ArrayList<>();
 
     public static List<BrandModel> getBrandModelList() {
-        if (brandModelList == null) {
+        if (brandModelList == null || brandModelList.size() == 0) {
             brandModelList = JSON.parseArray(getSP(BRAND_LIST), BrandModel.class);
         }
         return brandModelList;
@@ -32,7 +32,7 @@ public class StaticData {
     }
 
     public static List<CityModel> getCityModelList() {
-        if (cityModelList == null) {
+        if (cityModelList == null || cityModelList.size() == 0) {
             cityModelList = JSON.parseArray(getSP(CITY_LIST), CityModel.class);
         }
         return cityModelList;

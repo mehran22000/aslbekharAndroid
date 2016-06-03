@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/silver_light_2">
 
     <TextView
@@ -57,17 +58,37 @@
         android:layout_below="@+id/searchEditText"
         android:src="@drawable/shadow_from_top" />
 
-    <ProgressBar
+    <ImageView
+        android:id="@+id/listOverLay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/offlineLay"
+        android:layout_below="@+id/sliderLay"
+        android:background="@color/colorListOverLay"
+        android:visibility="gone"/>
+
+    <com.rey.material.widget.ProgressView
         android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
         style="@style/progressBarStyle"
-        android:layout_centerInParent="true" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:visibility="visible"
+        app:cpd_strokeSize="1dp"
+        app:pv_autostart="false"
+        app:pv_circular="true"
+        app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
+        app:pv_progressMode="indeterminate" />
 
     <include
         android:id="@+id/nodata"
         layout="@layout/nodata" />
+
+    <ImageView
+        android:id="@+id/fullScreenAdvertise"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
 
     <RelativeLayout
         android:id="@+id/offlineLay"
