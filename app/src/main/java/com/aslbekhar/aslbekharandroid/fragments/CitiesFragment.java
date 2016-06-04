@@ -205,6 +205,12 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
 
         fullScreenAdvertiseTimer = true;
         Snippets.showFade(listOverLay, true, 500);
+        listOverLay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         progressView.start();
 
         new Handler().postDelayed(new Runnable() {
@@ -222,7 +228,8 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
                 .load(Constants.CITY_TO_CAT_FULL_AD + model.getId() + ".png")
                 .listener(new RequestListener<String, GlideDrawable>() {
             @Override
-            public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target, boolean isFirstResource) {
+            public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target,
+                                       boolean isFirstResource) {
                 if (fullScreenAdvertiseTimer) {
                     fullScreenAdvertiseTimer = false;
                     openCatListFragment(model);
@@ -231,7 +238,8 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
             }
 
             @Override
-            public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+            public boolean onResourceReady(GlideDrawable resource,
+                                           String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                 if (fullScreenAdvertiseTimer) {
                     fullScreenAdvertiseTimer = false;
                     fullScreenAdImageView.setVisibility(View.VISIBLE);
