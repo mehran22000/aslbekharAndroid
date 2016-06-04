@@ -3,6 +3,7 @@ package com.aslbekhar.aslbekharandroid.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,21 +28,31 @@ import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.rey.material.widget.ProgressView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_STORE_URL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEFAULT_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showSlideUp;
 
 /**
  * Created by Amin on 19/05/2016.
@@ -58,6 +69,13 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
     LinearLayoutManager layoutManager;
     String cityCode = "";
     boolean fragmentAlive;
+
+    boolean fullScreenAdvertiseTimer = false;
+    boolean fullScreenAdvertiseSecondTimer = false;
+    ImageView fullScreenAdImageView;
+    ImageView bannerAdImageView;
+    ImageView listOverLay;
+    ProgressView progressView;
 
     public CatListFragment() {
 
@@ -81,6 +99,13 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
         if (getArguments() != null && getArguments().getBoolean(OFFLINE_MODE, false)){
             view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         }
+
+        fullScreenAdImageView = (ImageView) view.findViewById(R.id.fullScreenAdvertise);
+        listOverLay = (ImageView) view.findViewById(R.id.listOverLay);
+        progressView = (ProgressView) view.findViewById(R.id.progressBar);
+
+        bannerAdImageView = (ImageView) view.findViewById(R.id.bannerAdvertise);
+        checkForBannerAdvertise();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listView);
 
@@ -149,21 +174,106 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
                         @Override
                         public void onItemClick(View view, int position) {
 
-                            Bundle bundle = new Bundle();
-                            bundle.putString(CITY_CODE, getArguments().getString(CITY_CODE));
-                            bundle.putString(CITY_NAME, getArguments().getString(CITY_NAME));
-                            bundle.putString(CAT_NAME, modelListToShow.get(position).getTitle());
-
-                            BrandListFragment fragment = new BrandListFragment();
-                            fragment.setArguments(bundle);
-
-                            callBack.openNewContentFragment(fragment);
+                            checkForAdvertisement(position);
 
                         }
                     })
             );
         }
         return view;
+    }
+
+    private void checkForBannerAdvertise(){
+        Glide.with(this)
+                .load(CAT_BANNER_AD + cityCode + ".png")
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String StringModel,
+                                               Target<GlideDrawable> target, boolean isFirstResource) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        showSlideUp(bannerAdImageView, true, getContext());
+                        return false;
+                    }
+                }).into(bannerAdImageView);
+    }
+
+    private void openBrandListFragment(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CITY_CODE, getArguments().getString(CITY_CODE));
+        bundle.putString(CITY_NAME, getArguments().getString(CITY_NAME));
+        bundle.putString(CAT_NAME, modelListToShow.get(position).getTitle());
+
+        BrandListFragment fragment = new BrandListFragment();
+        fragment.setArguments(bundle);
+
+        callBack.openNewContentFragment(fragment);
+    }
+
+    private void checkForAdvertisement(final int position) {
+
+        fullScreenAdvertiseTimer = true;
+        Snippets.showFade(listOverLay, true, 500);
+        progressView.start();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (fullScreenAdvertiseTimer) {
+                    fullScreenAdvertiseTimer = false;
+                    openBrandListFragment(position);
+                }
+            }
+        }, ADVERTISEMENT_TIMEOUT);
+
+
+        Glide.with(this)
+                .load(CITY_TO_CAT_FULL_AD + cityCode + '.' + modelListToShow.get(position).getTitle() + ".png")
+//                .load("http://digiato.com/wp-content/uploads/2016/06/LIFAN-1-1.jpg")
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target, boolean isFirstResource) {
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            openBrandListFragment(position);
+                        }
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            fullScreenAdImageView.setVisibility(View.VISIBLE);
+                            progressView.stop();
+                            listOverLay.setVisibility(View.GONE);
+                            fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    fullScreenAdvertiseSecondTimer = false;
+                                    openBrandListFragment(position);
+                                }
+                            });
+                            fullScreenAdvertiseSecondTimer = true;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (fullScreenAdvertiseSecondTimer) {
+                                        fullScreenAdvertiseSecondTimer = false;
+                                        openBrandListFragment(position);
+                                    }
+                                }
+                            }, ADVERTISEMENT_VIEW_TIMEOUT);
+                            return false;
+
+                        } else {
+                            return true;
+                        }
+                    }
+                }).into(fullScreenAdImageView);
     }
 
     private void performSearch(String search) {

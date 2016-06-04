@@ -34,7 +34,9 @@ public class Constants {
 
 
     //ADVERTISEMENT LINKS
-    public static String CITY_TO_CAT_ADVERTISEMENT = WEB_SERVER + "/images/ads/fullpage/ad.";
+    public static String CITY_TO_CAT_FULL_AD = WEB_SERVER + "/images/ads/fullpage/ad.";
+    public static String CAT_BANNER_AD = WEB_SERVER + "/images/ads/banner/ad.";
+    public static String BRAND_VERIFICATION_IMAGE = WEB_SERVER + "/images/verifications/";
 
 
     //AMIN: Name Strings:
@@ -94,6 +96,8 @@ public class Constants {
     public static String CITY_NAME = "CITY_NAME";
     public static String CAT_NAME = "CAT_NAME";
     public static String BRAND_ID = "BRAND_ID";
+    public static String BRAND_NAME = "BRAND_NAME";
+    public static String VERIFICATION_TIPS = "VERIFICATION_TIPS";
     public static String OFFLINE_MODE = "OFFLINE_MODE";
 
     public static String LATITUDE = "LATITUDE";

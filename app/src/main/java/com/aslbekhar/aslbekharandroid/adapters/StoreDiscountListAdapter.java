@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.fragments.DealNearByFragments;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.StoreDiscountModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
@@ -34,11 +34,11 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
 
     List<StoreDiscountModel> modelList;
     Context context;
-    private Fragment fragment;
+    private DealNearByFragments fragment;
     private String cityCode;
 
     public StoreDiscountListAdapter(List<StoreDiscountModel> modelList,
-                                    Context context, Fragment fragment, String cityCode) {
+                                    Context context, DealNearByFragments fragment, String cityCode) {
         this.modelList = modelList;
         this.context = context;
         this.fragment = fragment;
@@ -125,7 +125,7 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
         holder.showOnMapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                fragment.showOnMap(model);
             }
         });
 
