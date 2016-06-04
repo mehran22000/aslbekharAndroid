@@ -3,6 +3,7 @@ package com.aslbekhar.aslbekharandroid.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,17 +26,28 @@ import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.rey.material.widget.ProgressView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_URL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showSlideUp;
 
 /**
  * Created by Amin on 19/05/2016.
@@ -45,11 +57,19 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
     View view;
     Interfaces.MainActivityInterface callBack;
     String cityCode;
+    String catName;
     RecyclerView recyclerView;
     BrandListAdapter adapter;
     List<BrandModel> modelList;
     List<BrandModel> modelListToShow = new ArrayList<>();
     LinearLayoutManager layoutManager;
+
+    boolean fullScreenAdvertiseTimer = false;
+    boolean fullScreenAdvertiseSecondTimer = false;
+    ImageView fullScreenAdImageView;
+    ImageView bannerAdImageView;
+    ImageView listOverLay;
+    ProgressView progressView;
 
     public BrandListFragment() {
 
@@ -59,7 +79,8 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cityCode = getArguments().getString(CITY_CODE);
-    };
+        catName = getArguments().getString(CAT_NAME);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,7 +90,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
         setupUI(view);
 
 
-        if (getArguments() != null && getArguments().getBoolean(OFFLINE_MODE, false)){
+        if (getArguments() != null && getArguments().getBoolean(OFFLINE_MODE, false)) {
             view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         }
 
@@ -89,11 +110,11 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
             @Override
             public void afterTextChanged(Editable s) {
                 performSearch(s.toString());
-                if (s.length() > 0){
-                    ((ImageView)view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search_clear);
+                if (s.length() > 0) {
+                    ((ImageView) view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search_clear);
                     view.findViewById(R.id.searchClear).setTag(R.drawable.search_clear);
                 } else {
-                    ((ImageView)view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search);
+                    ((ImageView) view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search);
                     view.findViewById(R.id.searchClear).setTag(R.drawable.search);
                 }
             }
@@ -104,7 +125,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
                 int tag = 0;
                 try {
                     tag = (int) v.getTag();
-                } catch (Exception ignored){
+                } catch (Exception ignored) {
                 }
                 if (tag == R.drawable.search_clear) {
                     performSearch("");
@@ -113,9 +134,16 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
             }
         });
 
+        fullScreenAdImageView = (ImageView) view.findViewById(R.id.fullScreenAdvertise);
+        listOverLay = (ImageView) view.findViewById(R.id.listOverLay);
+        progressView = (ProgressView) view.findViewById(R.id.progressBar);
+
+        bannerAdImageView = (ImageView) view.findViewById(R.id.bannerAdvertise);
+        checkForBannerAdvertise();
+
         recyclerView = (RecyclerView) view.findViewById(R.id.listView);
 
-        modelList = BrandModel.getBrandListBasedOnCat(cityCode, getArguments().getString(CAT_NAME));
+        modelList = BrandModel.getBrandListBasedOnCat(cityCode, catName);
 
         NetworkRequests.getRequest(BRAND_LIST_URL, this, BRAND_LIST_DOWNLOAD);
 
@@ -135,7 +163,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        openStoreListFragment(modelListToShow.get(position));
+                        checkForAdvertisement(modelListToShow.get(position));
                     }
                 })
         );
@@ -144,11 +172,96 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
     }
 
 
+
+    private void checkForBannerAdvertise(){
+        Glide.with(this)
+                .load(CAT_BANNER_AD + cityCode + "." + catName + ".png")
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String StringModel,
+                                               Target<GlideDrawable> target, boolean isFirstResource) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        showSlideUp(bannerAdImageView, true, getContext());
+                        return false;
+                    }
+                }).into(bannerAdImageView);
+    }
+
+
+    private void checkForAdvertisement(final BrandModel model) {
+
+        fullScreenAdvertiseTimer = true;
+        Snippets.showFade(listOverLay, true, 500);
+        progressView.start();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (fullScreenAdvertiseTimer) {
+                    fullScreenAdvertiseTimer = false;
+                    openStoreListFragment(model);
+                }
+            }
+        }, ADVERTISEMENT_TIMEOUT);
+
+
+        Glide.with(this)
+                .load(CITY_TO_CAT_FULL_AD + cityCode + '.' + catName + model.getbName() + ".png")
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target, boolean isFirstResource) {
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            openStoreListFragment(model);
+                        }
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            fullScreenAdImageView.setVisibility(View.VISIBLE);
+                            progressView.stop();
+                            listOverLay.setVisibility(View.GONE);
+                            fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    fullScreenAdvertiseSecondTimer = false;
+                                    openStoreListFragment(model);
+                                }
+                            });
+                            fullScreenAdvertiseSecondTimer = true;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (fullScreenAdvertiseSecondTimer) {
+                                        fullScreenAdvertiseSecondTimer = false;
+                                        openStoreListFragment(model);
+                                    }
+                                }
+                            }, ADVERTISEMENT_VIEW_TIMEOUT);
+                            return false;
+
+                        } else {
+                            return true;
+                        }
+                    }
+                }).into(fullScreenAdImageView);
+
+
+    }
+
+
     private void performSearch(String search) {
         modelListToShow.clear();
         if (!search.equals("")) {
             for (BrandModel model : modelList) {
-                if (model.getbName().toLowerCase().contains(search.toLowerCase())){
+                if (model.getbName().toLowerCase().contains(search.toLowerCase())) {
                     modelListToShow.add(model);
                 }
             }
@@ -194,6 +307,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
         bundle.putString(CITY_CODE, cityCode);
         bundle.putString(CAT_NAME, getArguments().getString(CAT_NAME));
         bundle.putString(BRAND_ID, brandModel.getbId());
+        bundle.putString(BRAND_NAME, brandModel.getbName());
 
         StoreListFragment fragment = new StoreListFragment();
         fragment.setArguments(bundle);
@@ -216,7 +330,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (brandModelList != null){
+                if (brandModelList != null) {
                     Snippets.setSP(BRAND_LIST, response);
                 }
             }

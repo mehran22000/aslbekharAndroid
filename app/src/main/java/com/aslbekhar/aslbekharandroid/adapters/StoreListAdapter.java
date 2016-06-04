@@ -14,8 +14,13 @@ import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.fragments.StoreListFragment;
+import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -53,7 +58,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
     }
 
     @Override
-    public void onBindViewHolder(GroupViewHolder holder, int position) {
+    public void onBindViewHolder(final GroupViewHolder holder, int position) {
         final StoreModel model = modelList.get(position);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/theme.ttf");
         holder.title.setText(model.getsName());
@@ -104,6 +109,24 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
         });
 
 
+
+        Glide.with(fragment)
+                .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
+                .listener(new RequestListener<Uri, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
+                        Glide.with(fragment).load(Constants.BRAND_LOGO_URL +
+                                BrandModel.getBrandLogo(model.getbName()) + ".png").into(holder.brandLogo);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        return false;
+                    }
+                })
+                .into(holder.brandLogo);
+
     }
 
     public static class GroupViewHolder extends RecyclerView.ViewHolder {
@@ -112,6 +135,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
         TextView workHour;
         TextView tell;
         TextView address;
+        ImageView brandLogo;
         ImageView image;
         View callBtn;
         View showOnMapBtn;
@@ -124,6 +148,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
             tell = (TextView) itemView.findViewById(R.id.tell);
             address = (TextView) itemView.findViewById(R.id.address);
             image = (ImageView) itemView.findViewById(R.id.image);
+            brandLogo = (ImageView) itemView.findViewById(R.id.brandLogo);
             callBtn = itemView.findViewById(R.id.callLay);
             showOnMapBtn = itemView.findViewById(R.id.showOnMapLay);
         }

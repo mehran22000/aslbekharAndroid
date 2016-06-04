@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.CityListAdapter;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
+import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
@@ -218,8 +219,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
 
 
         Glide.with(this)
-//                .load(CITY_TO_CAT_ADVERTISEMENT + model.getId() + ".png")
-                .load("http://digiato.com/wp-content/uploads/2016/06/LIFAN-1-1.jpg")
+                .load(Constants.CITY_TO_CAT_FULL_AD + model.getId() + ".png")
                 .listener(new RequestListener<String, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -261,8 +261,6 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
                 }
             }
         }).into(fullScreenAdImageView);
-
-
 
     }
 

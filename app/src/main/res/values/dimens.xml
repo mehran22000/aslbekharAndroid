@@ -6,7 +6,8 @@
     <dimen name="tab_padding_bottom">16dp</dimen>
     <dimen name="tab_label">14sp</dimen>
     <dimen name="custom_tab_layout_height">72dp</dimen>
-    <dimen name="item_title_ts_smaller">13sp</dimen>
+    <dimen name="item_title_ts_smaller">12sp</dimen>
+    <dimen name="item_title_ts_medium">15sp</dimen>
     <dimen name="item_title_ts_larger">17sp</dimen>
 
     // city list

@@ -24,14 +24,20 @@ import com.aslbekhar.aslbekharandroid.models.BrandVerificationModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_VERIFICATION_DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_VERIFICATION_URL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
@@ -43,8 +49,10 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_S
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFICATION_TIPS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFIED;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showSlideUp;
 
 /**
  * Created by Amin on 19/05/2016.
@@ -59,6 +67,11 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
     List<StoreModel> modelListToShow = new ArrayList<>();
     LinearLayoutManager layoutManager;
     String cityCode;
+    String catName;
+    String brandName;
+    String brandId;
+
+    ImageView bannerAdImageView;
 
     public StoreListFragment() {
 
@@ -119,14 +132,20 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
             }
         });
 
+        bannerAdImageView = (ImageView) view.findViewById(R.id.bannerAdvertise);
+        checkForBannerAdvertise();
+
         recyclerView = (RecyclerView) view.findViewById(R.id.listView);
 
         cityCode = getArguments().getString(CITY_CODE);
+        catName = getArguments().getString(CAT_NAME);
+        brandName = getArguments().getString(BRAND_NAME);
+        brandId = getArguments().getString(BRAND_ID);
 
         modelList = StoreModel.getStoreListBasedOnCatNameAndBrand(
                 cityCode,
-                getArguments().getString(CAT_NAME),
-                getArguments().getString(BRAND_ID));
+                catName,
+                brandId);
 
         modelListToShow.clear();
         modelListToShow.addAll(modelList);
@@ -148,6 +167,25 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         return view;
     }
 
+
+
+    private void checkForBannerAdvertise(){
+        Glide.with(this)
+                .load(CAT_BANNER_AD + cityCode + "." + catName + "." + brandName + ".png")
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String StringModel,
+                                               Target<GlideDrawable> target, boolean isFirstResource) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        showSlideUp(bannerAdImageView, true, getContext());
+                        return false;
+                    }
+                }).into(bannerAdImageView);
+    }
 
     private void performSearch(String search) {
         modelListToShow.clear();
@@ -223,7 +261,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
     }
 
     @Override
-    public void onResponse(String response, String tag) {
+    public void onResponse(final String response, String tag) {
         if (tag.equals(BRAND_VERIFICATION_DOWNLOAD)) {
             List<BrandVerificationModel> brandVerificationModelList = null;
             try {
@@ -234,9 +272,30 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
 
             if (brandVerificationModelList != null && brandVerificationModelList.size() > 0) {
                 view.findViewById(R.id.verificationTips).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.verificationTips).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openBrandVarificationFragment(response);
+                    }
+                });
             }
 
         }
+    }
+
+    private void openBrandVarificationFragment(String response) {
+
+        Bundle bundle = new Bundle();
+
+        bundle.putString(CITY_CODE, cityCode);
+        bundle.putString(CAT_NAME, getArguments().getString(CAT_NAME));
+        bundle.putString(BRAND_ID, brandId);
+        bundle.putString(BRAND_NAME, brandName);
+        bundle.putString(VERIFICATION_TIPS, response);
+
+        BrandVerificationFragment fragment = new BrandVerificationFragment();
+        fragment.setArguments(bundle);
+        callBack.openNewContentFragment(fragment);
     }
 
     @Override

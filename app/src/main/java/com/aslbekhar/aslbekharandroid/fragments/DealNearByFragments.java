@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.StoreDiscountListAdapter;
 import com.aslbekhar.aslbekharandroid.models.StoreDiscountModel;
+import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
@@ -35,6 +36,18 @@ import com.rey.material.widget.Slider;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_SINGLE_STORE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFIED;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
 
 /**
@@ -130,6 +143,29 @@ public class DealNearByFragments extends android.support.v4.app.Fragment
 
 
         return view;
+    }
+
+
+
+    public void showOnMap(StoreModel model) {
+
+        Bundle bundle = new Bundle();
+        bundle.putString(CITY_CODE, cityCode);
+        bundle.putString(LATITUDE, model.getsLat());
+        bundle.putString(LONGITUDE, model.getsLong());
+        bundle.putString(TITLE, model.getsName());
+        bundle.putString(WORK_HOUR, model.getsHour());
+        bundle.putString(ADDRESS, model.getsAddress());
+        bundle.putString(TELL, model.getsTel1());
+        bundle.putInt(DISCOUNT, model.getsDiscount());
+        bundle.putString(VERIFIED, model.getsVerified());
+        bundle.putString(LOGO, model.getbName());
+        bundle.putInt(MAP_TYPE, MAP_TYPE_SHOW_SINGLE_STORE);
+
+        MapNearByFragment fragment = new MapNearByFragment();
+        fragment.setArguments(bundle);
+
+        callBack.openNewContentFragment(fragment);
     }
 
     private void getDealsNearBy() {
@@ -242,6 +278,14 @@ public class DealNearByFragments extends android.support.v4.app.Fragment
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (googleApiClient != null) {
+            googleApiClient.disconnect();
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         if (googleApiClient != null) {
@@ -276,6 +320,7 @@ public class DealNearByFragments extends android.support.v4.app.Fragment
 
     @Override
     public void onLocationChanged(Location location) {
+        googleApiClient.disconnect();
         if (mLastLocation != null) {
             if (mLastLocation.distanceTo(location) > 500) {
                 mLastLocation = location;
