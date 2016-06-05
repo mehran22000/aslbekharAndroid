@@ -62,7 +62,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_layout);
         // we will start off by checking for the permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (
                 ActivityCompat.checkSelfPermission(getApplicationContext(),
@@ -132,6 +131,7 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         }
 
         if (getSP(DATA_PROCESSED_OR_NOT).equals(FALSE)){
+            setContentView(R.layout.splash_layout);
             ProgressView progressView = (ProgressView) findViewById(R.id.progressBar);
             progressView.start();
 

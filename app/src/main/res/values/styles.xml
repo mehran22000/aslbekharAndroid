@@ -13,18 +13,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-
     //for splash screen fast background
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_default</item>
     </style>
 
+    <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 
     <style name="progressBarStyle">
-
         <item name="colorAccent">@color/red</item>
-
     </style>
+
 
 </resources>

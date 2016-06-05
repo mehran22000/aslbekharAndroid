@@ -42,7 +42,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 
 /**
  * Created by Amin on 14/05/2016.
- * <p/>
+ * <p>
  * This class will be used for
  */
 public class CitiesFragment extends android.support.v4.app.Fragment {
@@ -97,11 +97,11 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 performSearch(s.toString());
-                if (s.length() > 0){
-                    ((ImageView)view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search_clear);
+                if (s.length() > 0) {
+                    ((ImageView) view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search_clear);
                     view.findViewById(R.id.searchClear).setTag(R.drawable.search_clear);
                 } else {
-                    ((ImageView)view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search);
+                    ((ImageView) view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search);
                     view.findViewById(R.id.searchClear).setTag(R.drawable.search);
                 }
             }
@@ -112,7 +112,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
                 int tag = 0;
                 try {
                     tag = (int) v.getTag();
-                } catch (Exception ignored){
+                } catch (Exception ignored) {
                 }
                 if (tag == R.drawable.search_clear) {
                     performSearch("");
@@ -227,48 +227,48 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
         Glide.with(this)
                 .load(Constants.CITY_TO_CAT_FULL_AD + model.getId() + ".png")
                 .listener(new RequestListener<String, GlideDrawable>() {
-            @Override
-            public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target,
-                                       boolean isFirstResource) {
-                if (fullScreenAdvertiseTimer) {
-                    fullScreenAdvertiseTimer = false;
-                    openCatListFragment(model);
-                }
-                return true;
-            }
-
-            @Override
-            public boolean onResourceReady(GlideDrawable resource,
-                                           String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                if (fullScreenAdvertiseTimer) {
-                    fullScreenAdvertiseTimer = false;
-                    fullScreenAdImageView.setVisibility(View.VISIBLE);
-                    progressView.stop();
-                    listOverLay.setVisibility(View.GONE);
-                    fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            fullScreenAdvertiseSecondTimer = false;
+                    @Override
+                    public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target,
+                                               boolean isFirstResource) {
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
                             openCatListFragment(model);
                         }
-                    });
-                    fullScreenAdvertiseSecondTimer = true;
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (fullScreenAdvertiseSecondTimer) {
-                                fullScreenAdvertiseSecondTimer = false;
-                                openCatListFragment(model);
-                            }
-                        }
-                    }, ADVERTISEMENT_VIEW_TIMEOUT);
-                    return false;
+                        return true;
+                    }
 
-                } else {
-                    return true;
-                }
-            }
-        }).into(fullScreenAdImageView);
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource,
+                                                   String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            fullScreenAdImageView.setVisibility(View.VISIBLE);
+                            progressView.stop();
+                            listOverLay.setVisibility(View.GONE);
+                            fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    fullScreenAdvertiseSecondTimer = false;
+                                    openCatListFragment(model);
+                                }
+                            });
+                            fullScreenAdvertiseSecondTimer = true;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (fullScreenAdvertiseSecondTimer) {
+                                        fullScreenAdvertiseSecondTimer = false;
+                                        openCatListFragment(model);
+                                    }
+                                }
+                            }, ADVERTISEMENT_VIEW_TIMEOUT);
+                            return false;
+
+                        } else {
+                            return true;
+                        }
+                    }
+                }).into(fullScreenAdImageView);
 
     }
 
@@ -285,12 +285,10 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
 
         callBack.openNewContentFragment(fragment);
 
-        if (fullScreenAdImageView.getVisibility() == View.VISIBLE){
+        if (fullScreenAdImageView.getVisibility() == View.VISIBLE) {
             fullScreenAdImageView.setVisibility(View.GONE);
         }
-        if (listOverLay.getVisibility() == View.VISIBLE) {
-            Snippets.showFade(listOverLay, true, 500);
-        }
+        listOverLay.setVisibility(View.GONE);
         progressView.stop();
     }
 
