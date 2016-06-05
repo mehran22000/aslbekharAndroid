@@ -5,10 +5,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.aslbekhar.aslbekharandroid.fragments.CitiesFragment;
-import com.aslbekhar.aslbekharandroid.fragments.DealNearByFragments;
+import com.aslbekhar.aslbekharandroid.fragments.DealNearByFragment;
 import com.aslbekhar.aslbekharandroid.fragments.HostFragment;
 import com.aslbekhar.aslbekharandroid.fragments.MapNearByFragment;
-import com.aslbekhar.aslbekharandroid.fragments.MyStoreFragments;
+import com.aslbekhar.aslbekharandroid.fragments.MyStoreLoginFragment;
+import com.aslbekhar.aslbekharandroid.utilities.Constants;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +35,12 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private void initializeTabs() {
         tabs.add(HostFragment.newInstance(new CitiesFragment()));
         tabs.add(HostFragment.newInstance(new MapNearByFragment()));
-        tabs.add(HostFragment.newInstance(new DealNearByFragments()));
-        tabs.add(HostFragment.newInstance(new MyStoreFragments()));
+        tabs.add(HostFragment.newInstance(new DealNearByFragment()));
+        if (Snippets.getSP(Constants.IS_LOGGED_IN).equals(Constants.FALSE)) {
+            tabs.add(HostFragment.newInstance(new MyStoreLoginFragment()));
+        } else {
+            tabs.add(HostFragment.newInstance(new MyStoreLoginFragment()));
+        }
     }
 
     @Override

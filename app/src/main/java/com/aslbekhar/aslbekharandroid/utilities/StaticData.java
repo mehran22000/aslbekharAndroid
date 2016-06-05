@@ -9,6 +9,7 @@ import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_LIST;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 
 /**
@@ -32,7 +33,7 @@ public class StaticData {
     }
 
     public static List<CityModel> getCityModelList() {
-        if (cityModelList == null || cityModelList.size() == 0) {
+        if (cityModelList == null || cityModelList.size() == 0 && !getSP(CITY_LIST).equals(FALSE)) {
             cityModelList = JSON.parseArray(getSP(CITY_LIST), CityModel.class);
         }
         return cityModelList;

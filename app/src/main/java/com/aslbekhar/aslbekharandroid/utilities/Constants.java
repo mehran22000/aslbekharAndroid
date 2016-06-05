@@ -28,8 +28,17 @@ public class Constants {
     // WS4
     public static String BRAND_VERIFICATION_URL = WEB_SERVER + "services/v1/dev/brands/verification/";
 
+    // WS8
+    public static String LOGIN_URL = WEB_SERVER + "services/v1/dev/users/business/login";
+
+
+
     // D2
     public static String BRAND_LOGO_URL = WEB_SERVER + "images/logos/";
+
+    //header token
+    public static String HEADER_TOKEN = WEB_SERVER + "emFuYmlsZGFyYW5naGVybWV6DQo=";
+
 
 
 
@@ -53,6 +62,7 @@ public class Constants {
     public static String TRUE = "TRUE";
     public static String YES = "YES";
     public static String NO = "NO";
+    public static String IS_LOGGED_IN = "IS_LOGGED_IN";
     public static String CITY_LIST = "CITY_LIST";
     public static String STORE_LIST = "STORE_LIST";
     public static String CAT_LIST = "CAT_LIST";

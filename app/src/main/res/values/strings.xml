@@ -28,5 +28,11 @@
     <string name="gps_didnt_turn_on">متاسفانه GPS روشن نشد، آیا میخواهید دوباره تلاش کنید؟</string>
     <string name="ok_i_try_again">باشه، دوباره سعی میکنم</string>
     <string name="tips_to_verify_product">نکاتی برای تشخیص کالای اصل از غیر اصل</string>
+    <string name="prompt_email">ایمیل (شناسه ورود)</string>
+    <string name="prompt_password">رمز عبور</string>
+    <string name="action_sign_in_short">ورود</string>
+    <string name="action_sign_in">ورود</string>
+    <string name="action_sign_up">ثبت فروشگاه (رایگان)</string>
+    <string name="forgot_your_password">آیا نام کاربری یا رمز عبور خود را فراموش کرده اید؟</string>
 
 </resources>

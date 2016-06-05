@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
-import com.aslbekhar.aslbekharandroid.fragments.DealNearByFragments;
+import com.aslbekhar.aslbekharandroid.fragments.DealNearByFragment;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.StoreDiscountModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
@@ -34,11 +34,11 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
 
     List<StoreDiscountModel> modelList;
     Context context;
-    private DealNearByFragments fragment;
+    private DealNearByFragment fragment;
     private String cityCode;
 
     public StoreDiscountListAdapter(List<StoreDiscountModel> modelList,
-                                    Context context, DealNearByFragments fragment, String cityCode) {
+                                    Context context, DealNearByFragment fragment, String cityCode) {
         this.modelList = modelList;
         this.context = context;
         this.fragment = fragment;
