@@ -73,7 +73,7 @@ public class NetworkRequests {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
-                params.put("token", Constants.HEADER_TOKEN);
+                params.put("token","emFuYmlsZGFyYW5naGVybWV6DQo=");
                 //..add other headers
                 return params;
             }
@@ -150,7 +150,7 @@ public class NetworkRequests {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
-                params.put("token", Constants.HEADER_TOKEN);
+                params.put("token", "emFuYmlsZGFyYW5naGVybWV6DQo=");
                 //..add other headers
                 return params;
             }

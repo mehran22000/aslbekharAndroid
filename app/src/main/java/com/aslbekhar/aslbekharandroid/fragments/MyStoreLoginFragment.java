@@ -6,11 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.models.UserModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
+
+import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGIN_URL;
 
@@ -75,7 +80,12 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void onResponse(String response, String tag) {
+        try {
+            List<UserModel> modelList = JSON.parseArray(response, UserModel.class);
+            Toast.makeText(getActivity(), modelList.get(0).getBuEmail(), Toast.LENGTH_LONG).show();
+        } catch (Exception ignored){
 
+        }
     }
 
     @Override
