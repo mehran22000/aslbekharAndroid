@@ -31,6 +31,7 @@ public class UserModel {
     String dEndDateFa;
     int dPrecentage;
     String dNote;
+    String err = "";
 
     public String getBuId() {
         return buId;
@@ -222,5 +223,16 @@ public class UserModel {
 
     public void setdNote(String dNote) {
         this.dNote = dNote;
+    }
+
+    public String getErr() {
+        if (err == null){
+            return "";
+        }
+        return err;
+    }
+
+    public void setErr(String err) {
+        this.err = err;
     }
 }

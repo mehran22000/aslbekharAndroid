@@ -135,7 +135,7 @@ public class NetworkRequests {
             }
         }) {
             public String getBodyContentType() {
-                return "application/json; charset=" + getParamsEncoding();
+                return "application/json";
             }
 
             public byte[] getBody() throws AuthFailureError {
@@ -147,7 +147,7 @@ public class NetworkRequests {
                 return null;
             }
 
-            protected Map<String, String> getParams() throws AuthFailureError {
+            public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", "application/json");
                 params.put("token", "emFuYmlsZGFyYW5naGVybWV6DQo=");

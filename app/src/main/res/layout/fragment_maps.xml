@@ -23,7 +23,7 @@
 
     <com.rey.material.widget.ProgressView
         android:id="@+id/progressBar"
-        style="@style/progressBarStyle"
+        style="@style/CircularProgressTheme"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerInParent="true"

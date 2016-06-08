@@ -34,5 +34,10 @@
     <string name="action_sign_in">ورود</string>
     <string name="action_sign_up">ثبت فروشگاه (رایگان)</string>
     <string name="forgot_your_password">آیا نام کاربری یا رمز عبور خود را فراموش کرده اید؟</string>
+    <string name="yes_its_me">بله، درسته</string>
+    <string name="no_its_not_me">نه این فروشگاه من نیست</string>
+    <string name="invalid_password">رمز عبور اشتباه است</string>
+    <string name="connection_error">خطا در اتصال</string>
+    <string name="try_again">دوباره تلاش کن</string>
 
 </resources>

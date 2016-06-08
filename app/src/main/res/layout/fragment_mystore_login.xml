@@ -71,22 +71,42 @@
 
                 </android.support.design.widget.TextInputLayout>
 
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/signInBtn"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/action_sign_in"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/item_title_ts_medium"
-                    app:backgroundTint="@color/colorPrimary" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/signInBtn"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/action_sign_in"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/item_title_ts_medium"
+                        app:backgroundTint="@color/colorPrimary" />
+
+                    <com.rey.material.widget.ProgressView
+                        android:id="@+id/signInBtnProgress"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/signInBtn"
+                        android:layout_alignLeft="@+id/signInBtn"
+                        android:layout_alignTop="@+id/signInBtn"
+                        android:layout_margin="7dp"
+                        android:translationZ="2dp"
+                        app:pv_autostart="false"
+                        app:pv_circular="true"
+                        app:pv_progressMode="indeterminate"
+                        app:pv_progressStyle="@style/CircularProgressWhite" />
+                </RelativeLayout>
+
 
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/signUpBtn"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="55dp"
                     android:text="@string/action_sign_up"
                     android:textColor="@color/white"
                     android:textSize="@dimen/item_title_ts_medium"
