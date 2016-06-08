@@ -24,8 +24,13 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="progressBarStyle">
-        <item name="colorAccent">@color/red</item>
+    <style name="CircularProgressWhite" parent="Material.Drawable.CircularProgress">
+        <item name="cpd_strokeColor">@color/white</item>
+        <item name="cpd_strokeSize">2dp</item>
+    </style>
+
+    <style name="CircularProgressTheme" parent="Material.Drawable.CircularProgress">
+        <item name="cpd_strokeColor">@color/colorPrimary</item>
     </style>
 
 

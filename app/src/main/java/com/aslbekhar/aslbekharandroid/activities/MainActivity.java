@@ -114,7 +114,14 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     }
 
     public void openNewContentFragment(Fragment targetFragment) {
-        targetFragment.getArguments().putBoolean(Constants.OFFLINE_MODE, offlineMode);
+
+        if (targetFragment.getArguments() == null) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(Constants.OFFLINE_MODE, offlineMode);
+            targetFragment.setArguments(bundle);
+        } else {
+            targetFragment.getArguments().putBoolean(Constants.OFFLINE_MODE, offlineMode);
+        }
         HostFragment hostFragment = (HostFragment) mainFragmentPagerAdapter.getItem(viewPager.getCurrentItem());
         hostFragment.replaceFragment(targetFragment, true);
     }

@@ -53,6 +53,7 @@ public class Constants {
     public static String BRAND_LIST_DOWNLOAD = "BRAND_LIST_DOWNLOAD";
     public static String DOWNLOAD = "DOWNLOAD";
     public static String BRAND_VERIFICATION_DOWNLOAD = "BRAND_VERIFICATION_DOWNLOAD";
+    public static String PASSWORD_ERROR = "err_invalid_password";
 
 
 
@@ -109,6 +110,7 @@ public class Constants {
     public static String BRAND_NAME = "BRAND_NAME";
     public static String VERIFICATION_TIPS = "VERIFICATION_TIPS";
     public static String OFFLINE_MODE = "OFFLINE_MODE";
+    public static String ADD_TO_BACK = "ADD_TO_BACK";
 
     public static String LATITUDE = "LATITUDE";
     public static String LONGITUDE = "LONGITUDE";
