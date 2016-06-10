@@ -24,6 +24,7 @@ import com.aslbekhar.aslbekharandroid.models.UserModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -32,7 +33,10 @@ import com.rey.material.widget.ProgressView;
 
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.IS_LOGGED_IN;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGIN_URL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.USER_INFO;
 
 /**
  * Created by Amin on 14/05/2016.
@@ -86,7 +90,6 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
         NetworkRequests.postRequest(LOGIN_URL, this, "login", postJson);
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -100,7 +103,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
 
     @Override
     public void onResponse(String response, String tag) {
-        ((ProgressView) view.findViewById(R.id.signInBtnProgress)).start();
+        ((ProgressView) view.findViewById(R.id.signInBtnProgress)).stop();
         List<UserModel> modelList = null;
         try {
             modelList = JSON.parseArray(response, UserModel.class);
@@ -158,7 +161,10 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
 
             dialogBuilder.setPositiveButton(R.string.yes_its_me, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int whichButton) {
-                    callBack.openNewContentFragment(new MyStoreAccountFragment());
+
+                    Snippets.setSP(IS_LOGGED_IN, TRUE);
+                    Snippets.setSP(USER_INFO, JSON.toJSONString(model));
+                    getActivity().onBackPressed();
                 }
             });
             dialogBuilder.setNegativeButton(R.string.no_its_not_me, new DialogInterface.OnClickListener() {
@@ -167,8 +173,8 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
 
                 }
             });
-            AlertDialog b = dialogBuilder.create();
-            b.show();
+            AlertDialog dialog = dialogBuilder.create();
+            dialog.show();
         } else if(modelList != null && modelList.size() > 0 && modelList.get(0).getErr().equals(Constants.PASSWORD_ERROR)){
             Toast.makeText(getActivity(), R.string.invalid_password, Toast.LENGTH_LONG).show();
         }
@@ -178,7 +184,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
     public void onError(VolleyError error, String tag) {
         ((ProgressView) view.findViewById(R.id.signInBtnProgress)).stop();
         Snackbar snackbar = Snackbar.make(view.findViewById(R.id.rootLayout),
-                getString(R.string.connection_error), Snackbar.LENGTH_LONG)
+                getString(R.string.connection_error), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(R.string.try_again), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -192,7 +198,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
     public void onOffline() {
         ((ProgressView) view.findViewById(R.id.signInBtnProgress)).stop();
         Snackbar snackbar = Snackbar.make(view.findViewById(R.id.rootLayout),
-                getString(R.string.you_are_offline), Snackbar.LENGTH_LONG)
+                getString(R.string.you_are_offline), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(R.string.try_again), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

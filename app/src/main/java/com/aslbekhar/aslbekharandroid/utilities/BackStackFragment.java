@@ -3,8 +3,6 @@ package com.aslbekhar.aslbekharandroid.utilities;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import java.util.List;
-
 /**
  * Created by Amin on 15/05/2016.
  * <p/>
@@ -16,16 +14,10 @@ public class BackStackFragment extends Fragment {
     public static boolean handleBackPressed(FragmentManager fm)
     {
         if(fm.getFragments() != null){
-            List<Fragment> fragments = fm.getFragments();
-            for (int i = 0; i < fragments.size(); i++) {
-                Fragment frag = fragments.get(i);
-                if (frag != null && frag.isVisible() && frag instanceof BackStackFragment) {
-                    if (frag.getArguments().getBoolean(Constants.ADD_TO_BACK)) {
-                        if (((BackStackFragment) frag).onBackPressed()) {
-                            return true;
-                        }
-                    } else {
-                        i++;
+            for(Fragment frag : fm.getFragments()){
+                if(frag != null && frag.isVisible() && frag instanceof BackStackFragment){
+                    if(((BackStackFragment)frag).onBackPressed()){
+                        return true;
                     }
                 }
             }

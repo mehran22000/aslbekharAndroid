@@ -5,7 +5,7 @@ package com.aslbekhar.aslbekharandroid.models;
  * <p>
  * This class will be used for
  */
-public class UserModel {
+public class UserModel extends ResponseModel{
 
     String buId;
     String buEmail;
@@ -31,7 +31,6 @@ public class UserModel {
     String dEndDateFa;
     int dPrecentage;
     String dNote;
-    String err = "";
 
     public String getBuId() {
         return buId;
@@ -225,14 +224,4 @@ public class UserModel {
         this.dNote = dNote;
     }
 
-    public String getErr() {
-        if (err == null){
-            return "";
-        }
-        return err;
-    }
-
-    public void setErr(String err) {
-        this.err = err;
-    }
 }

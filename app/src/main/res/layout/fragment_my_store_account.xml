@@ -1,10 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/silver_light_2">
+    xmlns:app="http://schemas.android.com/tools"
+    android:background="@color/silver_light_2"
+    android:orientation="vertical">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/brandCV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                card_view:cardCornerRadius="10dp"
+                card_view:cardElevation="3dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/brandLogo"
+                        android:layout_width="@dimen/item_store_image_h_sale"
+                        android:layout_height="@dimen/item_store_image_h_sale"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentTop="true" />
+
+                    <TextView
+                        android:id="@+id/brandName"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_margin="8dp"
+                        android:paddingLeft="20dp"
+                        android:gravity="right"
+                        android:layout_toRightOf="@+id/brandLogo" />
+
+                    <TextView
+                        android:id="@+id/catName"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/brandName"
+                        android:layout_below="@id/brandName"
+                        android:layout_toRightOf="@+id/brandLogo" />
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/emailCV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/brandCV"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:padding="5dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                card_view:cardCornerRadius="10dp"
+                card_view:cardElevation="3dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/email"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_margin="8dp" />
+
+                    <TextView
+                        android:id="@+id/password"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/email"
+                        android:layout_below="@id/email" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/changePassword"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/password"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_toRightOf="@+id/logOut"
+                        android:text="@string/change_password"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/item_title_ts_medium"
+                        app:backgroundTint="@color/colorPrimary" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/logOut"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/password"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_alignParentLeft="true"
+                        android:text="@string/logout"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/item_title_ts_medium"
+                        app:backgroundTint="@color/buttonColorSecondary" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/addressCV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/emailCV"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:padding="5dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                card_view:cardCornerRadius="10dp"
+                card_view:cardElevation="3dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/city"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_margin="8dp" />
+
+                    <TextView
+                        android:id="@+id/address"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/city"
+                        android:layout_marginBottom="5dp"
+                        android:layout_below="@id/city" />
+
+                    <TextView
+                        android:id="@+id/tell"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
+                        android:layout_alignRight="@+id/city"
+                        android:layout_below="@id/address" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/storeCV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/addressCV"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:padding="5dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                card_view:cardCornerRadius="10dp"
+                card_view:cardElevation="3dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/distributor"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_margin="8dp" />
+
+                    <TextView
+                        android:id="@+id/workHour"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/distributor"
+                        android:paddingBottom="8dp"
+                        android:layout_below="@id/distributor" />
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
+
+    </ScrollView>
 
 
 </RelativeLayout>

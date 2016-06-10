@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.utilities.BackStackFragment;
-import com.aslbekhar.aslbekharandroid.utilities.Constants;
 
 /**
  * Created by Amin on 15/05/2016.
@@ -38,17 +37,9 @@ public class HostFragment extends BackStackFragment {
         }
     }
 
-    public static HostFragment newInstance(Fragment fragment, boolean addToBackOrNot) {
+    public static HostFragment newInstance(Fragment fragment) {
         HostFragment hostFragment = new HostFragment();
         hostFragment.fragment = fragment;
-
-        if (hostFragment.getArguments() == null) {
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.ADD_TO_BACK, addToBackOrNot);
-            hostFragment.setArguments(bundle);
-        } else {
-            hostFragment.getArguments().putBoolean(Constants.ADD_TO_BACK, addToBackOrNot);
-        }
         return hostFragment;
     }
 }
