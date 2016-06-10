@@ -31,6 +31,9 @@ public class Constants {
     // WS8
     public static String LOGIN_URL = WEB_SERVER + "services/v1/dev/users/business/login";
 
+    // WS11
+    public static String UPDATE_USER_URL = WEB_SERVER + "services/v1/dev/users/business/updateuser";
+
 
 
     // D2
@@ -54,6 +57,7 @@ public class Constants {
     public static String DOWNLOAD = "DOWNLOAD";
     public static String BRAND_VERIFICATION_DOWNLOAD = "BRAND_VERIFICATION_DOWNLOAD";
     public static String PASSWORD_ERROR = "err_invalid_password";
+    public static String SUCCESS = "success";
 
 
 
@@ -64,6 +68,7 @@ public class Constants {
     public static String YES = "YES";
     public static String NO = "NO";
     public static String IS_LOGGED_IN = "IS_LOGGED_IN";
+    public static String USER_INFO = "USER_INFO";
     public static String CITY_LIST = "CITY_LIST";
     public static String STORE_LIST = "STORE_LIST";
     public static String CAT_LIST = "CAT_LIST";
@@ -111,6 +116,7 @@ public class Constants {
     public static String VERIFICATION_TIPS = "VERIFICATION_TIPS";
     public static String OFFLINE_MODE = "OFFLINE_MODE";
     public static String ADD_TO_BACK = "ADD_TO_BACK";
+    public static String CHANGE_PASSWORD = "CHANGE_PASSWORD";
 
     public static String LATITUDE = "LATITUDE";
     public static String LONGITUDE = "LONGITUDE";

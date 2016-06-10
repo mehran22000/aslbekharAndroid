@@ -33,5 +33,10 @@
         <item name="cpd_strokeColor">@color/colorPrimary</item>
     </style>
 
+    <style name="AccountInfoTextStyle" parent="MyMaterialTheme">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
 
 </resources>

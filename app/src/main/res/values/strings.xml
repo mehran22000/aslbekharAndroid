@@ -39,5 +39,13 @@
     <string name="invalid_password">رمز عبور اشتباه است</string>
     <string name="connection_error">خطا در اتصال</string>
     <string name="try_again">دوباره تلاش کن</string>
+    <string name="change_password">رمز را عوض کن</string>
+    <string name="old_password">رمز قبلی</string>
+    <string name="logout">خروج از حساب کاربری</string>
+    <string name="confirmPassword">تکرار رمز عبور جدید</string>
+    <string name="new_password">رمز عبور جدید</string>
+    <string name="back">بازگشت</string>
+    <string name="confirm_password_wrong">رمز جدید که دو بار وارد میکنید، باید با هم مطابقت داشته باشد</string>
+    <string name="password_too_short">پسورد باید حداقل پنچ حرف باشد</string>
 
 </resources>
