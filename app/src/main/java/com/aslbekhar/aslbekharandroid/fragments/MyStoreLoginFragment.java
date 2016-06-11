@@ -195,7 +195,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
     }
 
     @Override
-    public void onOffline() {
+    public void onOffline(String tag) {
         ((ProgressView) view.findViewById(R.id.signInBtnProgress)).stop();
         Snackbar snackbar = Snackbar.make(view.findViewById(R.id.rootLayout),
                 getString(R.string.you_are_offline), Snackbar.LENGTH_INDEFINITE)

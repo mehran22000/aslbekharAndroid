@@ -110,7 +110,7 @@ public class BrandVerificationFragment extends Fragment implements Interfaces.Ne
     }
 
     @Override
-    public void onOffline() {
+    public void onOffline(String tag) {
 
     }
 }

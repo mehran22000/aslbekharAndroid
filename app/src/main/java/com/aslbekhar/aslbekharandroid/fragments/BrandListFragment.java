@@ -343,7 +343,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
     }
 
     @Override
-    public void onOffline() {
+    public void onOffline(String tag) {
 
     }
 }

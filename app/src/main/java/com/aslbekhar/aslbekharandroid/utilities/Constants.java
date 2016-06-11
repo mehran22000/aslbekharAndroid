@@ -8,6 +8,9 @@ import java.text.DecimalFormat;
  */
 public class Constants {
 
+    public static int APP_VERSION = 1;
+
+
     public static String WEB_SERVER ="https://buyoriginal.herokuapp.com/";
 
     //AMIN: urls:
@@ -33,6 +36,9 @@ public class Constants {
 
     // WS11
     public static String UPDATE_USER_URL = WEB_SERVER + "services/v1/dev/users/business/updateuser";
+
+    // WS17
+    public static String CHECK_VERSION = WEB_SERVER + "services/v1/dev/appInfo/version/android";
 
 
 

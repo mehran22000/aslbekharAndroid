@@ -12,14 +12,16 @@ import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.MainFragmentPagerAdapter;
 import com.aslbekhar.aslbekharandroid.fragments.HostFragment;
 import com.aslbekhar.aslbekharandroid.utilities.BackStackFragment;
-import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class MainActivity extends AppCompatActivity implements Interfaces.MainActivityInterface , Interfaces.OfflineInterface{
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
+
+public class MainActivity extends AppCompatActivity implements Interfaces.MainActivityInterface,
+        Interfaces.OfflineInterface {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -117,10 +119,10 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
 
         if (targetFragment.getArguments() == null) {
             Bundle bundle = new Bundle();
-            bundle.putBoolean(Constants.OFFLINE_MODE, offlineMode);
+            bundle.putBoolean(OFFLINE_MODE, offlineMode);
             targetFragment.setArguments(bundle);
         } else {
-            targetFragment.getArguments().putBoolean(Constants.OFFLINE_MODE, offlineMode);
+            targetFragment.getArguments().putBoolean(OFFLINE_MODE, offlineMode);
         }
         HostFragment hostFragment = (HostFragment) mainFragmentPagerAdapter.getItem(viewPager.getCurrentItem());
         hostFragment.replaceFragment(targetFragment, true);

@@ -22,7 +22,7 @@ public class Interfaces {
     public interface NetworkListeners {
         public void onResponse(String response, String tag);
         public void onError(VolleyError error, String tag);
-        public void onOffline();
+        public void onOffline(String tag);
     }
 
 }
