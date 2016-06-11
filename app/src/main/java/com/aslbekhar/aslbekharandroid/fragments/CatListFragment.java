@@ -373,7 +373,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
     }
 
     @Override
-    public void onOffline() {
+    public void onOffline(String tag) {
         view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         offlineCallBack.offlineMode(true);
     }

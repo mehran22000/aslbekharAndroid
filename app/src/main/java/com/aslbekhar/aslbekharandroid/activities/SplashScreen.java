@@ -7,7 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,12 +21,19 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
+import com.aslbekhar.aslbekharandroid.models.VersionCheckModel;
+import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
+import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
@@ -35,6 +44,8 @@ import com.rey.material.widget.ProgressView;
 
 import static android.provider.Settings.Secure;
 import static android.provider.Settings.SettingNotFoundException;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.APP_VERSION;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHECK_VERSION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DATA_PROCESSED_OR_NOT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
@@ -49,7 +60,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
  * <p>
  * this activity is the starting point of this app, and the
  */
-public class SplashScreen extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class SplashScreen extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, Interfaces.NetworkListeners {
 
     GoogleApiClient googleApiClient;
     private static final int PERMISSION_REQUEST = 0;
@@ -57,12 +69,19 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     private boolean mResolvingError = false;
     private static int REQUEST_RESOLVE_ERROR = 9003;
     private static final String DIALOG_ERROR = "dialog_error";
+    Dialog dialog;
     
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // we will start off by checking for the permissions
+
+        NetworkRequests.getRequest(CHECK_VERSION, this, CHECK_VERSION);
+
+    }
+
+    private void checkForPermission() {
+        // we will continue with checking for the permissions
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (
                 ActivityCompat.checkSelfPermission(getApplicationContext(),
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -332,6 +351,87 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     public void onDialogDismissed() {
         mResolvingError = false;
         continueToCheckForData(false);
+    }
+
+    @Override
+    public void onResponse(String response, String tag) {
+
+
+        if (tag.equals(CHECK_VERSION)){
+            VersionCheckModel versionCheckModel = null;
+            try {
+                versionCheckModel = JSON.parseObject(response, VersionCheckModel.class);
+            } catch (Exception e) {
+                int x= 2;
+                x++;
+            }
+            if (versionCheckModel != null && versionCheckModel.getCurrent() > APP_VERSION){
+
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                final View dialogView = LayoutInflater.from(this).
+                        inflate(R.layout.dialog_update_required, null);
+
+                Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/theme.ttf");
+
+                ((TextView) dialogView.findViewById(R.id.text)).setTypeface(tf);
+                ((TextView) dialogView.findViewById(R.id.update)).setTypeface(tf);
+                ((TextView) dialogView.findViewById(R.id.skip)).setTypeface(tf);
+
+                dialogView.findViewById(R.id.update).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final String appPackageName = getPackageName();
+                        try {
+                            startActivity(new
+                                    Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            startActivity(new
+                                    Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
+                    }
+                });
+
+                if (versionCheckModel.getMinSupport() > APP_VERSION) {
+                    dialogBuilder.setCancelable(false);
+                    dialogView.findViewById(R.id.skip).setVisibility(View.GONE);
+                } else {
+                    dialogView.findViewById(R.id.skip).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            checkForPermission();
+
+                        }
+                    });
+                    dialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            checkForPermission();
+                        }
+                    });
+                }
+                dialogBuilder.setView(dialogView);
+                dialog = dialogBuilder.create();
+
+                dialog.show();
+            } else {
+                checkForPermission();
+            }
+        }
+    }
+
+    @Override
+    public void onError(VolleyError error, String tag) {
+        if (tag.equals(CHECK_VERSION)) {
+            checkForPermission();
+        }
+    }
+
+    @Override
+    public void onOffline(String tag) {
+        if (tag.equals(CHECK_VERSION)) {
+            checkForPermission();
+        }
     }
 
     /* A fragment to display an error dialog */

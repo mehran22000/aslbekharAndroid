@@ -47,5 +47,8 @@
     <string name="back">بازگشت</string>
     <string name="confirm_password_wrong">رمز جدید که دو بار وارد میکنید، باید با هم مطابقت داشته باشد</string>
     <string name="password_too_short">پسورد باید حداقل پنچ حرف باشد</string>
+    <string name="update">بروزرسانی کن</string>
+    <string name="do_it_later">فعلا نمیخواد</string>
+    <string name="you_need_to_update">نسخه جدید برنامه منتشر شده، لطفا برای استفاده از تمام امکانات برنامه باید آن را به روزرسانی کنید.</string>
 
 </resources>

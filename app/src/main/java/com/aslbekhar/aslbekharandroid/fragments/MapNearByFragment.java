@@ -504,7 +504,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     }
 
     @Override
-    public void onOffline() {
+    public void onOffline(String tag) {
         progressBar.stop();
         view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         offlineCallBack.offlineMode(true);

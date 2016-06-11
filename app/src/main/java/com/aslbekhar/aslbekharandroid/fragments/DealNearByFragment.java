@@ -363,7 +363,7 @@ public class DealNearByFragment extends android.support.v4.app.Fragment
     }
 
     @Override
-    public void onOffline() {
+    public void onOffline(String tag) {
         progressBar.stop();
         view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         offlineCallBack.offlineMode(true);

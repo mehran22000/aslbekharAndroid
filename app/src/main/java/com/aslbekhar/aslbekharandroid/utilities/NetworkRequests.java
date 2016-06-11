@@ -88,7 +88,7 @@ public class NetworkRequests {
         if (isOnline(AppController.applicationContext)) {
             AppController.getInstance().addToRequestQueue(strReq, "request");
         } else {
-            listener.onOffline();
+            listener.onOffline(tag);
         }
 
     }
@@ -166,7 +166,7 @@ public class NetworkRequests {
         if (isOnline(AppController.applicationContext)) {
             AppController.getInstance().addToRequestQueue(strReq, "request");
         } else {
-            listener.onOffline();
+            listener.onOffline(tag);
         }
 
     }

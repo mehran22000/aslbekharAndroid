@@ -159,7 +159,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 break;
 
             case R.id.changePassword:
-                changePassword();
+                showChangePasswordDialog();
                 break;
         }
     }
@@ -170,7 +170,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         callBack.openNewContentFragment(new MyStoreLoginFragment());
     }
 
-    private void changePassword() {
+    private void showChangePasswordDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getLayoutInflater(null);
         final View dialogView = inflater.inflate(R.layout.dialog_change_password, null);
@@ -232,7 +232,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
     }
 
     @Override
-    public void onOffline() {
+    public void onOffline(String tag) {
 
     }
 }
