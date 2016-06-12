@@ -192,7 +192,21 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
                         Log.d("heaaaa", "heyaaaaaaa22222222");
                         return false;
                     }
-                }).into(bannerAdImageView);
+                }).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+
+                Log.d("heaaaa", "3333333333333");
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                Log.d("heaaaa", "44444444444444");
+                return false;
+            }
+        })
+                .into(bannerAdImageView);
     }
 
 
