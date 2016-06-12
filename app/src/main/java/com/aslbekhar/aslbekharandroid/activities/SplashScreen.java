@@ -361,9 +361,7 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
             VersionCheckModel versionCheckModel = null;
             try {
                 versionCheckModel = JSON.parseObject(response, VersionCheckModel.class);
-            } catch (Exception e) {
-                int x= 2;
-                x++;
+            } catch (Exception ignored) {
             }
             if (versionCheckModel != null && versionCheckModel.getCurrent() > APP_VERSION){
 

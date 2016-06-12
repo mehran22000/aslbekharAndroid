@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,7 +43,6 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
@@ -174,18 +174,22 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
 
 
     private void checkForBannerAdvertise(){
+        String url = "https://buyoriginal.herokuapp.com//images/ads/banner/ad.021.clothes.png";
         Glide.with(this)
-                .load(CAT_BANNER_AD + cityCode + "." + catName + ".png")
+//                .load(CAT_BANNER_AD + cityCode + "." + catName + ".png")
+                .load(url)
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String StringModel,
                                                Target<GlideDrawable> target, boolean isFirstResource) {
+                        Log.d("heaaaa", "heyaaaaaaaaaaaaaa");
                         return true;
                     }
 
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                         showSlideUp(bannerAdImageView, true, getContext());
+                        Log.d("heaaaa", "heyaaaaaaa22222222");
                         return false;
                     }
                 }).into(bannerAdImageView);
