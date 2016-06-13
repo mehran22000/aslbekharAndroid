@@ -8,13 +8,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.aslbekhar.aslbekharandroid.R;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
-
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class AppController extends Application {
 
@@ -33,11 +30,11 @@ public class AppController extends Application {
         mInstance = this;
 
         // for setting Typefaces for textViews
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/theme.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        );
+//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+//                .setDefaultFontPath("fonts/theme.ttf")
+//                .setFontAttrId(R.attr.fontPath)
+//                .build()
+//        );
 
         // register for google analytics Tracker
         AnalyticsTrackers.initialize(this);

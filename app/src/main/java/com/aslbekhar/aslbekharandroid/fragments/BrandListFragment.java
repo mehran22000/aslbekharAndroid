@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.BrandListAdapter;
@@ -172,40 +170,24 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
     }
 
 
-
-    private void checkForBannerAdvertise(){
+    private void checkForBannerAdvertise() {
         String url = "https://buyoriginal.herokuapp.com//images/ads/banner/ad.021.clothes.png";
         Glide.with(this)
 //                .load(CAT_BANNER_AD + cityCode + "." + catName + ".png")
                 .load(url)
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
-                    public boolean onException(Exception e, String StringModel,
-                                               Target<GlideDrawable> target, boolean isFirstResource) {
-                        Log.d("heaaaa", "heyaaaaaaaaaaaaaa");
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+
                         return true;
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
                         showSlideUp(bannerAdImageView, true, getContext());
-                        Log.d("heaaaa", "heyaaaaaaa22222222");
                         return false;
                     }
-                }).listener(new RequestListener<String, GlideDrawable>() {
-            @Override
-            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-
-                Log.d("heaaaa", "3333333333333");
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                Log.d("heaaaa", "44444444444444");
-                return false;
-            }
-        })
+                })
                 .into(bannerAdImageView);
     }
 
@@ -342,15 +324,8 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
     @Override
     public void onResponse(String response, String tag) {
         if (tag.equals(BRAND_LIST_DOWNLOAD)) {
-            List<BrandModel> brandModelList = null;
-            try {
-                brandModelList = JSON.parseArray(response, BrandModel.class);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (brandModelList != null) {
-                    Snippets.setSP(BRAND_LIST, response);
-                }
+            if (response.startsWith("[") && response.endsWith("]")) {
+                Snippets.setSP(BRAND_LIST, response);
             }
         }
     }

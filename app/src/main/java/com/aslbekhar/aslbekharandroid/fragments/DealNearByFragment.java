@@ -39,6 +39,8 @@ import java.util.List;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
@@ -48,6 +50,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFIED;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
 
 /**
@@ -73,9 +76,7 @@ public class DealNearByFragment extends android.support.v4.app.Fragment
     private View nodata;
 
     // for location
-
-    private Location mLastLocation;
-    private Location currentLocation;
+    private Location lastLocation;
 
     // Google client to interact with Google API
     private GoogleApiClient googleApiClient;
@@ -178,10 +179,10 @@ public class DealNearByFragment extends android.support.v4.app.Fragment
             });
             showFade(listOverLay, true, 500);
         }
-        if (mLastLocation != null) {
+        if (lastLocation != null) {
             progressBar.start();
-            NetworkRequests.getRequest(Constants.DEALS_NEARBY_URL + mLastLocation.getLatitude() + "/"
-                    + mLastLocation.getLongitude() + "/" + distance, this, Constants.DOWNLOAD);
+            NetworkRequests.getRequest(Constants.DEALS_NEARBY_URL + lastLocation.getLatitude() + "/"
+                    + lastLocation.getLongitude() + "/" + distance, this, Constants.DOWNLOAD);
         }
     }
 
@@ -240,9 +241,11 @@ public class DealNearByFragment extends android.support.v4.app.Fragment
         } else {
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     googleApiClient, mLocationRequest, this);
-            mLastLocation = LocationServices
+            lastLocation = LocationServices
                     .FusedLocationApi
                     .getLastLocation(googleApiClient);
+            setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
+            setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
             getDealsNearBy();
         }
     }
@@ -321,13 +324,15 @@ public class DealNearByFragment extends android.support.v4.app.Fragment
     @Override
     public void onLocationChanged(Location location) {
         googleApiClient.disconnect();
-        if (mLastLocation != null) {
-            if (mLastLocation.distanceTo(location) > 500) {
-                mLastLocation = location;
+        if (lastLocation != null) {
+            if (lastLocation.distanceTo(location) > 500) {
+                lastLocation = location;
+                setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
+                setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
                 getDealsNearBy();
             }
         } else {
-            mLastLocation = location;
+            lastLocation = location;
             getDealsNearBy();
         }
     }

@@ -23,7 +23,6 @@ import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.CategoryListAdapter;
 import com.aslbekhar.aslbekharandroid.models.CategoryModel;
-import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
@@ -96,7 +95,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
 
         setupUI(view);
 
-        if (getArguments() != null && getArguments().getBoolean(OFFLINE_MODE, false)){
+        if (getArguments() != null && getArguments().getBoolean(OFFLINE_MODE, false)) {
             view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         }
 
@@ -128,11 +127,11 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
             @Override
             public void afterTextChanged(Editable s) {
                 performSearch(s.toString());
-                if (s.length() > 0){
-                    ((ImageView)view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search_clear);
+                if (s.length() > 0) {
+                    ((ImageView) view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search_clear);
                     view.findViewById(R.id.searchClear).setTag(R.drawable.search_clear);
                 } else {
-                    ((ImageView)view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search);
+                    ((ImageView) view.findViewById(R.id.searchClear)).setImageResource(R.drawable.search);
                     view.findViewById(R.id.searchClear).setTag(R.drawable.search);
                 }
             }
@@ -143,7 +142,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
                 int tag = 0;
                 try {
                     tag = (int) v.getTag();
-                } catch (Exception ignored){
+                } catch (Exception ignored) {
                 }
                 if (tag == R.drawable.search_clear) {
                     performSearch("");
@@ -183,7 +182,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
         return view;
     }
 
-    private void checkForBannerAdvertise(){
+    private void checkForBannerAdvertise() {
         Glide.with(this)
                 .load(CAT_BANNER_AD + cityCode + ".png")
                 .listener(new RequestListener<String, GlideDrawable>() {
@@ -280,7 +279,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
         modelListToShow.clear();
         if (!search.equals("")) {
             for (CategoryModel model : modelList) {
-                if (model.getTitle().toLowerCase().contains(search.toLowerCase())){
+                if (model.getTitle().toLowerCase().contains(search.toLowerCase())) {
                     modelListToShow.add(model);
                 }
             }
@@ -355,15 +354,8 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
     public void onResponse(String response, String tag) {
         view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
         offlineCallBack.offlineMode(false);
-        List<StoreModel> storeModelList = null;
-        try {
-            storeModelList = JSON.parseArray(response, StoreModel.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (storeModelList != null) {
-                Snippets.setSP(cityCode + STORE_LIST, response);
-            }
+        if (response.startsWith("[") && response.endsWith("]")) {
+            Snippets.setSP(cityCode + STORE_LIST, response);
         }
     }
 

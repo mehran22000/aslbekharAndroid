@@ -21,7 +21,7 @@
     <EditText
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:hint="@string/search"
         android:paddingRight="40dp"
         android:paddingLeft="10dp"
@@ -48,7 +48,7 @@
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
         android:layout_below="@+id/searchEditText"
-        android:layout_above="@+id/offlineLay"
+        android:layout_above="@+id/bannerAdvertise"
         android:visibility="visible" />
 
 
@@ -88,7 +88,8 @@
         android:id="@+id/fullScreenAdvertise"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/bannerAdvertise"
