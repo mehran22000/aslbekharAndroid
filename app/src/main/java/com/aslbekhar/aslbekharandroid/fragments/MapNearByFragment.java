@@ -55,6 +55,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.DIFAULT_DISTANC
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.GPS_ON_OR_OFF;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
@@ -67,6 +69,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFIED;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSPboolean;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
 
 /**
@@ -97,7 +100,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     private View listOverLay;
     private ProgressView progressBar;
     private Location lastLocation;
-    private Location currentLocation;
     boolean gpsAvailableOrNot = false;
     boolean playServiceAvailableOrNot = false;
 
@@ -261,6 +263,8 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             lastLocation = LocationServices
                     .FusedLocationApi
                     .getLastLocation(googleApiClient);
+            setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
+            setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
 
             if (type == Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
                 showSingleStore();
@@ -300,6 +304,8 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                 if (type == Constants.MAP_TYPE_SHOW_NEAR_BY) {
                     lastLocation = location;
                     initCamera(lastLocation);
+                    setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
+                    setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
                     getStoresNearBy();
                 }
             }

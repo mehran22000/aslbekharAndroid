@@ -38,11 +38,13 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_T
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEVICE_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
 
 /**
  * Created by Amin on 14/05/2016.
- * <p>
+ * <p/>
  * This class will be used for
  */
 public class CitiesFragment extends android.support.v4.app.Fragment {
@@ -143,7 +145,10 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-
+                        if (Snippets.getSP(Constants.REGISTRATION).equals(TRUE)){
+                            String postJson = "{\"device\":\"" + Snippets.getSP(DEVICE_ID) + "\",\"city\":\"";
+//                            NetworkRequests.postRequest();
+                        }
                         checkForAdvertisement(modelListToShow.get(position));
 
                     }

@@ -2,8 +2,6 @@ package com.aslbekhar.aslbekharandroid.services;
 
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -18,9 +16,8 @@ import java.io.IOException;
 
 /**
  * Created by Amin on 30/05/2016.
- *
  */
-public class GcmRegistrationIntentService  extends IntentService {
+public class GcmRegistrationIntentService extends IntentService {
 
     private static final String TAG = "RegIntentService";
     private static final String[] TOPICS = {"global"};
@@ -31,8 +28,6 @@ public class GcmRegistrationIntentService  extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         try {
             // [START register_for_gcm]
@@ -56,13 +51,14 @@ public class GcmRegistrationIntentService  extends IntentService {
             // You should store a boolean that indicates whether the generated token has been
             // sent to your server. If the boolean is false, send the token to your server,
             // otherwise your server should have already received the token.
-            Snippets.setSP(Constants.SENT_TOKEN_TO_SERVER, Constants.TRUE);
+            Snippets.setSP(Constants.DEVICE_ID, token);
+            Snippets.setSP(Constants.REGISTRATION, Constants.TRUE);
             // [END register_for_gcm]
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);
             // If an exception happens while fetching the new token or updating our registration data
             // on a third-party server, this ensures that we'll attempt the update at a later time.
-            Snippets.setSP(Constants.SENT_TOKEN_TO_SERVER, Constants.FALSE);
+            Snippets.setSP(Constants.REGISTRATION, Constants.FALSE);
         }
         // Notify UI that registration has completed, so the progress indicator can be hidden.
         Intent registrationComplete = new Intent(Constants.REGISTRATION_COMPLETE);
@@ -71,14 +67,14 @@ public class GcmRegistrationIntentService  extends IntentService {
 
     /**
      * Persist registration to third-party servers.
-     *
+     * <p/>
      * Modify this method to associate the user's GCM registration token with any server-side account
      * maintained by your application.
      *
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+//        NetworkRequests.postRequest(Constants.REGISTER_ANDROID_DEVICE_LINK, this, Constants.REGISTRATION, );
     }
 
     /**

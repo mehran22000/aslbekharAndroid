@@ -31,6 +31,9 @@ public class Constants {
     // WS4
     public static String BRAND_VERIFICATION_URL = WEB_SERVER + "services/v1/dev/brands/verification/";
 
+    // WS5
+    public static String REGISTER_ANDROID_DEVICE_LINK = WEB_SERVER + "services/v1/dev/users/register/android";
+
     // WS8
     public static String LOGIN_URL = WEB_SERVER + "services/v1/dev/users/business/login";
 
@@ -73,6 +76,8 @@ public class Constants {
     public static String TRUE = "TRUE";
     public static String YES = "YES";
     public static String NO = "NO";
+    public static String LAST_LAT = "LAST_LAT";
+    public static String LAST_LONG = "LAST_LONG";
     public static String IS_LOGGED_IN = "IS_LOGGED_IN";
     public static String USER_INFO = "USER_INFO";
     public static String CITY_LIST = "CITY_LIST";
@@ -82,6 +87,7 @@ public class Constants {
     public static String STORE_LIST_FILE_POSTFIX = "-StoreList.txt";
     public static String SENT_TOKEN_TO_SERVER = "SENT_TOKEN_TO_SERVER";
     public static String REGISTRATION_COMPLETE = "REGISTRATION_COMPLETE";
+    public static String DEVICE_ID = "DEVICE_ID";
     public static String GPS_ON_OR_OFF = "GPS_ON_OR_OFF";
     public static String PLAY_SERVICES_ON_OR_OFF = "PLAY_SERVICES_ON_OR_OFF";
     public static String DATA_PROCESSED_OR_NOT = "DATA_PROCESSED_OR_NOT";
@@ -123,6 +129,7 @@ public class Constants {
     public static String OFFLINE_MODE = "OFFLINE_MODE";
     public static String ADD_TO_BACK = "ADD_TO_BACK";
     public static String CHANGE_PASSWORD = "CHANGE_PASSWORD";
+    public static String REGISTRATION = "REGISTRATION";
 
     public static String LATITUDE = "LATITUDE";
     public static String LONGITUDE = "LONGITUDE";
