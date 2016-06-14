@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.BrandListAdapter;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
@@ -30,12 +32,15 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.rey.material.widget.ProgressView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_DOWNLOAD;
@@ -44,6 +49,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showSlideUp;
 
@@ -161,6 +167,8 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
+                        AnalyticsDataModel.saveAnalytic(BRAND,
+                                modelListToShow.get(position).getbId());
                         checkForAdvertisement(modelListToShow.get(position));
                     }
                 })
@@ -189,6 +197,19 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
                     }
                 })
                 .into(bannerAdImageView);
+
+        Picasso.with(getContext()).load(url).into(bannerAdImageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                showSlideUp(bannerAdImageView, true, getContext());
+                Log.d(LOG_TAG, "sssssssssss: ");
+            }
+
+            @Override
+            public void onError() {
+                Log.d(LOG_TAG, "eeeeeeeeeeeee: ");
+            }
+        });
     }
 
 

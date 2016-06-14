@@ -498,7 +498,10 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         for (int i = 0; i < storeModelList.size(); i++) {
             StoreModel store = storeModelList.get(i);
             LatLng position = new LatLng(Double.parseDouble(store.getsLat()), Double.parseDouble(store.getsLong()));
-            markerList.add(mMap.addMarker(new MarkerOptions().position(position).title(store.getsName()).snippet(String.valueOf(i)).icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_store))));
+            markerList.add(mMap.addMarker(
+                    new MarkerOptions().position(position).title(store.getsName())
+                            .snippet(String.valueOf(i)).icon(BitmapDescriptorFactory
+                            .fromResource(R.drawable.map_pin_store))));
         }
     }
 

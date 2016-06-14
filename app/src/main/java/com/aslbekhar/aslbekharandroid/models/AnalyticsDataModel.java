@@ -1,9 +1,12 @@
 package com.aslbekhar.aslbekharandroid.models;
 
+import com.alibaba.fastjson.JSON;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Amin on 13/06/2016.
@@ -29,7 +32,18 @@ public class AnalyticsDataModel {
         day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
         month = String.valueOf(calendar.get(Calendar.MONTH));
         year = String.valueOf(calendar.get(Calendar.YEAR));
+    }
 
+    public static void saveAnalytic(String value, String key){
+        List<AnalyticsDataModel> analyticsDataModels = new ArrayList<>();
+        String jsonData = Snippets.getSP(Constants.SAVED_ANALYTICS);
+        if (!jsonData.equals(Constants.FALSE)){
+            try {
+                analyticsDataModels = JSON.parseArray(jsonData, AnalyticsDataModel.class);
+            } catch (Exception ignored){}
+        }
+        analyticsDataModels.add(new AnalyticsDataModel(value, key));
+        Snippets.setSP(Constants.SAVED_ANALYTICS, JSON.toJSONString(analyticsDataModels));
     }
 
     public String getDevice() {

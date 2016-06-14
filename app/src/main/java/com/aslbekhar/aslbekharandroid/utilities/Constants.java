@@ -34,6 +34,9 @@ public class Constants {
     // WS5
     public static String REGISTER_ANDROID_DEVICE_LINK = WEB_SERVER + "services/v1/dev/users/register/android";
 
+    // WS6
+    public static String SEND_ANALYTICS_LINK = WEB_SERVER + "services/v1/dev/users/interests";
+
     // WS8
     public static String LOGIN_URL = WEB_SERVER + "services/v1/dev/users/business/login";
 
@@ -84,6 +87,7 @@ public class Constants {
     public static String STORE_LIST = "STORE_LIST";
     public static String CAT_LIST = "CAT_LIST";
     public static String BRAND_LIST = "CAT_LIST";
+    public static String SAVED_ANALYTICS = "SAVED_ANALYTICS";
     public static String STORE_LIST_FILE_POSTFIX = "-StoreList.txt";
     public static String SENT_TOKEN_TO_SERVER = "SENT_TOKEN_TO_SERVER";
     public static String REGISTRATION_COMPLETE = "REGISTRATION_COMPLETE";
@@ -134,6 +138,12 @@ public class Constants {
     public static String LATITUDE = "LATITUDE";
     public static String LONGITUDE = "LONGITUDE";
     public static String MAP_TYPE = "MAP_TYPE";
+    public static String CATEGORY = "category";
+    public static String BRAND = "brand";
+    public static String BRAND_STORE = "Brand_Store";
+    public static String NEAR_ME_STORE = "NearMe_Brand_Store";
+    public static String NEAR_ME_BRAND = "NearMe_Brand";
+    public static String VERIFICATION = "Verification";
     public static int MAP_TYPE_SHOW_NEAR_BY = 1;
     public static int MAP_TYPE_SHOW_SINGLE_STORE = 2;
 

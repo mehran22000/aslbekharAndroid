@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,13 +18,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.CityListAdapter;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
+import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
-import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -39,15 +41,24 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_V
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEVICE_ID;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTER_ANDROID_DEVICE_LINK;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTRATION;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTRATION_COMPLETE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SUCCESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
 
 /**
  * Created by Amin on 14/05/2016.
- * <p/>
+ * <p>
  * This class will be used for
  */
-public class CitiesFragment extends android.support.v4.app.Fragment {
+public class CitiesFragment extends android.support.v4.app.Fragment implements Interfaces.NetworkListeners {
 
     View view;
     Interfaces.MainActivityInterface callBack;
@@ -145,9 +156,16 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
                 new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if (Snippets.getSP(Constants.REGISTRATION).equals(TRUE)){
-                            String postJson = "{\"device\":\"" + Snippets.getSP(DEVICE_ID) + "\",\"city\":\"";
-//                            NetworkRequests.postRequest();
+                        Log.d(LOG_TAG, "gcm id " + getSP(DEVICE_ID));
+                        if (getSP(Constants.REGISTRATION).equals(TRUE)
+                                && getSP(REGISTRATION_COMPLETE).equals(FALSE)) {
+                            String postJson = "{\"device\":\""
+                                    + getSP(DEVICE_ID) + "\",\"city\":\""
+                                    + modelListToShow.get(position).getEnglishName()
+                                    + "\"}";
+                            Log.d(LOG_TAG, "gcm post json " + postJson);
+                            NetworkRequests.postRequest(REGISTER_ANDROID_DEVICE_LINK,
+                                    CitiesFragment.this, REGISTRATION, postJson);
                         }
                         checkForAdvertisement(modelListToShow.get(position));
 
@@ -209,7 +227,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
     private void checkForAdvertisement(final CityModel model) {
 
         fullScreenAdvertiseTimer = true;
-        Snippets.showFade(listOverLay, true, 500);
+        showFade(listOverLay, true, 500);
         listOverLay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -312,5 +330,27 @@ public class CitiesFragment extends android.support.v4.app.Fragment {
     public void onResume() {
         super.onResume();
         callBack = (Interfaces.MainActivityInterface) getActivity();
+    }
+
+    @Override
+    public void onResponse(String response, String tag) {
+        if (tag.equals(REGISTRATION)) {
+            if (response.toLowerCase().contains(SUCCESS.toLowerCase())) {
+                setSP(REGISTRATION_COMPLETE, TRUE);
+                Log.d(LOG_TAG, REGISTRATION_COMPLETE);
+            } else {
+                Log.d(LOG_TAG, "Problem in registration" + "onResponse: " + response);
+            }
+        }
+    }
+
+    @Override
+    public void onError(VolleyError error, String tag) {
+
+    }
+
+    @Override
+    public void onOffline(String tag) {
+
     }
 }

@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
-import com.aslbekhar.aslbekharandroid.models.ResponseModel;
 import com.aslbekhar.aslbekharandroid.models.UserModel;
+import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.bumptech.glide.Glide;
@@ -30,6 +30,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LOGO_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHANGE_PASSWORD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.IS_LOGGED_IN;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SUCCESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.UPDATE_USER_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.USER_INFO;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
@@ -84,6 +85,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         textView.setText("رمز ورود: •••••••••");
 
         view.findViewById(R.id.logOut).setOnClickListener(this);
+        view.findViewById(R.id.changePassword).setOnClickListener(this);
 
         textView = (TextView) view.findViewById(R.id.city);
         textView.setText("شهر: " + model.getBuCityNameFa());
@@ -134,9 +136,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             model = JSON.parseObject(getSP(USER_INFO), UserModel.class);
             showUserInfo(model);
         } else {
-            if (getSP(IS_LOGGED_IN).equals(FALSE)) {
-                callBack.openNewContentFragment(new MyStoreLoginFragment());
-            }
+            callBack.openNewContentFragment(new MyStoreLoginFragment(), 3);
         }
     }
 
@@ -190,10 +190,10 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 if (!model.getBuPassword().equals(oldPassword.getText().toString())) {
                     Toast.makeText(getContext(), R.string.invalid_password, Toast.LENGTH_LONG).show();
                     return;
-                } else if (!newPassword.getText().toString().equals(confirmPassword.getText().toString())){
+                } else if (!newPassword.getText().toString().equals(confirmPassword.getText().toString())) {
                     Toast.makeText(getContext(), R.string.confirm_password_wrong, Toast.LENGTH_LONG).show();
                     return;
-                } else if(newPassword.getText().toString().length() <5){
+                } else if (newPassword.getText().toString().length() < 5) {
                     Toast.makeText(getContext(), R.string.password_too_short, Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -205,13 +205,6 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             }
         });
 
-        dialogView.findViewById(R.id.changePassword).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
 
         dialogBuilder.setView(dialogView);
         dialog = dialogBuilder.create();
@@ -220,9 +213,13 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
     @Override
     public void onResponse(String response, String tag) {
-        if (tag.equals(CHANGE_PASSWORD)){
-            ResponseModel responseModel = JSON.parseObject(response, ResponseModel.class);
-
+        if (tag.equals(CHANGE_PASSWORD)) {
+            if (response.toLowerCase().contains(SUCCESS.toLowerCase())) {
+                setSP(Constants.USER_INFO, JSON.toJSONString(model));
+                dialog.dismiss();
+            } else {
+                Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_LONG).show();
+            }
         }
     }
 

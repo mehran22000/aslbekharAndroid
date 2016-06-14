@@ -94,9 +94,10 @@
     <ImageView
         android:id="@+id/bannerAdvertise"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:background="@color/white"/>
 
     <RelativeLayout
         android:id="@+id/offlineLay"
