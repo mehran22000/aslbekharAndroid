@@ -6,22 +6,30 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.MainFragmentPagerAdapter;
 import com.aslbekhar.aslbekharandroid.fragments.HostFragment;
 import com.aslbekhar.aslbekharandroid.utilities.BackStackFragment;
+import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
+import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SEND_ANALYTICS_LINK;
 
 public class MainActivity extends AppCompatActivity implements Interfaces.MainActivityInterface,
-        Interfaces.OfflineInterface {
+        Interfaces.OfflineInterface, Interfaces.NetworkListeners {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -58,6 +66,12 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
         setTitle(R.string.app_name_persian);
 
         setupViewPagerAndTabs();
+
+        String analyticSavedJson = Snippets.getSP(Constants.SAVED_ANALYTICS);
+        if (!analyticSavedJson.equals(FALSE)){
+            NetworkRequests.postRequest(SEND_ANALYTICS_LINK, this, SEND_ANALYTICS_LINK,
+                    "{\"interests\":\"" + analyticSavedJson + "\"}");
+        }
     }
 
     private void setupViewPagerAndTabs() {
@@ -128,9 +142,39 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
         hostFragment.replaceFragment(targetFragment, true);
     }
 
+    public void openNewContentFragment(Fragment targetFragment, int position) {
+
+        if (targetFragment.getArguments() == null) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(OFFLINE_MODE, offlineMode);
+            targetFragment.setArguments(bundle);
+        } else {
+            targetFragment.getArguments().putBoolean(OFFLINE_MODE, offlineMode);
+        }
+        HostFragment hostFragment = (HostFragment) mainFragmentPagerAdapter.getItem(position);
+        hostFragment.replaceFragment(targetFragment, true);
+    }
+
 
     @Override
     public void offlineMode(boolean offline) {
             offlineMode = offline;
+    }
+
+    @Override
+    public void onResponse(String response, String tag) {
+        if (tag.equals(SEND_ANALYTICS_LINK)){
+            Log.d(LOG_TAG, "SEND_ANALYTICS_LINK onResponse: " + response);
+        }
+    }
+
+    @Override
+    public void onError(VolleyError error, String tag) {
+
+    }
+
+    @Override
+    public void onOffline(String tag) {
+
     }
 }

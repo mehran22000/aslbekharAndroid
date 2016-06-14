@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.fragments.StoreListFragment;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
@@ -23,6 +24,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
+
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_STORE;
 
 /**
  * Created by Amin on 12/1/2015.
@@ -104,6 +107,8 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
         holder.showOnMapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AnalyticsDataModel.saveAnalytic(BRAND_STORE,
+                        model.getbId() + "_" + model.getsId());
                 fragment.showOnMap(model);
             }
         });

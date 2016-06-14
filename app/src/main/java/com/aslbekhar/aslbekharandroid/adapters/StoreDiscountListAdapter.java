@@ -63,24 +63,6 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/theme.ttf");
         holder.title.setText(model.getsName());
         holder.title.setTypeface(tf);
-        if (model.getsHour() != null && model.getsHour().length() > 1) {
-            holder.workHour.setText("ساعات کار: " + model.getsHour());
-            holder.workHour.setTypeface(tf);
-        } else {
-            holder.workHour.setVisibility(View.GONE);
-        }
-        if (model.getsTel1() != null && model.getsTel1().length() > 1) {
-            holder.tell.setText("تلفن: " + Constants.persianNumbers(model.getsTel1()));
-            holder.tell.setTypeface(tf);
-        } else {
-            holder.tell.setVisibility(View.INVISIBLE);
-        }
-        if (model.getsAddress() != null && model.getsAddress().length() > 1) {
-            holder.address.setText("آدرس: " + model.getsAddress());
-            holder.address.setTypeface(tf);
-        } else {
-            holder.address.setVisibility(View.INVISIBLE);
-        }
         if (model.getDistance() != null && model.getDistance().length() > 1) {
             holder.distance.setText("فاصله شما تا فروشگاه: " + Constants.persianNumbers(model.getDistance()) + " کیلومتر");
             holder.distance.setTypeface(tf);
@@ -93,18 +75,12 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
         } else {
             holder.saleStart.setVisibility(View.INVISIBLE);
         }
-        if (model.getdEndDate() != null && model.getdEndDate().length() > 1) {
-            holder.saleEnd.setText("پایان حراج: " + Constants.persianNumbers(model.getdEndDateFa()));
-            holder.saleEnd.setTypeface(tf);
-        } else {
-            holder.saleEnd.setVisibility(View.INVISIBLE);
-        }
-
         if (model.getdPercentage() != null && model.getdPercentage().length() > 1) {
-            holder.salePercentage.setText(model.getdPercentage() +"%");
-//            holder.salePercentage.setTypeface(tf);
+            holder.percentage.setText("حراج: " + Constants.persianNumbers(model.getdPercentage()) + "%");
+            holder.percentage.setTypeface(tf);
         } else {
-            holder.salePercentage.setVisibility(View.INVISIBLE);
+            holder.percentage.setText("حراج");
+            holder.percentage.setTypeface(tf);
         }
 
         if (model.getsVerified().equals(Constants.YES)){
@@ -153,13 +129,9 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
     public static class GroupViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView title;
-        TextView workHour;
-        TextView tell;
-        TextView address;
         TextView distance;
         TextView saleStart;
-        TextView saleEnd;
-        TextView salePercentage;
+        TextView percentage;
         ImageView image;
         ImageView brandLogo;
         View callBtn;
@@ -169,13 +141,9 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.itemCV);
             title = (TextView) itemView.findViewById(R.id.title);
-            workHour = (TextView) itemView.findViewById(R.id.workHour);
-            tell = (TextView) itemView.findViewById(R.id.tell);
-            address = (TextView) itemView.findViewById(R.id.address);
             distance = (TextView) itemView.findViewById(R.id.distance);
             saleStart = (TextView) itemView.findViewById(R.id.sale_start);
-            saleEnd = (TextView) itemView.findViewById(R.id.sale_end);
-            salePercentage = (TextView) itemView.findViewById(R.id.salePercentage);
+            percentage = (TextView) itemView.findViewById(R.id.salePercentageTxt);
             image = (ImageView) itemView.findViewById(R.id.image);
             brandLogo = (ImageView) itemView.findViewById(R.id.brandLogo);
             callBtn = itemView.findViewById(R.id.callLay);

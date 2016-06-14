@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.CategoryListAdapter;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.CategoryModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
@@ -38,6 +39,7 @@ import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CATEGORY;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
@@ -172,7 +174,8 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
                     new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-
+                            AnalyticsDataModel.saveAnalytic(CATEGORY,
+                                    modelListToShow.get(position).getTitle());
                             checkForAdvertisement(position);
 
                         }

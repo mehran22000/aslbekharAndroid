@@ -12,6 +12,7 @@ public class Interfaces {
 
     public interface MainActivityInterface {
         public void openNewContentFragment(Fragment targetFragment);
+        public void openNewContentFragment(Fragment targetFragment, int position);
     }
 
     public interface OfflineInterface {

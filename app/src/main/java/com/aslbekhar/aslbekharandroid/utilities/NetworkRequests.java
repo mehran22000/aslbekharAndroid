@@ -97,6 +97,12 @@ public class NetworkRequests {
                                    final String tag, final String postBody) {
 
 
+        if (DEBUG) {
+            Log.d(LOG_TAG, tag + " url = " + url);
+        }
+        if (DEBUG) {
+            Log.d(LOG_TAG, tag + " postJson = " + postBody);
+        }
         StringRequest strReq = new StringRequest(POST,
                 url, new Response.Listener<String>() {
 

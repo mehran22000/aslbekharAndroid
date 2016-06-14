@@ -31,22 +31,22 @@
                 android:layout_width="@dimen/item_store_image_h"
                 android:layout_height="@dimen/item_store_image_h"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"/>
+                android:layout_alignParentTop="true" />
 
             <TextView
                 android:id="@+id/salePercentage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_above="@+id/btnLay"
                 android:layout_alignLeft="@+id/brandLogo"
                 android:layout_alignParentLeft="true"
                 android:layout_alignRight="@+id/brandLogo"
                 android:layout_below="@+id/brandLogo"
-                android:layout_above="@+id/btnLay"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:textColor="@color/red"
-                android:textStyle="bold"
-                android:textSize="@dimen/item_store_sale_percentage_ts" />
+                android:textSize="@dimen/item_store_sale_percentage_ts"
+                android:textStyle="bold" />
 
 
             <TextView
@@ -61,71 +61,20 @@
                 android:layout_toRightOf="@+id/brandLogo"
                 android:gravity="center"
                 android:maxLines="1"
-                android:padding="2dp"
                 android:textColor="@color/textColorPrimaryInverse"
                 android:textSize="@dimen/item_title_ts_larger" />
-
-            <TextView
-                android:id="@+id/workHour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/title"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="2dp"
-                android:layout_toRightOf="@+id/brandLogo"
-                android:gravity="right"
-                android:maxLines="1"
-                android:padding="2dp"
-                android:textColor="@color/textColorPrimaryInverse"
-                android:textSize="@dimen/item_title_ts_smaller" />
-
-            <TextView
-                android:id="@+id/tell"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/workHour"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="2dp"
-                android:layout_toRightOf="@+id/brandLogo"
-                android:gravity="right"
-                android:maxLines="1"
-                android:padding="2dp"
-                android:textColor="@color/textColorPrimaryInverse"
-                android:textSize="@dimen/item_title_ts_smaller" />
-
-            <TextView
-                android:id="@+id/address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/tell"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="2dp"
-                android:layout_toRightOf="@+id/brandLogo"
-                android:gravity="right"
-                android:maxLines="1"
-                android:padding="2dp"
-                android:textColor="@color/textColorPrimaryInverse"
-                android:textSize="@dimen/item_title_ts_smaller" />
 
             <TextView
                 android:id="@+id/distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/address"
+                android:layout_below="@+id/title"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="2dp"
                 android:layout_toRightOf="@+id/brandLogo"
                 android:gravity="right"
                 android:maxLines="1"
-                android:padding="2dp"
                 android:textColor="@color/textColorPrimaryInverse"
                 android:textSize="@dimen/item_title_ts_smaller" />
 
@@ -137,27 +86,9 @@
                 android:layout_below="@+id/distance"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="2dp"
                 android:layout_toRightOf="@+id/brandLogo"
                 android:gravity="right"
                 android:maxLines="1"
-                android:padding="2dp"
-                android:textColor="@color/textColorPrimaryInverse"
-                android:textSize="@dimen/item_title_ts_smaller" />
-
-            <TextView
-                android:id="@+id/sale_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/sale_start"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="2dp"
-                android:layout_toRightOf="@+id/brandLogo"
-                android:gravity="right"
-                android:maxLines="1"
-                android:padding="2dp"
                 android:textColor="@color/textColorPrimaryInverse"
                 android:textSize="@dimen/item_title_ts_smaller" />
 
@@ -166,15 +97,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
+                android:layout_below="@+id/brandLogo"
                 android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/salePercentageLay"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_left_bottom_secondary">
+
+
+                    <TextView
+                        android:id="@+id/salePercentageTxt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:padding="2dp"
+                        android:text="50%"
+                        android:textColor="@color/textColorPrimary" />
+
+
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/showOnMapLay"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginRight="2dp"
                     android:layout_weight="1"
-                    android:background="@drawable/rounded_corner_left_bottom">
+                    android:background="@color/colorPrimary">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -193,9 +146,7 @@
                             android:text="@string/show_on_map"
                             android:textColor="@color/textColorPrimary" />
 
-
                     </LinearLayout>
-
 
                 </RelativeLayout>
 
