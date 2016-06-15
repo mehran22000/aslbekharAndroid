@@ -8,6 +8,7 @@ import java.util.List;
 public class CategoryModel {
 
     String title;
+    String cId;
     List<String> images;
 
     public CategoryModel() {
@@ -17,9 +18,10 @@ public class CategoryModel {
         this.title = title;
     }
 
-    public CategoryModel(String title, List<String> images) {
+    public CategoryModel(String title, String cId, List<String> images) {
         this.title = title;
         this.images = images;
+        this.cId = cId;
     }
 
     public String getTitle() {
@@ -28,6 +30,14 @@ public class CategoryModel {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getcId() {
+        return cId;
+    }
+
+    public void setcId(String cId) {
+        this.cId = cId;
     }
 
     public List<String> getImages() {

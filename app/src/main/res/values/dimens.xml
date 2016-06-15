@@ -21,4 +21,6 @@
     <dimen name="item_store_image_h_sale">120dp</dimen>
     <dimen name="item_store_sale_percentage_ts">35dp</dimen>
 
+    // store frag
+    <dimen name="store_image_h_sale">150dp</dimen>
 </resources>

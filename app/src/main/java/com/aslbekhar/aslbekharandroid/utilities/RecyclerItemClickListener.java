@@ -10,11 +10,11 @@ import android.view.View;
  * Created by Amin on 01/01/2016.
  */
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
-private OnItemClickListener mListener;
+    private OnItemClickListener mListener;
 
-public interface OnItemClickListener {
-    public void onItemClick(View view, int position);
-}
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position);
+    }
 
     GestureDetector mGestureDetector;
 

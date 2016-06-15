@@ -51,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.DIFAULT_DISTANCE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEFAULT_DISTANCE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.GPS_ON_OR_OFF;
@@ -391,7 +391,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         progressBar.start();
         if (type == MAP_TYPE_SHOW_NEAR_BY) {
             NetworkRequests.getRequest(STORESLIST_NEARBY + lastLocation.getLatitude() + "/"
-                    + lastLocation.getLongitude() + "/" + DIFAULT_DISTANCE, this, DOWNLOAD);
+                    + lastLocation.getLongitude() + "/" + DEFAULT_DISTANCE, this, DOWNLOAD);
         }
     }
 

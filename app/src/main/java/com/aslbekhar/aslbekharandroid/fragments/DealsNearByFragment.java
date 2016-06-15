@@ -19,11 +19,13 @@ import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.StoreDiscountListAdapter;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.StoreDiscountModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
+import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -38,6 +40,8 @@ import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEALS_BRAND;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEALS_BRAND_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
@@ -58,7 +62,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
  * <p/>
  * This class will be used for
  */
-public class DealNearByFragment extends android.support.v4.app.Fragment
+public class DealsNearByFragment extends android.support.v4.app.Fragment
         implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, Interfaces.NetworkListeners {
 
@@ -93,7 +97,7 @@ public class DealNearByFragment extends android.support.v4.app.Fragment
 
     private LocationRequest mLocationRequest;
 
-    public DealNearByFragment() {
+    public DealsNearByFragment() {
 
     }
 
@@ -120,6 +124,18 @@ public class DealNearByFragment extends android.support.v4.app.Fragment
 
         adapter = new StoreDiscountListAdapter(modelList, getActivity(), this, cityCode);
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        AnalyticsDataModel.saveAnalytic(DEALS_BRAND_STORE,
+                                modelList.get(position).getbId() + "_" +
+                                        modelList.get(position).getsId());
+                        AnalyticsDataModel.saveAnalytic(DEALS_BRAND,
+                                modelList.get(position).getbId());
+                    }
+                })
+        );
 
         // First we need to check availability of play services
         if (checkPlayServices()) {

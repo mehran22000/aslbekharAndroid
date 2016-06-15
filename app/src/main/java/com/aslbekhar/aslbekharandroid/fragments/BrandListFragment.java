@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,10 +45,11 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showSlideUp;
 
@@ -62,6 +62,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
     Interfaces.MainActivityInterface callBack;
     String cityCode;
     String catName;
+    String catNum;
     RecyclerView recyclerView;
     BrandListAdapter adapter;
     List<BrandModel> modelList;
@@ -84,6 +85,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
         super.onCreate(savedInstanceState);
         cityCode = getArguments().getString(CITY_CODE);
         catName = getArguments().getString(CAT_NAME);
+        catNum = getArguments().getString(CAT_NUMBER, "0");
     }
 
     @Override
@@ -179,35 +181,16 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
 
 
     private void checkForBannerAdvertise() {
-        String url = "https://buyoriginal.herokuapp.com//images/ads/banner/ad.021.clothes.png";
-        Glide.with(this)
-//                .load(CAT_BANNER_AD + cityCode + "." + catName + ".png")
-                .load(url)
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
 
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        showSlideUp(bannerAdImageView, true, getContext());
-                        return false;
-                    }
-                })
-                .into(bannerAdImageView);
-
+        String url = CAT_BANNER_AD + cityCode + ".cat" + catNum + ".png";
         Picasso.with(getContext()).load(url).into(bannerAdImageView, new Callback() {
             @Override
             public void onSuccess() {
                 showSlideUp(bannerAdImageView, true, getContext());
-                Log.d(LOG_TAG, "sssssssssss: ");
             }
 
             @Override
             public void onError() {
-                Log.d(LOG_TAG, "eeeeeeeeeeeee: ");
             }
         });
     }
@@ -231,7 +214,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
 
 
         Glide.with(this)
-                .load(CITY_TO_CAT_FULL_AD + cityCode + '.' + catName + model.getbName() + ".png")
+                .load(CITY_TO_CAT_FULL_AD + cityCode + '.' + catNum +"." + model.getbName() + ".png")
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
                     public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -326,7 +309,8 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
         Bundle bundle = new Bundle();
 
         bundle.putString(CITY_CODE, cityCode);
-        bundle.putString(CAT_NAME, getArguments().getString(CAT_NAME));
+        bundle.putString(CAT_NAME, catName);
+        bundle.putString(CAT_NUMBER, catNum);
         bundle.putString(BRAND_ID, brandModel.getbId());
         bundle.putString(BRAND_NAME, brandModel.getbName());
 

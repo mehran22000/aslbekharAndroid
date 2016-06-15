@@ -26,6 +26,7 @@ public class BrandModel {
     String bName;
     String cName;
     String bLogo;
+    String cId;
 
     public String get_id() {
         return _id;
@@ -65,6 +66,14 @@ public class BrandModel {
 
     public void setbLogo(String bLogo) {
         this.bLogo = bLogo;
+    }
+
+    public String getcId() {
+        return cId;
+    }
+
+    public void setcId(String cId) {
+        this.cId = cId;
     }
 
     public static List<BrandModel> getBrandListFromAssets() {

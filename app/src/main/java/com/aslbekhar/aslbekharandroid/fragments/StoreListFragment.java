@@ -3,6 +3,7 @@ package com.aslbekhar.aslbekharandroid.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,26 +21,37 @@ import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.StoreListAdapter;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.BrandVerificationModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
+import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.rey.material.widget.ProgressView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_VERIFICATION_DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_VERIFICATION_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
@@ -47,6 +59,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFICATION_TIPS;
@@ -68,10 +81,17 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
     LinearLayoutManager layoutManager;
     String cityCode;
     String catName;
+    String catNum;
     String brandName;
     String brandId;
 
+
+    boolean fullScreenAdvertiseTimer = false;
+    boolean fullScreenAdvertiseSecondTimer = false;
+    ImageView fullScreenAdImageView;
     ImageView bannerAdImageView;
+    ImageView listOverLay;
+    ProgressView progressView;
 
     public StoreListFragment() {
 
@@ -139,6 +159,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
 
         cityCode = getArguments().getString(CITY_CODE);
         catName = getArguments().getString(CAT_NAME);
+        catNum = getArguments().getString(CAT_NUMBER);
         brandName = getArguments().getString(BRAND_NAME);
         brandId = getArguments().getString(BRAND_ID);
 
@@ -164,27 +185,116 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         adapter = new StoreListAdapter(modelListToShow, getActivity(), this, cityCode);
         recyclerView.setAdapter(adapter);
 
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        AnalyticsDataModel.saveAnalytic(BRAND_STORE,
+                                modelListToShow.get(position).getbId() + "_" +
+                                        modelListToShow.get(position).getsId());
+                        checkForAdvertisement(modelListToShow.get(position));
+                    }
+                })
+        );
+
         return view;
     }
 
+    private void checkForAdvertisement(final StoreModel model) {
+
+        fullScreenAdvertiseTimer = true;
+        Snippets.showFade(listOverLay, true, 500);
+        progressView.start();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (fullScreenAdvertiseTimer) {
+                    fullScreenAdvertiseTimer = false;
+                    openStoreFragment(model);
+                }
+            }
+        }, ADVERTISEMENT_TIMEOUT);
 
 
-    private void checkForBannerAdvertise(){
         Glide.with(this)
-                .load(CAT_BANNER_AD + cityCode + "." + catName + "." + brandName + ".png")
+                .load(CITY_TO_CAT_FULL_AD + cityCode + '.' + catNum + "."+ brandName +"." + model.getsId() + ".png")
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override
-                    public boolean onException(Exception e, String StringModel,
-                                               Target<GlideDrawable> target, boolean isFirstResource) {
+                    public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target, boolean isFirstResource) {
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            openStoreFragment(model);
+                        }
                         return true;
                     }
 
                     @Override
                     public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        showSlideUp(bannerAdImageView, true, getContext());
-                        return false;
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            fullScreenAdImageView.setVisibility(View.VISIBLE);
+                            progressView.stop();
+                            listOverLay.setVisibility(View.GONE);
+                            fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    fullScreenAdvertiseSecondTimer = false;
+                                    openStoreFragment(model);
+                                }
+                            });
+                            fullScreenAdvertiseSecondTimer = true;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (fullScreenAdvertiseSecondTimer) {
+                                        fullScreenAdvertiseSecondTimer = false;
+                                        openStoreFragment(model);
+                                    }
+                                }
+                            }, ADVERTISEMENT_VIEW_TIMEOUT);
+                            return false;
+
+                        } else {
+                            return true;
+                        }
                     }
-                }).into(bannerAdImageView);
+                }).into(fullScreenAdImageView);
+
+
+    }
+
+    private void openStoreFragment(StoreModel model) {
+
+
+        Bundle bundle = new Bundle();
+
+        bundle.putString(CITY_CODE, cityCode);
+        bundle.putString(CAT_NAME, catName);
+        bundle.putString(CAT_NUMBER, catNum);
+        bundle.putString(BRAND_ID, model.getbId());
+        bundle.putString(BRAND_NAME, model.getbName());
+        bundle.putString(STORE_DETAILS, JSON.toJSONString(model));
+
+        StoreFragment fragment = new StoreFragment();
+        fragment.setArguments(bundle);
+        callBack.openNewContentFragment(fragment);
+
+    }
+
+    private void checkForBannerAdvertise(){
+
+        String url = CAT_BANNER_AD + cityCode + ".cat" + catNum + "." + brandName + ".png";
+        Picasso.with(getContext()).load(url).into(bannerAdImageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                showSlideUp(bannerAdImageView, true, getContext());
+            }
+
+            @Override
+            public void onError() {
+            }
+        });
     }
 
     private void performSearch(String search) {

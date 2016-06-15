@@ -33,6 +33,8 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.rey.material.widget.ProgressView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.CATEGORY;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_STORE_URL;
@@ -186,21 +189,18 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
     }
 
     private void checkForBannerAdvertise() {
-        Glide.with(this)
-                .load(CAT_BANNER_AD + cityCode + ".png")
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String StringModel,
-                                               Target<GlideDrawable> target, boolean isFirstResource) {
-                        return true;
-                    }
 
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        showSlideUp(bannerAdImageView, true, getContext());
-                        return false;
-                    }
-                }).into(bannerAdImageView);
+        String url = CAT_BANNER_AD + cityCode + ".png";
+        Picasso.with(getContext()).load(url).into(bannerAdImageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                showSlideUp(bannerAdImageView, true, getContext());
+            }
+
+            @Override
+            public void onError() {
+            }
+        });
     }
 
     private void openBrandListFragment(int position) {
@@ -208,6 +208,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
         bundle.putString(CITY_CODE, getArguments().getString(CITY_CODE));
         bundle.putString(CITY_NAME, getArguments().getString(CITY_NAME));
         bundle.putString(CAT_NAME, modelListToShow.get(position).getTitle());
+        bundle.putString(CAT_NUMBER, modelListToShow.get(position).getcId());
 
         BrandListFragment fragment = new BrandListFragment();
         fragment.setArguments(bundle);
@@ -233,7 +234,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
 
 
         Glide.with(this)
-                .load(CITY_TO_CAT_FULL_AD + cityCode + '.' + modelListToShow.get(position).getTitle() + ".png")
+                .load(CITY_TO_CAT_FULL_AD + cityCode + '.' + modelListToShow.get(position).getcId() + ".png")
 //                .load("http://digiato.com/wp-content/uploads/2016/06/LIFAN-1-1.jpg")
                 .listener(new RequestListener<String, GlideDrawable>() {
                     @Override

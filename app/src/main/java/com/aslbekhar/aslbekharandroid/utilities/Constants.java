@@ -112,6 +112,7 @@ public class Constants {
     public static String STORE_TYPE_VERIFIED_DISCOUNT = "STORE_TYPE_VERIFIED_DISCOUNT";
     public static String STORE_TYPE_DISCOUT = "STORE_TYPE_DISCOUT";
     public static String STORE_TYPE_NONE = "STORE_TYPE_NONE";
+    public static String STORE_DETAILS = "STORE_DETAILS";
     public static String MAX_NUMBER = "MAX_NUMBER";
     public static String HEADER_IMAGE = "HEADER_IMAGE";
     public static String LINK = "LINK";
@@ -127,6 +128,7 @@ public class Constants {
     public static String DEFAULT_CITY_CODE = "021";
     public static String CITY_NAME = "CITY_NAME";
     public static String CAT_NAME = "CAT_NAME";
+    public static String CAT_NUMBER = "CAT_NUMBER";
     public static String BRAND_ID = "BRAND_ID";
     public static String BRAND_NAME = "BRAND_NAME";
     public static String VERIFICATION_TIPS = "VERIFICATION_TIPS";
@@ -141,8 +143,10 @@ public class Constants {
     public static String CATEGORY = "category";
     public static String BRAND = "brand";
     public static String BRAND_STORE = "Brand_Store";
-    public static String NEAR_ME_STORE = "NearMe_Brand_Store";
+    public static String NEAR_ME_BRAND_STORE = "NearMe_Brand_Store";
     public static String NEAR_ME_BRAND = "NearMe_Brand";
+    public static String DEALS_BRAND = "Deal_Brand";
+    public static String DEALS_BRAND_STORE = "Deal_Brand_Store";
     public static String VERIFICATION = "Verification";
     public static int MAP_TYPE_SHOW_NEAR_BY = 1;
     public static int MAP_TYPE_SHOW_SINGLE_STORE = 2;
@@ -159,7 +163,7 @@ public class Constants {
 
 
     //AMIN Numbers:
-    public static int DIFAULT_DISTANCE = 10;
+    public static int DEFAULT_DISTANCE = 10;
     public static int ADVERTISEMENT_TIMEOUT = 4000;
     public static int ADVERTISEMENT_VIEW_TIMEOUT = 3000;
     public static int NOTIFICATION_CHECK_INTERVAL = 30 * 60 * 1000;
