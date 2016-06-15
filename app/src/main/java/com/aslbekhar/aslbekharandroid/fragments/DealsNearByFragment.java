@@ -39,6 +39,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEALS_BRAND;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEALS_BRAND_STORE;
@@ -50,6 +54,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_SINGLE_STORE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFIED;
@@ -133,6 +138,7 @@ public class DealsNearByFragment extends android.support.v4.app.Fragment
                                         modelList.get(position).getsId());
                         AnalyticsDataModel.saveAnalytic(DEALS_BRAND,
                                 modelList.get(position).getbId());
+                        openStoreFragment(modelList.get(position));
                     }
                 })
         );
@@ -162,6 +168,23 @@ public class DealsNearByFragment extends android.support.v4.app.Fragment
         return view;
     }
 
+
+    private void openStoreFragment(StoreModel model) {
+
+        Bundle bundle = new Bundle();
+
+        bundle.putString(CITY_CODE, cityCode);
+        bundle.putString(CAT_NAME, model.getbCategory());
+        bundle.putString(CAT_NUMBER, model.getcId());
+        bundle.putString(BRAND_ID, model.getbId());
+        bundle.putString(BRAND_NAME, model.getbName());
+        bundle.putString(STORE_DETAILS, JSON.toJSONString(model));
+
+        StoreFragment fragment = new StoreFragment();
+        fragment.setArguments(bundle);
+        callBack.openNewContentFragment(fragment);
+
+    }
 
 
     public void showOnMap(StoreModel model) {

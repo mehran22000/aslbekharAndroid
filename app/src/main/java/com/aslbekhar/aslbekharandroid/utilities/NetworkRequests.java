@@ -36,8 +36,6 @@ public class NetworkRequests {
             @Override
             public void onResponse(String response) {
 
-
-
                 if (!(response.contains("ا") || response.contains("ب") || response.contains("پ") ||
                         response.contains("ت") || response.contains("ث") || response.contains("ج")
                         || response.contains("چ") || response.contains("ح") || response.contains("خ")

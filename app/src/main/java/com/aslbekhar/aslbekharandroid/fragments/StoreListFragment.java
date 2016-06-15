@@ -152,6 +152,9 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
             }
         });
 
+        fullScreenAdImageView = (ImageView) view.findViewById(R.id.fullScreenAdvertise);
+        listOverLay = (ImageView) view.findViewById(R.id.listOverLay);
+        progressView = (ProgressView) view.findViewById(R.id.progressBar);
         bannerAdImageView = (ImageView) view.findViewById(R.id.bannerAdvertise);
         checkForBannerAdvertise();
 

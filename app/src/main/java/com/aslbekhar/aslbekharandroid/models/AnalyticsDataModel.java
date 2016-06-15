@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * Created by Amin on 13/06/2016.
+ *
  */
 public class AnalyticsDataModel {
 
@@ -20,14 +21,14 @@ public class AnalyticsDataModel {
     String key;
     String year;
     String lat;
-    String mLong;
+    String lon;
 
     public AnalyticsDataModel(String value, String key) {
         this.value = value;
         this.key = key;
         device = Snippets.getSP(Constants.DEVICE_ID);
         lat = Snippets.getSP(Constants.LAST_LAT);
-        mLong = Snippets.getSP(Constants.LAST_LONG);
+        lon = Snippets.getSP(Constants.LAST_LONG);
         Calendar calendar = Calendar.getInstance();
         day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
         month = String.valueOf(calendar.get(Calendar.MONTH));
@@ -102,11 +103,11 @@ public class AnalyticsDataModel {
         this.lat = lat;
     }
 
-    public String getmLong() {
-        return mLong;
+    public String getLon() {
+        return lon;
     }
 
-    public void setmLong(String mLong) {
-        this.mLong = mLong;
+    public void setLon(String lon) {
+        this.lon = lon;
     }
 }

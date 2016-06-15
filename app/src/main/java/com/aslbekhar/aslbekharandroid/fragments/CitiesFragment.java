@@ -42,6 +42,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEVICE_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTER_ANDROID_DEVICE_LINK;
@@ -167,11 +168,16 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
                             NetworkRequests.postRequest(REGISTER_ANDROID_DEVICE_LINK,
                                     CitiesFragment.this, REGISTRATION, postJson);
                         }
+                        setSP(LAST_CITY_CODE, modelListToShow.get(position).getId());
                         checkForAdvertisement(modelListToShow.get(position));
 
                     }
                 })
         );
+
+        if (getSP(LAST_CITY_CODE).equals(FALSE)){
+            setSP(LAST_CITY_CODE, "021");
+        }
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
