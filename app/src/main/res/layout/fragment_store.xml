@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/silver_light_2">
 
     <TextView
@@ -36,7 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/brandLogo"
+        android:layout_alignBottom="@+id/brandLogo"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
@@ -44,7 +44,7 @@
         android:gravity="center"
         android:padding="5dp"
         android:textColor="@color/textColorSecondary"
-        android:textSize="@dimen/item_title_ts_larger" />
+        android:textSize="25dp" />
 
 
     <TextView
@@ -58,10 +58,9 @@
         android:layout_marginTop="2dp"
         android:layout_toRightOf="@+id/brandLogo"
         android:gravity="right"
-        android:maxLines="1"
         android:padding="5dp"
         android:textColor="@color/textColorPrimaryInverse"
-        android:textSize="@dimen/item_title_ts_smaller" />
+        android:textSize="@dimen/item_title_ts_medium" />
 
     <TextView
         android:id="@+id/tell"
@@ -74,10 +73,10 @@
         android:layout_marginTop="2dp"
         android:layout_toRightOf="@+id/brandLogo"
         android:gravity="right"
-        android:maxLines="1"
         android:padding="5dp"
         android:textColor="@color/textColorPrimaryInverse"
-        android:textSize="@dimen/item_title_ts_smaller" />
+        android:textSize="@dimen/item_title_ts_medium" />
+
     <TextView
         android:id="@+id/address"
         android:layout_width="wrap_content"
@@ -87,12 +86,10 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="2dp"
-        android:layout_toRightOf="@+id/brandLogo"
         android:gravity="right"
-        android:maxLines="1"
         android:padding="5dp"
         android:textColor="@color/textColorPrimaryInverse"
-        android:textSize="@dimen/item_title_ts_smaller" />
+        android:textSize="@dimen/item_title_ts_medium" />
 
     <ImageView
         android:id="@+id/fullScreenAdvertise"

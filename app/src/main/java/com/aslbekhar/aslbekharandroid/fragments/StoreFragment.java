@@ -69,7 +69,7 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
 
         cityCode = getArguments().getString(CITY_CODE, "");
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_list_search, container, false);
+        view = inflater.inflate(R.layout.fragment_store, container, false);
 
 
         cityCode = getArguments().getString(CITY_CODE);

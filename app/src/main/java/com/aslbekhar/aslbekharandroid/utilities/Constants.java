@@ -95,6 +95,7 @@ public class Constants {
     public static String GPS_ON_OR_OFF = "GPS_ON_OR_OFF";
     public static String PLAY_SERVICES_ON_OR_OFF = "PLAY_SERVICES_ON_OR_OFF";
     public static String DATA_PROCESSED_OR_NOT = "DATA_PROCESSED_OR_NOT";
+    public static String LAST_CITY_CODE = "LAST_CITY_CODE";
 
 
 
@@ -110,7 +111,7 @@ public class Constants {
     public static String STORE_TYPE = "STORE_TYPE";
     public static String STORE_TYPE_VERIFIED = "STORE_TYPE_VERIFIED";
     public static String STORE_TYPE_VERIFIED_DISCOUNT = "STORE_TYPE_VERIFIED_DISCOUNT";
-    public static String STORE_TYPE_DISCOUT = "STORE_TYPE_DISCOUT";
+    public static String STORE_TYPE_DISCOUNT = "STORE_TYPE_DISCOUNT";
     public static String STORE_TYPE_NONE = "STORE_TYPE_NONE";
     public static String STORE_DETAILS = "STORE_DETAILS";
     public static String MAX_NUMBER = "MAX_NUMBER";

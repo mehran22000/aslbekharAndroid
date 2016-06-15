@@ -51,10 +51,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEFAULT_DISTANCE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.GPS_ON_OR_OFF;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
@@ -64,10 +70,12 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_NEAR_BY;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORESLIST_NEARBY;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFIED;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSPboolean;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
@@ -89,7 +97,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
 
     int type = 1;
-    Interfaces.MainActivityInterface mCallback;
+    Interfaces.MainActivityInterface callBack;
     Interfaces.OfflineInterface offlineCallBack;
     View view;
     GoogleApiClient googleApiClient;
@@ -169,7 +177,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-
+        openStoreFragment(storeModelList.get(Integer.parseInt(marker.getSnippet())));
     }
 
     @Override
@@ -372,7 +380,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        mCallback = (Interfaces.MainActivityInterface) getActivity();
+        callBack = (Interfaces.MainActivityInterface) getActivity();
         offlineCallBack = (Interfaces.OfflineInterface) getActivity();
 
     }
@@ -467,6 +475,23 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
 
         return view;
+    }
+
+    private void openStoreFragment(StoreModel model) {
+
+        Bundle bundle = new Bundle();
+
+        bundle.putString(CITY_CODE, getSP(LAST_CITY_CODE));
+        bundle.putString(CAT_NAME, model.getbCategory());
+        bundle.putString(CAT_NUMBER, model.getcId());
+        bundle.putString(BRAND_ID, model.getbId());
+        bundle.putString(BRAND_NAME, model.getbName());
+        bundle.putString(STORE_DETAILS, JSON.toJSONString(model));
+
+        StoreFragment fragment = new StoreFragment();
+        fragment.setArguments(bundle);
+        callBack.openNewContentFragment(fragment);
+
     }
 
     @Override
