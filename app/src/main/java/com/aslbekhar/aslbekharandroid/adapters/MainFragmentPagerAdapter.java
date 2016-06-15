@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.aslbekhar.aslbekharandroid.fragments.CitiesFragment;
-import com.aslbekhar.aslbekharandroid.fragments.DealNearByFragment;
+import com.aslbekhar.aslbekharandroid.fragments.DealsNearByFragment;
 import com.aslbekhar.aslbekharandroid.fragments.HostFragment;
 import com.aslbekhar.aslbekharandroid.fragments.MapNearByFragment;
 import com.aslbekhar.aslbekharandroid.fragments.MyStoreAccountFragment;
@@ -33,7 +33,7 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private void initializeTabs() {
         tabs.add(HostFragment.newInstance(new CitiesFragment()));
         tabs.add(HostFragment.newInstance(new MapNearByFragment()));
-        tabs.add(HostFragment.newInstance(new DealNearByFragment()));
+        tabs.add(HostFragment.newInstance(new DealsNearByFragment()));
         tabs.add(HostFragment.newInstance(new MyStoreAccountFragment()));
     }
 
