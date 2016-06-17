@@ -5,7 +5,7 @@
 
     <RelativeLayout
         android:layout_width="300dp"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/item_store_image_h_sale"
         android:layout_centerHorizontal="true"
         android:padding="1dp"
         android:background="@drawable/map_infowindow_back">

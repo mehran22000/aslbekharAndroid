@@ -15,10 +15,8 @@ import android.widget.TextView;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.models.CategoryModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -65,140 +63,148 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         final List<String> brandLogos = model.getImages();
 
         if (brandLogos.size() > 0) {
-            Glide.with(fragment)
+
+            Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(0) + ".png"))
-                    .listener(new RequestListener<Uri, GlideDrawable>() {
+                    .into(holder.image1, new Callback() {
                         @Override
-                        public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            Glide.with(fragment).load(Constants.BRAND_LOGO_URL + brandLogos.get(0) + ".png").into(holder.image1);
-                            return true;
+                        public void onSuccess() {
+
                         }
 
                         @Override
-                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
+                        public void onError() {
+                            Picasso.with(context)
+                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(0) + ".png")
+                                    .into(holder.image1);
                         }
-                    })
-                    .into(holder.image1);
+                    });
         }
         if (brandLogos.size() > 1) {
-            Glide.with(fragment)
+
+            Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(1) + ".png"))
-                    .listener(new RequestListener<Uri, GlideDrawable>() {
+                    .into(holder.image2, new Callback() {
                         @Override
-                        public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            Glide.with(fragment).load(Constants.BRAND_LOGO_URL + brandLogos.get(1) + ".png").into(holder.image2);
-                            return true;
+                        public void onSuccess() {
+
                         }
 
                         @Override
-                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
+                        public void onError() {
+                            Picasso.with(context)
+                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(1) + ".png")
+                                    .into(holder.image2);
                         }
-                    })
-                    .into(holder.image2);
+                    });
         }
         if (brandLogos.size() > 2) {
-            Glide.with(fragment)
+
+            Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(2) + ".png"))
-                    .listener(new RequestListener<Uri, GlideDrawable>() {
+                    .into(holder.image3, new Callback() {
                         @Override
-                        public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            Glide.with(fragment).load(Constants.BRAND_LOGO_URL + brandLogos.get(2) + ".png").into(holder.image3);
-                            return true;
+                        public void onSuccess() {
+
                         }
 
                         @Override
-                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
+                        public void onError() {
+                            Picasso.with(context)
+                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(2) + ".png")
+                                    .into(holder.image3);
                         }
-                    })
-                    .into(holder.image3);
+                    });
         }
         if (brandLogos.size() > 3) {
-            Glide.with(fragment)
+
+            Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(3) + ".png"))
-                    .listener(new RequestListener<Uri, GlideDrawable>() {
+                    .into(holder.image4, new Callback() {
                         @Override
-                        public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            Glide.with(fragment).load(Constants.BRAND_LOGO_URL + brandLogos.get(3) + ".png").into(holder.image4);
-                            return true;
+                        public void onSuccess() {
+
                         }
 
                         @Override
-                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
+                        public void onError() {
+                            Picasso.with(context)
+                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(3) + ".png")
+                                    .into(holder.image4);
                         }
-                    })
-                    .into(holder.image4);
+                    });
         }
         if (brandLogos.size() > 4) {
-            Glide.with(fragment)
+
+            Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(4) + ".png"))
-                    .listener(new RequestListener<Uri, GlideDrawable>() {
+                    .into(holder.image5, new Callback() {
                         @Override
-                        public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            Glide.with(fragment).load(Constants.BRAND_LOGO_URL + brandLogos.get(4) + ".png").into(holder.image5);
-                            return true;
+                        public void onSuccess() {
+
                         }
 
                         @Override
-                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
+                        public void onError() {
+                            Picasso.with(context)
+                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(4) + ".png")
+                                    .into(holder.image5);
                         }
-                    })
-                    .into(holder.image5);
+                    });
         }
         if (brandLogos.size() > 5) {
-            Glide.with(fragment)
+
+            Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(5) + ".png"))
-                    .listener(new RequestListener<Uri, GlideDrawable>() {
+                    .into(holder.image6, new Callback() {
                         @Override
-                        public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            Glide.with(fragment).load(Constants.BRAND_LOGO_URL + brandLogos.get(5) + ".png").into(holder.image6);
-                            return true;
+                        public void onSuccess() {
+
                         }
 
                         @Override
-                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
+                        public void onError() {
+                            Picasso.with(context)
+                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(5) + ".png")
+                                    .into(holder.image6);
                         }
-                    })
-                    .into(holder.image6);
+                    });
         }
         if (brandLogos.size() > 6) {
-            Glide.with(fragment)
+
+            Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(6) + ".png"))
-                    .listener(new RequestListener<Uri, GlideDrawable>() {
+                    .into(holder.image7, new Callback() {
                         @Override
-                        public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            Glide.with(fragment).load(Constants.BRAND_LOGO_URL + brandLogos.get(6) + ".png").into(holder.image7);
-                            return true;
+                        public void onSuccess() {
+
                         }
 
                         @Override
-                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
+                        public void onError() {
+                            Picasso.with(context)
+                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(6) + ".png")
+                                    .into(holder.image7);
                         }
-                    })
-                    .into(holder.image7);
+                    });
         }
         if (brandLogos.size() > 7) {
-            Glide.with(fragment)
+
+            Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(7) + ".png"))
-                    .listener(new RequestListener<Uri, GlideDrawable>() {
+                    .into(holder.image8, new Callback() {
                         @Override
-                        public boolean onException(Exception e, Uri model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            Glide.with(fragment).load(Constants.BRAND_LOGO_URL + brandLogos.get(7) + ".png").into(holder.image8);
-                            return true;
+                        public void onSuccess() {
+
                         }
 
                         @Override
-                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
+                        public void onError() {
+                            Picasso.with(context)
+                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(7) + ".png")
+                                    .into(holder.image8);
                         }
-                    })
-                    .into(holder.image8);
+                    });
         }
 
         holder.brandCount.setText(String.valueOf(brandLogos.size()));

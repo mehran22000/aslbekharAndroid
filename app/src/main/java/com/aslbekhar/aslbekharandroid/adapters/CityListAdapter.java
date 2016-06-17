@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
-import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -83,7 +83,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
                 break;
         }
 
-        Glide.with(fragment).load(imageResourceId).into(holder.image);
+        Picasso.with(context).load(imageResourceId).into(holder.image);
 
 
     }

@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -45,6 +46,7 @@ import com.rey.material.widget.ProgressView;
 import static android.provider.Settings.Secure;
 import static android.provider.Settings.SettingNotFoundException;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.APP_VERSION;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHECK_FOR_NEW_VERSION_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHECK_VERSION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DATA_PROCESSED_OR_NOT;
@@ -70,13 +72,29 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     private static int REQUEST_RESOLVE_ERROR = 9003;
     private static final String DIALOG_ERROR = "dialog_error";
     Dialog dialog;
+
+    boolean checkForNewVersionTimer = false;
     
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.splash_layout);
+        ProgressView progressView = (ProgressView) findViewById(R.id.progressBar);
+        progressView.start();
+
         NetworkRequests.getRequest(CHECK_VERSION, this, CHECK_VERSION);
+        checkForNewVersionTimer = true;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (checkForNewVersionTimer) {
+                    checkForNewVersionTimer = false;
+                    checkForPermission();
+                }
+            }
+        }, CHECK_FOR_NEW_VERSION_TIMEOUT);
 
     }
 
@@ -150,9 +168,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         }
 
         if (getSP(DATA_PROCESSED_OR_NOT).equals(FALSE)){
-            setContentView(R.layout.splash_layout);
-            ProgressView progressView = (ProgressView) findViewById(R.id.progressBar);
-            progressView.start();
 
             DataProcessing dataProcessing = new DataProcessing();
             dataProcessing.execute();
@@ -356,8 +371,8 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onResponse(String response, String tag) {
 
-
-        if (tag.equals(CHECK_VERSION)){
+        if (tag.equals(CHECK_VERSION) && checkForNewVersionTimer) {
+            checkForNewVersionTimer = false;
             VersionCheckModel versionCheckModel = null;
             try {
                 versionCheckModel = JSON.parseObject(response, VersionCheckModel.class);
@@ -420,14 +435,16 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onError(VolleyError error, String tag) {
-        if (tag.equals(CHECK_VERSION)) {
+        if (tag.equals(CHECK_VERSION) && checkForNewVersionTimer) {
+            checkForNewVersionTimer = false;
             checkForPermission();
         }
     }
 
     @Override
     public void onOffline(String tag) {
-        if (tag.equals(CHECK_VERSION)) {
+        if (tag.equals(CHECK_VERSION) && checkForNewVersionTimer) {
+            checkForNewVersionTimer = false;
             checkForPermission();
         }
     }

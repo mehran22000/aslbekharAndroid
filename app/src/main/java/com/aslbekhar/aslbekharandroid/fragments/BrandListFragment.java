@@ -26,10 +26,6 @@ import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -51,7 +47,6 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
-import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showSlideUp;
 
 /**
  * Created by Amin on 19/05/2016.
@@ -186,7 +181,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
         Picasso.with(getContext()).load(url).into(bannerAdImageView, new Callback() {
             @Override
             public void onSuccess() {
-                showSlideUp(bannerAdImageView, true, getContext());
+                bannerAdImageView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -212,21 +207,11 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
             }
         }, ADVERTISEMENT_TIMEOUT);
 
-
-        Glide.with(this)
-                .load(CITY_TO_CAT_FULL_AD + cityCode + '.' + catNum +"." + model.getbName() + ".png")
-                .listener(new RequestListener<String, GlideDrawable>() {
+        Picasso.with(getContext())
+                .load(CITY_TO_CAT_FULL_AD + cityCode + ".cat" + catNum +"." + model.getbName() + ".png")
+                .into(fullScreenAdImageView, new Callback() {
                     @Override
-                    public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target, boolean isFirstResource) {
-                        if (fullScreenAdvertiseTimer) {
-                            fullScreenAdvertiseTimer = false;
-                            openStoreListFragment(model);
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public void onSuccess() {
                         if (fullScreenAdvertiseTimer) {
                             fullScreenAdvertiseTimer = false;
                             fullScreenAdImageView.setVisibility(View.VISIBLE);
@@ -249,15 +234,20 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
                                     }
                                 }
                             }, ADVERTISEMENT_VIEW_TIMEOUT);
-                            return false;
 
-                        } else {
-                            return true;
                         }
                     }
-                }).into(fullScreenAdImageView);
 
+                    @Override
+                    public void onError() {
 
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            openStoreListFragment(model);
+                        }
+
+                    }
+                });
     }
 
 
@@ -316,7 +306,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
 
         StoreListFragment fragment = new StoreListFragment();
         fragment.setArguments(bundle);
-        callBack.openNewContentFragment(fragment);
+        callBack.openNewContentFragment(fragment, 0);
 
     }
 

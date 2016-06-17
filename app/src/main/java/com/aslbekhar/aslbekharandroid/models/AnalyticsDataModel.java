@@ -35,7 +35,7 @@ public class AnalyticsDataModel {
         year = String.valueOf(calendar.get(Calendar.YEAR));
     }
 
-    public static void saveAnalytic(String value, String key){
+    public static void saveAnalytic(String key, String value){
         List<AnalyticsDataModel> analyticsDataModels = new ArrayList<>();
         String jsonData = Snippets.getSP(Constants.SAVED_ANALYTICS);
         if (!jsonData.equals(Constants.FALSE)){

@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +29,6 @@ import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -46,6 +43,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rey.material.widget.ProgressView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,6 +64,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_NEAR_BY;
@@ -177,6 +177,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+        Log.d(LOG_TAG, "onInfoWindowClick: asdasdadasdasd");
         openStoreFragment(storeModelList.get(Integer.parseInt(marker.getSnippet())));
     }
 
@@ -456,22 +457,41 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         }
 
         final ImageView brandLogo = (ImageView) view.findViewById(R.id.brandLogo);
-        Glide.with(this)
+//        Glide.with(this)
+//                .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
+//                .listener(new RequestListener<Uri, GlideDrawable>() {
+//                    @Override
+//                    public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
+//                        Glide.with(MapNearByFragment.this).load(Constants.BRAND_LOGO_URL +
+//                                BrandModel.getBrandLogo(model.getbName()) + ".png").into(brandLogo);
+//                        return true;
+//                    }
+//
+//                    @Override
+//                    public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                        return false;
+//                    }
+//                })
+//                .into(brandLogo);
+
+        Picasso.with(getContext())
                 .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
-                .listener(new RequestListener<Uri, GlideDrawable>() {
+                .into(brandLogo, new Callback() {
                     @Override
-                    public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
-                        Glide.with(MapNearByFragment.this).load(Constants.BRAND_LOGO_URL +
-                                BrandModel.getBrandLogo(model.getbName()) + ".png").into(brandLogo);
-                        return true;
+                    public void onSuccess() {
+                        Log.d(LOG_TAG, "onSuccess: ssssssssssssss");
+                        brandLogo.refreshDrawableState();
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        return false;
+                    public void onError() {
+                        Log.d(LOG_TAG, "onSuccess: errrrrrrrrr");
+                        Picasso.with(getContext())
+                                .load(Constants.BRAND_LOGO_URL +
+                                        BrandModel.getBrandLogo(model.getbName()) + ".png")
+                                .into(brandLogo);
                     }
-                })
-                .into(brandLogo);
+                });
 
 
         return view;
@@ -483,7 +503,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
         bundle.putString(CITY_CODE, getSP(LAST_CITY_CODE));
         bundle.putString(CAT_NAME, model.getbCategory());
-        bundle.putString(CAT_NUMBER, model.getcId());
+        bundle.putString(CAT_NUMBER, model.getbCategoryId());
         bundle.putString(BRAND_ID, model.getbId());
         bundle.putString(BRAND_NAME, model.getbName());
         bundle.putString(STORE_DETAILS, JSON.toJSONString(model));

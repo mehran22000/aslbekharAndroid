@@ -15,10 +15,8 @@ import android.widget.TextView;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -59,22 +57,23 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/theme.ttf");
         holder.title.setText(model.getbName());
         holder.title.setTypeface(tf);
-        Glide.with(fragment)
+
+
+        Picasso.with(context)
                 .load(Uri.parse("file:///android_asset/logos/" + model.getbLogo() + ".png"))
-                .listener(new RequestListener<Uri, GlideDrawable>() {
+                .into(holder.image, new Callback() {
                     @Override
-                    public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
-                        Glide.with(fragment).load(Constants.BRAND_LOGO_URL + model.getbLogo() + ".png").into(holder.image);
-                        return true;
+                    public void onSuccess() {
+
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        return false;
+                    public void onError() {
+                        Picasso.with(context)
+                                .load(Constants.BRAND_LOGO_URL + model.getbLogo() + ".png")
+                                .into(holder.image);
                     }
-                })
-                .into(holder.image);
-
+                });
 
     }
 

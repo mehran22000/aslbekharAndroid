@@ -19,10 +19,6 @@ import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -144,22 +140,21 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
 
 
 
-        Glide.with(this)
+        Picasso.with(getContext())
                 .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
-                .listener(new RequestListener<Uri, GlideDrawable>() {
+                .into(brandLogo, new Callback() {
                     @Override
-                    public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
-                        Glide.with(StoreFragment.this).load(Constants.BRAND_LOGO_URL +
-                                BrandModel.getBrandLogo(model.getbName()) + ".png").into(brandLogo);
-                        return true;
+                    public void onSuccess() {
+
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        return false;
+                    public void onError() {
+                        Picasso.with(getContext())
+                                .load(Constants.BRAND_LOGO_URL + BrandModel.getBrandLogo(model.getbName()) + ".png")
+                                .into(brandLogo);
                     }
-                })
-                .into(brandLogo);
+                });
     }
 
     private void checkForBannerAdvertise() {
