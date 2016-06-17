@@ -41,7 +41,7 @@ public class StoreModel {
     String sLong;
     int sDiscount;
     String sVerified;
-    String cId;
+    String bCategoryId;
 
     public StoreModel() {
     }
@@ -194,12 +194,12 @@ public class StoreModel {
         this.sVerified = sVerified;
     }
 
-    public String getcId() {
-        return cId;
+    public String getbCategoryId() {
+        return bCategoryId;
     }
 
-    public void setcId(String cId) {
-        this.cId = cId;
+    public void setbCategoryId(String bCategoryId) {
+        this.bCategoryId = bCategoryId;
     }
 
     public static void getStoreListFromAssets() {
@@ -254,7 +254,7 @@ public class StoreModel {
             }
             if (!catFound){
                 categoryModelList.add(new CategoryModel(storeModel.getbCategory(),
-                        storeModel.getcId(),
+                        storeModel.getbCategoryId(),
                         BrandModel.getBrandLogosBasedOnCat(cityCode, storeModel.getbCategory(),
                                 storeModelList)));
             }

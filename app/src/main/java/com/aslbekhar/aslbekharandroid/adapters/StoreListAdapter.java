@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +19,13 @@ import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_STORE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 
 /**
  * Created by Amin on 12/1/2015.
@@ -107,30 +107,38 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
         holder.showOnMapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(LOG_TAG, "onClick: mapsssssss");
                 AnalyticsDataModel.saveAnalytic(BRAND_STORE,
                         model.getbId() + "_" + model.getsId());
                 fragment.showOnMap(model);
             }
         });
+        holder.cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(LOG_TAG, "onClick: ccccccvvvvvvv");
+                AnalyticsDataModel.saveAnalytic(BRAND_STORE,
+                        model.getbId() + "_" +
+                                model.getsId());
+                fragment.checkForAdvertisement(model);
+            }
+        });
 
-
-
-        Glide.with(fragment)
+        Picasso.with(context)
                 .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
-                .listener(new RequestListener<Uri, GlideDrawable>() {
+                .into(holder.image, new Callback() {
                     @Override
-                    public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
-                        Glide.with(fragment).load(Constants.BRAND_LOGO_URL +
-                                BrandModel.getBrandLogo(model.getbName()) + ".png").into(holder.brandLogo);
-                        return true;
+                    public void onSuccess() {
+
                     }
 
                     @Override
-                    public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        return false;
+                    public void onError() {
+                        Picasso.with(context)
+                                .load(Constants.BRAND_LOGO_URL + BrandModel.getBrandLogo(model.getbName()) + ".png")
+                                .into(holder.image);
                     }
-                })
-                .into(holder.brandLogo);
+                });
 
     }
 

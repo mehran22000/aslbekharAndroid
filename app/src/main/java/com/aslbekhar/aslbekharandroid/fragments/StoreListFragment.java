@@ -21,12 +21,10 @@ import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.StoreListAdapter;
-import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.BrandVerificationModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
-import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -44,7 +42,6 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_T
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_VERIFICATION_DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_VERIFICATION_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
@@ -65,7 +62,6 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFICATION_TIPS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFIED;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
-import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showSlideUp;
 
 /**
  * Created by Amin on 19/05/2016.
@@ -188,22 +184,10 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         adapter = new StoreListAdapter(modelListToShow, getActivity(), this, cityCode);
         recyclerView.setAdapter(adapter);
 
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        AnalyticsDataModel.saveAnalytic(BRAND_STORE,
-                                modelListToShow.get(position).getbId() + "_" +
-                                        modelListToShow.get(position).getsId());
-                        checkForAdvertisement(modelListToShow.get(position));
-                    }
-                })
-        );
-
         return view;
     }
 
-    private void checkForAdvertisement(final StoreModel model) {
+    public void checkForAdvertisement(final StoreModel model) {
 
         fullScreenAdvertiseTimer = true;
         Snippets.showFade(listOverLay, true, 500);
@@ -219,6 +203,48 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
             }
         }, ADVERTISEMENT_TIMEOUT);
 
+
+        Picasso.with(getContext())
+                .load(CITY_TO_CAT_FULL_AD + cityCode + ".cat" + catNum + "."+ brandName +"." + model.getsId() + ".png")
+                .into(fullScreenAdImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            fullScreenAdImageView.setVisibility(View.VISIBLE);
+                            progressView.stop();
+                            listOverLay.setVisibility(View.GONE);
+                            fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    fullScreenAdvertiseSecondTimer = false;
+                                    openStoreFragment(model);
+                                }
+                            });
+                            fullScreenAdvertiseSecondTimer = true;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (fullScreenAdvertiseSecondTimer) {
+                                        fullScreenAdvertiseSecondTimer = false;
+                                        openStoreFragment(model);
+                                    }
+                                }
+                            }, ADVERTISEMENT_VIEW_TIMEOUT);
+
+                        }
+                    }
+
+                    @Override
+                    public void onError() {
+
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            openStoreFragment(model);
+                        }
+
+                    }
+                });
 
         Glide.with(this)
                 .load(CITY_TO_CAT_FULL_AD + cityCode + '.' + catNum + "."+ brandName +"." + model.getsId() + ".png")
@@ -267,7 +293,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
 
     }
 
-    private void openStoreFragment(StoreModel model) {
+    public void openStoreFragment(StoreModel model) {
 
 
         Bundle bundle = new Bundle();
@@ -291,7 +317,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         Picasso.with(getContext()).load(url).into(bannerAdImageView, new Callback() {
             @Override
             public void onSuccess() {
-                showSlideUp(bannerAdImageView, true, getContext());
+                bannerAdImageView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -363,7 +389,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         MapNearByFragment fragment = new MapNearByFragment();
         fragment.setArguments(bundle);
 
-        callBack.openNewContentFragment(fragment);
+        callBack.openNewContentFragment(fragment, 0);
     }
 
 

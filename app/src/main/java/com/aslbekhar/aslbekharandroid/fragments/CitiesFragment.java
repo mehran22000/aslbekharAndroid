@@ -27,11 +27,9 @@ import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.aslbekhar.aslbekharandroid.utilities.StaticData;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.rey.material.widget.ProgressView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +54,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
 
 /**
  * Created by Amin on 14/05/2016.
- * <p>
+ * <p/>
  * This class will be used for
  */
 public class CitiesFragment extends android.support.v4.app.Fragment implements Interfaces.NetworkListeners {
@@ -175,7 +173,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
                 })
         );
 
-        if (getSP(LAST_CITY_CODE).equals(FALSE)){
+        if (getSP(LAST_CITY_CODE).equals(FALSE)) {
             setSP(LAST_CITY_CODE, "021");
         }
 
@@ -252,23 +250,11 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
             }
         }, ADVERTISEMENT_TIMEOUT);
 
-
-        Glide.with(this)
+        Picasso.with(getContext())
                 .load(Constants.CITY_TO_CAT_FULL_AD + model.getId() + ".png")
-                .listener(new RequestListener<String, GlideDrawable>() {
+                .into(fullScreenAdImageView, new Callback() {
                     @Override
-                    public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target,
-                                               boolean isFirstResource) {
-                        if (fullScreenAdvertiseTimer) {
-                            fullScreenAdvertiseTimer = false;
-                            openCatListFragment(model);
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource,
-                                                   String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public void onSuccess() {
                         if (fullScreenAdvertiseTimer) {
                             fullScreenAdvertiseTimer = false;
                             fullScreenAdImageView.setVisibility(View.VISIBLE);
@@ -291,14 +277,20 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
                                     }
                                 }
                             }, ADVERTISEMENT_VIEW_TIMEOUT);
-                            return false;
 
-                        } else {
-                            return true;
                         }
                     }
-                }).into(fullScreenAdImageView);
 
+                    @Override
+                    public void onError() {
+
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            openCatListFragment(model);
+                        }
+
+                    }
+                });
     }
 
     private void openCatListFragment(CityModel model) {
@@ -312,7 +304,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
         CatListFragment fragment = new CatListFragment();
         fragment.setArguments(bundle);
 
-        callBack.openNewContentFragment(fragment);
+        callBack.openNewContentFragment(fragment, 0);
 
         if (fullScreenAdImageView.getVisibility() == View.VISIBLE) {
             fullScreenAdImageView.setVisibility(View.GONE);

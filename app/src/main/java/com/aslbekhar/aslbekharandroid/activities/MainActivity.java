@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
         setupViewPagerAndTabs();
 
         String analyticSavedJson = Snippets.getSP(Constants.SAVED_ANALYTICS);
+        analyticSavedJson.replace("\"", "\\\"");
         if (!analyticSavedJson.equals(FALSE)){
             NetworkRequests.postRequest(SEND_ANALYTICS_LINK, this, SEND_ANALYTICS_LINK,
                     "{\"interests\":\"" + analyticSavedJson + "\"}");
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     @Override
     public void onResponse(String response, String tag) {
         if (tag.equals(SEND_ANALYTICS_LINK)){
-            Log.d(LOG_TAG, "SEND_ANALYTICS_LINK onResponse: " + response);
+            Log.d(LOG_TAG, SEND_ANALYTICS_LINK +" onResponse: " + response);
         }
     }
 

@@ -165,8 +165,9 @@ public class Constants {
 
     //AMIN Numbers:
     public static int DEFAULT_DISTANCE = 10;
-    public static int ADVERTISEMENT_TIMEOUT = 4000;
+    public static int ADVERTISEMENT_TIMEOUT = 3500;
     public static int ADVERTISEMENT_VIEW_TIMEOUT = 3000;
+    public static int CHECK_FOR_NEW_VERSION_TIMEOUT = 2000;
     public static int NOTIFICATION_CHECK_INTERVAL = 30 * 60 * 1000;
     public static final int VOLLEY_TIME_OUT = 25000;
     public static int COUNT = 7;
@@ -196,5 +197,4 @@ public class Constants {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         return formatter.format(Float.valueOf(num));
     }
-
 }

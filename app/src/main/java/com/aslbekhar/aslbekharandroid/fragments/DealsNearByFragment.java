@@ -175,7 +175,7 @@ public class DealsNearByFragment extends android.support.v4.app.Fragment
 
         bundle.putString(CITY_CODE, cityCode);
         bundle.putString(CAT_NAME, model.getbCategory());
-        bundle.putString(CAT_NUMBER, model.getcId());
+        bundle.putString(CAT_NUMBER, model.getbCategoryId());
         bundle.putString(BRAND_ID, model.getbId());
         bundle.putString(BRAND_NAME, model.getbName());
         bundle.putString(STORE_DETAILS, JSON.toJSONString(model));
