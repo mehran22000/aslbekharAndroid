@@ -33,7 +33,7 @@ public class StoreModel {
     String bDistributor;
     String sCity;
     String sAddress;
-    String sHour;
+    String sHours;
     String sAreaCode;
     String sTel1;
     String sTel2;
@@ -50,7 +50,7 @@ public class StoreModel {
         this.sName = sName;
         this.bName = bName;
         this.sAddress = sAddress;
-        this.sHour = sHour;
+        this.sHours = sHour;
         this.sTel1 = sTel1;
         this.sLat = sLat;
         this.sLong = sLong;
@@ -131,11 +131,11 @@ public class StoreModel {
     }
 
     public String getsHour() {
-        return sHour;
+        return sHours;
     }
 
     public void setsHour(String sHour) {
-        this.sHour = sHour;
+        this.sHours = sHour;
     }
 
     public String getsAreaCode() {

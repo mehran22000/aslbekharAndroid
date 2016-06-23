@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.fragments.CatListFragment;
 import com.aslbekhar.aslbekharandroid.models.CategoryModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.squareup.picasso.Callback;
@@ -133,9 +134,11 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                                     .into(holder.image4);
                         }
                     });
+        } else {
+            holder.image8.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 4) {
-
+            holder.image5.setVisibility(View.VISIBLE);
             Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(4) + ".png"))
                     .into(holder.image5, new Callback() {
@@ -151,9 +154,11 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                                     .into(holder.image5);
                         }
                     });
+        } else {
+            holder.image5.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 5) {
-
+            holder.image6.setVisibility(View.VISIBLE);
             Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(5) + ".png"))
                     .into(holder.image6, new Callback() {
@@ -169,9 +174,11 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                                     .into(holder.image6);
                         }
                     });
+        } else {
+            holder.image6.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 6) {
-
+            holder.image7.setVisibility(View.VISIBLE);
             Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(6) + ".png"))
                     .into(holder.image7, new Callback() {
@@ -187,9 +194,12 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                                     .into(holder.image7);
                         }
                     });
+        } else {
+
+            holder.image7.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 7) {
-
+            holder.image8.setVisibility(View.VISIBLE);
             Picasso.with(context)
                     .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(7) + ".png"))
                     .into(holder.image8, new Callback() {
@@ -205,10 +215,22 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                                     .into(holder.image8);
                         }
                     });
+        } else {
+            holder.image8.setVisibility(View.INVISIBLE);
         }
 
-        holder.brandCount.setText(String.valueOf(brandLogos.size()));
+        if (brandLogos.size() > 8) {
+            holder.brandCount.setText("+" + (brandLogos.size() - 8));
+        } else {
+            holder.brandCount.setText("");
+        }
 
+        holder.cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((CatListFragment) fragment).openBrandListFromAdapter(model);
+            }
+        });
 
     }
 

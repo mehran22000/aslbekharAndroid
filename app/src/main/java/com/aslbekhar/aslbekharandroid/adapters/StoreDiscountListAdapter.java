@@ -123,6 +123,12 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
                 })
                 .into(holder.brandLogo);
 
+        holder.cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment.openStoreFromAdapter(model);
+            }
+        });
 
     }
 

@@ -24,6 +24,7 @@
                 android:layout_width="@dimen/item_store_image_h_sale"
                 android:layout_height="@dimen/item_store_image_h_sale"
                 android:layout_alignParentLeft="true"
+                android:visibility="gone"
                 android:layout_alignParentTop="true" />
 
             <ImageView
@@ -43,7 +44,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_toRightOf="@+id/brandLogo"
-                android:gravity="center"
+                android:gravity="right"
                 android:maxLines="1"
                 android:padding="2dp"
                 android:textColor="@color/textColorPrimaryInverse"

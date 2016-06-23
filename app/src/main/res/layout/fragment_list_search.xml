@@ -5,17 +5,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/silver_light_2">
 
-    <TextView
+    <RelativeLayout
         android:id="@+id/verificationTips"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/red_light"
-        android:textColor="@color/black"
-        android:padding="10dp"
         android:visibility="gone"
-        android:gravity="center"
-        android:layout_alignParentTop="true"
-        android:text="@string/tips_to_verify_product"/>
+        android:background="@color/red_light"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/verificationTipsTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_alignParentTop="true"
+            android:padding="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/tips_to_verify_product" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/verificationTipsTxt"
+            android:layout_alignBottom="@+id/verificationTipsTxt"
+            android:layout_toRightOf="@+id/verificationTipsTxt"
+            android:src="@drawable/icon_verification_tips"/>
+
+    </RelativeLayout>
 
 
     <EditText
