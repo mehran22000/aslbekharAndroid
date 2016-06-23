@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -25,7 +26,6 @@ import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
-import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Callback;
@@ -141,7 +141,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
 
         recyclerView.setHasFixedSize(true);
 
-        layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager = new GridLayoutManager(getActivity(),3);
 
         // setting the layout manager of recyclerView
         recyclerView.setLayoutManager(layoutManager);
@@ -151,28 +151,6 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
 
         adapter = new CityListAdapter(modelListToShow, getActivity(), this);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        Log.d(LOG_TAG, "gcm id " + getSP(DEVICE_ID));
-                        if (getSP(Constants.REGISTRATION).equals(TRUE)
-                                && getSP(REGISTRATION_COMPLETE).equals(FALSE)) {
-                            String postJson = "{\"device\":\""
-                                    + getSP(DEVICE_ID) + "\",\"city\":\""
-                                    + modelListToShow.get(position).getEnglishName()
-                                    + "\"}";
-                            Log.d(LOG_TAG, "gcm post json " + postJson);
-                            NetworkRequests.postRequest(REGISTER_ANDROID_DEVICE_LINK,
-                                    CitiesFragment.this, REGISTRATION, postJson);
-                        }
-                        setSP(LAST_CITY_CODE, modelListToShow.get(position).getId());
-                        checkForAdvertisement(modelListToShow.get(position));
-
-                    }
-                })
-        );
-
         if (getSP(LAST_CITY_CODE).equals(FALSE)) {
             setSP(LAST_CITY_CODE, "021");
         }
@@ -180,6 +158,22 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         return view;
+    }
+
+    public void openCatFromAdapter(CityModel model) {
+        Log.d(LOG_TAG, "gcm id " + getSP(DEVICE_ID));
+        if (getSP(Constants.REGISTRATION).equals(TRUE)
+                && getSP(REGISTRATION_COMPLETE).equals(FALSE)) {
+            String postJson = "{\"device\":\""
+                    + getSP(DEVICE_ID) + "\",\"city\":\""
+                    + model.getEnglishName()
+                    + "\"}";
+            Log.d(LOG_TAG, "gcm post json " + postJson);
+            NetworkRequests.postRequest(REGISTER_ANDROID_DEVICE_LINK,
+                    CitiesFragment.this, REGISTRATION, postJson);
+        }
+        setSP(LAST_CITY_CODE, model.getId());
+        checkForAdvertisement(model);
     }
 
 
@@ -293,7 +287,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
                 });
     }
 
-    private void openCatListFragment(CityModel model) {
+    public void openCatListFragment(CityModel model) {
 
         fullScreenAdvertiseTimer = false;
         fullScreenAdvertiseSecondTimer = false;

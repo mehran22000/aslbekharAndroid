@@ -25,7 +25,6 @@ import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
-import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -129,19 +128,6 @@ public class DealsNearByFragment extends android.support.v4.app.Fragment
 
         adapter = new StoreDiscountListAdapter(modelList, getActivity(), this, cityCode);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        AnalyticsDataModel.saveAnalytic(DEALS_BRAND_STORE,
-                                modelList.get(position).getbId() + "_" +
-                                        modelList.get(position).getsId());
-                        AnalyticsDataModel.saveAnalytic(DEALS_BRAND,
-                                modelList.get(position).getbId());
-                        openStoreFragment(modelList.get(position));
-                    }
-                })
-        );
 
         // First we need to check availability of play services
         if (checkPlayServices()) {
@@ -166,6 +152,15 @@ public class DealsNearByFragment extends android.support.v4.app.Fragment
 
 
         return view;
+    }
+
+    public void openStoreFromAdapter(StoreDiscountModel model) {
+        AnalyticsDataModel.saveAnalytic(DEALS_BRAND_STORE,
+                model.getbId() + "_" +
+                        model.getsId());
+        AnalyticsDataModel.saveAnalytic(DEALS_BRAND,
+                model.getbId());
+        openStoreFragment(model);
     }
 
 

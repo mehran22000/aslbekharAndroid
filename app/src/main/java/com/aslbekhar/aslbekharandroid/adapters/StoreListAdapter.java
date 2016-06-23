@@ -16,11 +16,8 @@ import android.widget.TextView;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.fragments.StoreListFragment;
 import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
-import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -124,21 +121,21 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
             }
         });
 
-        Picasso.with(context)
-                .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
-                .into(holder.image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onError() {
-                        Picasso.with(context)
-                                .load(Constants.BRAND_LOGO_URL + BrandModel.getBrandLogo(model.getbName()) + ".png")
-                                .into(holder.image);
-                    }
-                });
+//        Picasso.with(context)
+//                .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
+//                .into(holder.image, new Callback() {
+//                    @Override
+//                    public void onSuccess() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError() {
+//                        Picasso.with(context)
+//                                .load(Constants.BRAND_LOGO_URL + BrandModel.getBrandLogo(model.getbName()) + ".png")
+//                                .into(holder.image);
+//                    }
+//                });
 
     }
 

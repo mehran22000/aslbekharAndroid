@@ -1,7 +1,6 @@
 package com.aslbekhar.aslbekharandroid.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -87,14 +86,16 @@ public class BrandVerificationAdapter extends RecyclerView.Adapter<BrandVerifica
                 ((TextView) dialogView.findViewById(R.id.title)).setTypeface(tf);
 
                 dialogBuilder.setView(dialogView);
+                final AlertDialog alertDialog = dialogBuilder.create();
 
-                dialogBuilder.setPositiveButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        //do something with edt.getText().toString();
+                dialogView.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
                     }
                 });
-                AlertDialog b = dialogBuilder.create();
-                b.show();
+
+                alertDialog.show();
             }
         });
 

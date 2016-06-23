@@ -24,7 +24,6 @@ import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
-import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Callback;
@@ -160,18 +159,13 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
 
         adapter = new BrandListAdapter(modelListToShow, getActivity(), this);
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        AnalyticsDataModel.saveAnalytic(BRAND,
-                                modelListToShow.get(position).getbId());
-                        checkForAdvertisement(modelListToShow.get(position));
-                    }
-                })
-        );
-
         return view;
+    }
+
+    public void openStoreListFromAdapter(BrandModel model) {
+        AnalyticsDataModel.saveAnalytic(BRAND,
+                model.getbId());
+        checkForAdvertisement(model);
     }
 
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.fragments.BrandListFragment;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.squareup.picasso.Callback;
@@ -75,16 +75,24 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
                     }
                 });
 
+
+        holder.cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((BrandListFragment) fragment).openStoreListFromAdapter(model);
+            }
+        });
+
     }
 
     public static class GroupViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
+        View cv;
         TextView title;
         ImageView image;
 
         GroupViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.itemCV);
+            cv = itemView.findViewById(R.id.itemCV);
             title = (TextView) itemView.findViewById(R.id.title);
             image = (ImageView) itemView.findViewById(R.id.image);
         }

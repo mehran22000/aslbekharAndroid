@@ -26,7 +26,6 @@ import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.CategoryModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
-import com.aslbekhar.aslbekharandroid.utilities.RecyclerItemClickListener;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Callback;
@@ -168,19 +167,14 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
 
             adapter = new CategoryListAdapter(modelListToShow, getActivity(), this, cityCode);
             recyclerView.setAdapter(adapter);
-            recyclerView.addOnItemTouchListener(
-                    new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            AnalyticsDataModel.saveAnalytic(CATEGORY,
-                                    modelListToShow.get(position).getTitle());
-                            checkForAdvertisement(position);
-
-                        }
-                    })
-            );
         }
         return view;
+    }
+
+    public void openBrandListFromAdapter(CategoryModel model) {
+        AnalyticsDataModel.saveAnalytic(CATEGORY,
+                model.getTitle());
+        checkForAdvertisement(model);
     }
 
     private void checkForBannerAdvertise() {
@@ -198,12 +192,12 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
         });
     }
 
-    private void openBrandListFragment(int position) {
+    private void openBrandListFragment(CategoryModel model) {
         Bundle bundle = new Bundle();
         bundle.putString(CITY_CODE, getArguments().getString(CITY_CODE));
         bundle.putString(CITY_NAME, getArguments().getString(CITY_NAME));
-        bundle.putString(CAT_NAME, modelListToShow.get(position).getTitle());
-        bundle.putString(CAT_NUMBER, modelListToShow.get(position).getcId());
+        bundle.putString(CAT_NAME, model.getTitle());
+        bundle.putString(CAT_NUMBER, model.getcId());
 
         BrandListFragment fragment = new BrandListFragment();
         fragment.setArguments(bundle);
@@ -211,7 +205,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
         callBack.openNewContentFragment(fragment, 0);
     }
 
-    private void checkForAdvertisement(final int position) {
+    private void checkForAdvertisement(final CategoryModel model) {
 
         fullScreenAdvertiseTimer = true;
         Snippets.showFade(listOverLay, true, 500);
@@ -222,12 +216,12 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
             public void run() {
                 if (fullScreenAdvertiseTimer) {
                     fullScreenAdvertiseTimer = false;
-                    openBrandListFragment(position);
+                    openBrandListFragment(model);
                 }
             }
         }, ADVERTISEMENT_TIMEOUT);
         Picasso.with(getContext())
-                .load(CITY_TO_CAT_FULL_AD + cityCode + ".cat" + modelListToShow.get(position).getcId() + ".png")
+                .load(CITY_TO_CAT_FULL_AD + cityCode + ".cat" + model.getcId() + ".png")
                 .into(fullScreenAdImageView, new Callback() {
                     @Override
                     public void onSuccess() {
@@ -240,7 +234,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
                                 @Override
                                 public void onClick(View v) {
                                     fullScreenAdvertiseSecondTimer = false;
-                                    openBrandListFragment(position);
+                                    openBrandListFragment(model);
                                 }
                             });
                             fullScreenAdvertiseSecondTimer = true;
@@ -249,7 +243,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
                                 public void run() {
                                     if (fullScreenAdvertiseSecondTimer) {
                                         fullScreenAdvertiseSecondTimer = false;
-                                        openBrandListFragment(position);
+                                        openBrandListFragment(model);
                                     }
                                 }
                             }, ADVERTISEMENT_VIEW_TIMEOUT);
@@ -262,7 +256,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
 
                         if (fullScreenAdvertiseTimer) {
                             fullScreenAdvertiseTimer = false;
-                            openBrandListFragment(position);
+                            openBrandListFragment(model);
                         }
 
                     }

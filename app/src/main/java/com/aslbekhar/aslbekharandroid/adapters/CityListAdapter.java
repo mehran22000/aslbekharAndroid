@@ -1,10 +1,12 @@
 package com.aslbekhar.aslbekharandroid.adapters;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.fragments.CitiesFragment;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -83,7 +87,22 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
                 break;
         }
 
-        Picasso.with(context).load(imageResourceId).into(holder.image);
+
+        Display display = fragment.getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = (size.x / 3) - Snippets.dpToPixels(context, 11);
+        Picasso.with(context)
+                .load(imageResourceId)
+                .resize(width, 0)
+                .into(holder.image);
+
+        holder.cv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((CitiesFragment) fragment).openCatFromAdapter(model);
+            }
+        });
 
 
     }

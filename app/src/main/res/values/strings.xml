@@ -50,5 +50,6 @@
     <string name="update">بروزرسانی کن</string>
     <string name="do_it_later">فعلا نمیخواد</string>
     <string name="you_need_to_update">نسخه جدید برنامه منتشر شده، لطفا برای استفاده از تمام امکانات برنامه باید آن را به روزرسانی کنید.</string>
+    <string name="go_on">ادامه</string>
 
 </resources>
