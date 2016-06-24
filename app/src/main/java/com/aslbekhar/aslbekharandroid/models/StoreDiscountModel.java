@@ -75,4 +75,6 @@ public class StoreDiscountModel extends StoreModel {
     public void setDistance(String distance) {
         this.distance = distance;
     }
+
+
 }

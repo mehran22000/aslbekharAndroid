@@ -26,10 +26,6 @@ import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -65,6 +61,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
 
 /**
  * Created by Amin on 19/05/2016.
+ *
  */
 public class StoreListFragment extends Fragment implements Interfaces.NetworkListeners {
 
@@ -245,51 +242,6 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
 
                     }
                 });
-
-        Glide.with(this)
-                .load(CITY_TO_CAT_FULL_AD + cityCode + '.' + catNum + "."+ brandName +"." + model.getsId() + ".png")
-                .listener(new RequestListener<String, GlideDrawable>() {
-                    @Override
-                    public boolean onException(Exception e, String StringModel, Target<GlideDrawable> target, boolean isFirstResource) {
-                        if (fullScreenAdvertiseTimer) {
-                            fullScreenAdvertiseTimer = false;
-                            openStoreFragment(model);
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(GlideDrawable resource, String StringModel, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        if (fullScreenAdvertiseTimer) {
-                            fullScreenAdvertiseTimer = false;
-                            fullScreenAdImageView.setVisibility(View.VISIBLE);
-                            progressView.stop();
-                            listOverLay.setVisibility(View.GONE);
-                            fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    fullScreenAdvertiseSecondTimer = false;
-                                    openStoreFragment(model);
-                                }
-                            });
-                            fullScreenAdvertiseSecondTimer = true;
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (fullScreenAdvertiseSecondTimer) {
-                                        fullScreenAdvertiseSecondTimer = false;
-                                        openStoreFragment(model);
-                                    }
-                                }
-                            }, ADVERTISEMENT_VIEW_TIMEOUT);
-                            return false;
-
-                        } else {
-                            return true;
-                        }
-                    }
-                }).into(fullScreenAdImageView);
-
 
     }
 
