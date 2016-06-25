@@ -14,9 +14,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <!--
+    Not Necessary for Fiberbase
     <permission android:name="com.ionicframework.aslbekhar192325.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
     <uses-permission android:name="com.ionicframework.aslbekhar192325.permission.C2D_MESSAGE" />
+    -->
 
     <!--<meta-data-->
     <!--android:name="com.google.android.gms.version"-->
@@ -48,8 +52,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        // for GCM
+        <!--
+        // for GCM : Not needed for Fiberbase
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
@@ -60,12 +64,15 @@
                 <category android:name="com.ionicframework.aslbekhar192325" />
             </intent-filter>
         </receiver>
+        -->
         <!-- [START gcm_listener] -->
         <service
             android:name=".services.GcmListenerServce"
             android:exported="false" >
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            <!--       <action android:name="com.google.android.c2dm.intent.RECEIVE" /> -->
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+
             </intent-filter>
         </service>
         <!-- [END gcm_listener] -->
@@ -74,7 +81,8 @@
             android:name=".services.GcmInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID"/>
+             <!--   <action android:name="com.google.android.gms.iid.InstanceID"/> -->
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- [END instanceId_listener] -->

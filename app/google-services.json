@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "472796603076",
+    "firebase_url": "https://aslbekhar-1a4c7.firebaseio.com",
+    "project_id": "aslbekhar-1a4c7",
+    "storage_bucket": "aslbekhar-1a4c7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:472796603076:android:71bddea7a6f5c874",
+        "android_client_info": {
+          "package_name": "com.ionicframework.aslbekhar192325"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "472796603076-jbvhb7b586gmf7sm5li82ktihof4q6f9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdw5j5CDqtsCWAz3AwoKQU-VZH9XfCXog"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
