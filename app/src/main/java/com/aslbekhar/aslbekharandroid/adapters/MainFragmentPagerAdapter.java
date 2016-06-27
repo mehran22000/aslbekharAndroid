@@ -8,7 +8,6 @@ import com.aslbekhar.aslbekharandroid.fragments.CitiesFragment;
 import com.aslbekhar.aslbekharandroid.fragments.DealsNearByFragment;
 import com.aslbekhar.aslbekharandroid.fragments.HostFragment;
 import com.aslbekhar.aslbekharandroid.fragments.MapNearByFragment;
-import com.aslbekhar.aslbekharandroid.fragments.MyStoreAccountFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,7 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
         tabs.add(HostFragment.newInstance(new CitiesFragment()));
         tabs.add(HostFragment.newInstance(new MapNearByFragment()));
         tabs.add(HostFragment.newInstance(new DealsNearByFragment()));
-        tabs.add(HostFragment.newInstance(new MyStoreAccountFragment()));
+//        tabs.add(HostFragment.newInstance(new MyStoreAccountFragment()));
     }
 
     @Override

@@ -157,6 +157,9 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+        view.findViewById(R.id.root).setBackgroundColor(getResources().getColor(R.color.white));
+        view.findViewById(R.id.searchEditText).setVisibility(View.GONE);
+
         return view;
     }
 

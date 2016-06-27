@@ -10,6 +10,7 @@ public class CategoryModel {
     String title;
     String cId;
     List<String> images;
+    int latestBrandLogoUsed = 0;
 
     public CategoryModel() {
     }
@@ -46,5 +47,13 @@ public class CategoryModel {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public int getLatestBrandLogoUsed() {
+        return latestBrandLogoUsed;
+    }
+
+    public void setLatestBrandLogoUsed(int latestBrandLogoUsed) {
+        this.latestBrandLogoUsed = latestBrandLogoUsed;
     }
 }

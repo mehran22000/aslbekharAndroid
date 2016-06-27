@@ -83,12 +83,12 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
         }
 
         if (model.getsVerified().equals(Constants.YES)){
-            if (model.getsDiscount() > 0){
+            if (Integer.parseInt(model.getdPrecentage()) > 0){
                 holder.image.setImageResource(R.drawable.discountverified);
             } else {
                 holder.image.setImageResource(R.drawable.verified);
             }
-        } else if (model.getsDiscount() > 0){
+        } else if (Integer.parseInt(model.getdPrecentage()) > 0){
             holder.image.setImageResource(R.drawable.discount);
         }
 
@@ -113,29 +113,15 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
         holder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(LOG_TAG, "onClick: ccccccvvvvvvv");
                 AnalyticsDataModel.saveAnalytic(BRAND_STORE,
                         model.getbId() + "_" +
                                 model.getsId());
-                fragment.checkForAdvertisement(model);
+
+                if (Integer.parseInt(model.getdPrecentage()) > 0) {
+                    fragment.checkForAdvertisement(model);
+                }
             }
         });
-
-//        Picasso.with(context)
-//                .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
-//                .into(holder.image, new Callback() {
-//                    @Override
-//                    public void onSuccess() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError() {
-//                        Picasso.with(context)
-//                                .load(Constants.BRAND_LOGO_URL + BrandModel.getBrandLogo(model.getbName()) + ".png")
-//                                .into(holder.image);
-//                    }
-//                });
 
     }
 

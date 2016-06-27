@@ -51,6 +51,9 @@ public class Constants {
     // D2
     public static String BRAND_LOGO_URL = WEB_SERVER + "images/logos/";
 
+    // D ?
+    public static String FULLSCREEN_ADD_IMAGE_URL = WEB_SERVER + "images/ads/";
+
     //header token
     public static String HEADER_TOKEN = WEB_SERVER + "emFuYmlsZGFyYW5naGVybWV6DQo=";
 

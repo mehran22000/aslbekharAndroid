@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -108,13 +107,13 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
     }
 
     public static class GroupViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
+        View cv;
         TextView title;
         ImageView image;
 
         GroupViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.itemCV);
+            cv = itemView.findViewById(R.id.itemCV);
             title = (TextView) itemView.findViewById(R.id.title);
             image = (ImageView) itemView.findViewById(R.id.image);
         }
