@@ -159,6 +159,9 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
 
         adapter = new BrandListAdapter(modelListToShow, getActivity(), this);
         recyclerView.setAdapter(adapter);
+
+        view.findViewById(R.id.root).setBackgroundColor(getResources().getColor(R.color.white));
+
         return view;
     }
 
@@ -202,7 +205,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
         }, ADVERTISEMENT_TIMEOUT);
 
         Picasso.with(getContext())
-                .load(CITY_TO_CAT_FULL_AD + cityCode + ".cat" + catNum +"." + model.getbName() + ".png")
+                .load(CITY_TO_CAT_FULL_AD + cityCode + ".cat" + catNum + "." + model.getbName() + ".png")
                 .into(fullScreenAdImageView, new Callback() {
                     @Override
                     public void onSuccess() {

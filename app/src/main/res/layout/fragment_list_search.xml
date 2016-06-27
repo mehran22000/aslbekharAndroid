@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -41,7 +42,7 @@
         android:hint="@string/search"
         android:paddingRight="40dp"
         android:paddingLeft="10dp"
-        android:background="@color/silver_light_2"
+        android:background="@color/white"
         android:layout_below="@+id/verificationTips"/>
 
     <ImageView

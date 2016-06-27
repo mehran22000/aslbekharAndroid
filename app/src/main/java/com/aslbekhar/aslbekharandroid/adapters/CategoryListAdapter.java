@@ -64,157 +64,42 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
         final List<String> brandLogos = model.getImages();
 
         if (brandLogos.size() > 0) {
-
-            Picasso.with(context)
-                    .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(0) + ".png"))
-                    .into(holder.image1, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            Picasso.with(context)
-                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(0) + ".png")
-                                    .into(holder.image1);
-                        }
-                    });
+            loadCatImage(holder.image1, 0, model);
+        } else {
+            holder.image1.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 1) {
-
-            Picasso.with(context)
-                    .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(1) + ".png"))
-                    .into(holder.image2, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            Picasso.with(context)
-                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(1) + ".png")
-                                    .into(holder.image2);
-                        }
-                    });
+            loadCatImage(holder.image2, 1, model);
+        } else {
+            holder.image2.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 2) {
-
-            Picasso.with(context)
-                    .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(2) + ".png"))
-                    .into(holder.image3, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            Picasso.with(context)
-                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(2) + ".png")
-                                    .into(holder.image3);
-                        }
-                    });
+            loadCatImage(holder.image3, 2, model);
+        } else {
+            holder.image3.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 3) {
-
-            Picasso.with(context)
-                    .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(3) + ".png"))
-                    .into(holder.image4, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            Picasso.with(context)
-                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(3) + ".png")
-                                    .into(holder.image4);
-                        }
-                    });
+            loadCatImage(holder.image4,  3, model);
         } else {
-            holder.image8.setVisibility(View.INVISIBLE);
+            holder.image4.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 4) {
-            holder.image5.setVisibility(View.VISIBLE);
-            Picasso.with(context)
-                    .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(4) + ".png"))
-                    .into(holder.image5, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            Picasso.with(context)
-                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(4) + ".png")
-                                    .into(holder.image5);
-                        }
-                    });
+            loadCatImage(holder.image5,  4, model);
         } else {
             holder.image5.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 5) {
-            holder.image6.setVisibility(View.VISIBLE);
-            Picasso.with(context)
-                    .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(5) + ".png"))
-                    .into(holder.image6, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            Picasso.with(context)
-                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(5) + ".png")
-                                    .into(holder.image6);
-                        }
-                    });
+            loadCatImage(holder.image6,  5, model);
         } else {
             holder.image6.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 6) {
-            holder.image7.setVisibility(View.VISIBLE);
-            Picasso.with(context)
-                    .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(6) + ".png"))
-                    .into(holder.image7, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            Picasso.with(context)
-                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(6) + ".png")
-                                    .into(holder.image7);
-                        }
-                    });
+            loadCatImage(holder.image7,  6, model);
         } else {
-
             holder.image7.setVisibility(View.INVISIBLE);
         }
         if (brandLogos.size() > 7) {
-            holder.image8.setVisibility(View.VISIBLE);
-            Picasso.with(context)
-                    .load(Uri.parse("file:///android_asset/logos/" + brandLogos.get(7) + ".png"))
-                    .into(holder.image8, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            Picasso.with(context)
-                                    .load(Constants.BRAND_LOGO_URL + brandLogos.get(7) + ".png")
-                                    .into(holder.image8);
-                        }
-                    });
+            loadCatImage(holder.image8,  7, model);
         } else {
             holder.image8.setVisibility(View.INVISIBLE);
         }
@@ -231,6 +116,40 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                 ((CatListFragment) fragment).openBrandListFromAdapter(model);
             }
         });
+
+    }
+
+    public void loadCatImage(final ImageView imageView,
+                             final int brandLogoPosition, final CategoryModel model) {
+        imageView.setVisibility(View.VISIBLE);
+        if (model.getLatestBrandLogoUsed() < brandLogoPosition){
+            model.setLatestBrandLogoUsed(brandLogoPosition);
+        }
+        Picasso.with(context)
+                .load(Uri.parse("file:///android_asset/logos/" + model.getImages().get(brandLogoPosition) + ".png"))
+                .into(imageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError() {
+                        Picasso.with(context)
+                                .load(Constants.BRAND_LOGO_URL + model.getImages().get(brandLogoPosition) + ".png")
+                                .into(imageView, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onError() {
+                                        loadCatImage(imageView,model.getLatestBrandLogoUsed() +1, model);
+                                    }
+                                });
+                    }
+                });
 
     }
 
