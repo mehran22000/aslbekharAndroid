@@ -1,18 +1,29 @@
 package com.aslbekhar.aslbekharandroid.activities;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.MainFragmentPagerAdapter;
 import com.aslbekhar.aslbekharandroid.fragments.HostFragment;
+import com.aslbekhar.aslbekharandroid.models.VersionCheckModel;
 import com.aslbekhar.aslbekharandroid.utilities.BackStackFragment;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
@@ -23,6 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.APP_VERSION;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHECK_VERSION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
@@ -47,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     // for keeping record of previous tabs, for clicking on back
     Stack<Integer> tabStack = new Stack<>();
     int currentTab = 0;
+    Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +82,13 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
         setupViewPagerAndTabs();
 
         String analyticSavedJson = Snippets.getSP(Constants.SAVED_ANALYTICS);
-        analyticSavedJson.replace("\"", "\\\"");
         if (!analyticSavedJson.equals(FALSE)){
             NetworkRequests.postRequest(SEND_ANALYTICS_LINK, this, SEND_ANALYTICS_LINK,
-                    "{\"interests\":\"" + analyticSavedJson + "\"}");
+                    "{\"interests\":\"" + Base64.encodeToString(analyticSavedJson.getBytes(), Base64.DEFAULT) + "\"}");
         }
+
+
+        NetworkRequests.getRequest(CHECK_VERSION, this, CHECK_VERSION);
     }
 
     private void setupViewPagerAndTabs() {
@@ -166,6 +182,60 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     public void onResponse(String response, String tag) {
         if (tag.equals(SEND_ANALYTICS_LINK)){
             Log.d(LOG_TAG, SEND_ANALYTICS_LINK +" onResponse: " + response);
+        } else if (tag.equals(CHECK_VERSION)) {
+            VersionCheckModel versionCheckModel = null;
+            try {
+                versionCheckModel = JSON.parseObject(response, VersionCheckModel.class);
+            } catch (Exception ignored) {
+            }
+            if (versionCheckModel != null && versionCheckModel.getCurrent() > APP_VERSION){
+
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+                final View dialogView = LayoutInflater.from(this).
+                        inflate(R.layout.dialog_update_required, null);
+
+                Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/theme.ttf");
+
+                ((TextView) dialogView.findViewById(R.id.text)).setTypeface(tf);
+                ((TextView) dialogView.findViewById(R.id.update)).setTypeface(tf);
+                ((TextView) dialogView.findViewById(R.id.skip)).setTypeface(tf);
+
+                dialogView.findViewById(R.id.update).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final String appPackageName = getPackageName();
+                        try {
+                            startActivity(new
+                                    Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            startActivity(new
+                                    Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
+                    }
+                });
+
+                if (versionCheckModel.getMinSupport() > APP_VERSION) {
+                    dialogBuilder.setCancelable(false);
+                    dialogView.findViewById(R.id.skip).setVisibility(View.GONE);
+                } else {
+                    dialogView.findViewById(R.id.skip).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+
+                        }
+                    });
+                    dialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                        }
+                    });
+                }
+                dialogBuilder.setView(dialogView);
+                dialog = dialogBuilder.create();
+
+                dialog.show();
+            }
         }
     }
 

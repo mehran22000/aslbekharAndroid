@@ -7,13 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.Typeface;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,9 +19,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
@@ -32,21 +26,18 @@ import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
-import com.aslbekhar.aslbekharandroid.models.VersionCheckModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
-import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.rey.material.app.SimpleDialog;
 import com.rey.material.widget.ProgressView;
 
 import static android.provider.Settings.Secure;
 import static android.provider.Settings.SettingNotFoundException;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.APP_VERSION;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHECK_FOR_NEW_VERSION_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHECK_VERSION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DATA_PROCESSED_OR_NOT;
@@ -59,7 +50,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 
 /**
  * Created by Amin on 11/30/2015.
- * <p>
+ * <p/>
  * this activity is the starting point of this app, and the
  */
 public class SplashScreen extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -74,7 +65,7 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     Dialog dialog;
 
     boolean checkForNewVersionTimer = false;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,18 +74,7 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.splash_layout);
         ProgressView progressView = (ProgressView) findViewById(R.id.progressBar);
         progressView.start();
-
-        NetworkRequests.getRequest(CHECK_VERSION, this, CHECK_VERSION);
-        checkForNewVersionTimer = true;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (checkForNewVersionTimer) {
-                    checkForNewVersionTimer = false;
-                    checkForPermission();
-                }
-            }
-        }, CHECK_FOR_NEW_VERSION_TIMEOUT);
+        checkForPermission();
 
     }
 
@@ -105,7 +85,20 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         || ActivityCompat.checkSelfPermission(getApplicationContext(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-            requestForPermission();
+
+            com.rey.material.app.Dialog.Builder builder = new SimpleDialog.Builder(R.style.SimpleDialogLight){
+                @Override
+                public void onPositiveActionClicked(com.rey.material.app.DialogFragment fragment) {
+                    requestForPermission();
+                    super.onPositiveActionClicked(fragment);
+                }
+            };
+
+            ((SimpleDialog.Builder)builder).message(getString(R.string.permission_needed))
+                    .positiveAction(getString(R.string.ok));
+            com.rey.material.app.DialogFragment fragment =
+                    com.rey.material.app.DialogFragment.newInstance(builder);
+            fragment.show(getSupportFragmentManager(), null);
 
         } else {
             // if permissions we are already ok, we will check for if gps is on or not
@@ -167,7 +160,7 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
             Snippets.setSP(PLAY_SERVICES_ON_OR_OFF, FALSE);
         }
 
-        if (getSP(DATA_PROCESSED_OR_NOT).equals(FALSE)){
+        if (getSP(DATA_PROCESSED_OR_NOT).equals(FALSE)) {
 
             DataProcessing dataProcessing = new DataProcessing();
             dataProcessing.execute();
@@ -371,66 +364,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onResponse(String response, String tag) {
 
-        if (tag.equals(CHECK_VERSION) && checkForNewVersionTimer) {
-            checkForNewVersionTimer = false;
-            VersionCheckModel versionCheckModel = null;
-            try {
-                versionCheckModel = JSON.parseObject(response, VersionCheckModel.class);
-            } catch (Exception ignored) {
-            }
-            if (versionCheckModel != null && versionCheckModel.getCurrent() > APP_VERSION){
-
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-                final View dialogView = LayoutInflater.from(this).
-                        inflate(R.layout.dialog_update_required, null);
-
-                Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/theme.ttf");
-
-                ((TextView) dialogView.findViewById(R.id.text)).setTypeface(tf);
-                ((TextView) dialogView.findViewById(R.id.update)).setTypeface(tf);
-                ((TextView) dialogView.findViewById(R.id.skip)).setTypeface(tf);
-
-                dialogView.findViewById(R.id.update).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final String appPackageName = getPackageName();
-                        try {
-                            startActivity(new
-                                    Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                        } catch (android.content.ActivityNotFoundException anfe) {
-                            startActivity(new
-                                    Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-                        }
-                    }
-                });
-
-                if (versionCheckModel.getMinSupport() > APP_VERSION) {
-                    dialogBuilder.setCancelable(false);
-                    dialogView.findViewById(R.id.skip).setVisibility(View.GONE);
-                } else {
-                    dialogView.findViewById(R.id.skip).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            dialog.dismiss();
-                            checkForPermission();
-
-                        }
-                    });
-                    dialogBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            checkForPermission();
-                        }
-                    });
-                }
-                dialogBuilder.setView(dialogView);
-                dialog = dialogBuilder.create();
-
-                dialog.show();
-            } else {
-                checkForPermission();
-            }
-        }
     }
 
     @Override
@@ -451,7 +384,8 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
 
     /* A fragment to display an error dialog */
     public static class ErrorDialogFragment extends DialogFragment {
-        public ErrorDialogFragment() { }
+        public ErrorDialogFragment() {
+        }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -501,9 +435,11 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         }
 
         @Override
-        protected void onPreExecute() {}
+        protected void onPreExecute() {
+        }
 
         @Override
-        protected void onProgressUpdate(Void... values) {}
+        protected void onProgressUpdate(Void... values) {
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -14,17 +15,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.StoreDiscountListAdapter;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
 import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.StoreDiscountModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
+import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,19 +38,31 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.rey.material.widget.ProgressView;
 import com.rey.material.widget.Slider;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_MAX_COUNT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISE_DEALS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BANNER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEALS_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEALS_BRAND;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEALS_BRAND_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FULL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
@@ -58,6 +75,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFIED;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
 
@@ -79,9 +97,12 @@ public class DealsNearByFragment extends android.support.v4.app.Fragment
     LinearLayoutManager layoutManager;
     String cityCode;
     int distance = 2;
-    private View listOverLay;
     private ProgressView progressBar;
     private View nodata;
+    boolean fullScreenAdvertiseTimer = false;
+    boolean fullScreenAdvertiseSecondTimer = false;
+    ImageView fullScreenAdImageView;
+    View listOverLay;
 
     // for location
     private Location lastLocation;
@@ -116,11 +137,17 @@ public class DealsNearByFragment extends android.support.v4.app.Fragment
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_deals_nearby, container, false);
 
+        cityCode = getSP(LAST_CITY_CODE);
+        if (cityCode.equals(FALSE)){
+            cityCode = "021";
+        }
+
         layoutManager = new LinearLayoutManager(getActivity());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listView);
         listOverLay = view.findViewById(R.id.listOverLay);
         progressBar = (ProgressView) view.findViewById(R.id.progressBar);
+        fullScreenAdImageView = (ImageView) view.findViewById(R.id.fullScreenAdvertise);
         nodata = view.findViewById(R.id.nodata);
 
         // setting the layout manager of recyclerView
@@ -150,8 +177,74 @@ public class DealsNearByFragment extends android.support.v4.app.Fragment
             }
         });
 
+        checkForBannerAdvertise();
 
         return view;
+    }
+
+    private void checkForAdvertisement(final StoreModel model) {
+
+
+        if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            StaticData.addShownCount++;
+            return;
+        }
+        fullScreenAdvertiseTimer = true;
+        Snippets.showFade(listOverLay, true, 500);
+        progressBar.start();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (fullScreenAdvertiseTimer) {
+                    fullScreenAdvertiseTimer = false;
+                    openStoreFragment(model);
+                }
+            }
+        }, ADVERTISEMENT_TIMEOUT);
+        Picasso.with(getContext())
+                .load(CITY_TO_CAT_FULL_AD + ".deal." + cityCode + ".png")
+                .into(fullScreenAdImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        if (fullScreenAdvertiseTimer) {
+                            AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
+                                    new AnalyticsAdvertisementModel(CITY_TO_CAT_FULL_AD + ".deal." + cityCode + ".png", ADVERTISE_DEALS, FULL));
+                            fullScreenAdvertiseTimer = false;
+                            fullScreenAdImageView.setVisibility(View.VISIBLE);
+                            progressBar.stop();
+                            listOverLay.setVisibility(View.GONE);
+                            fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    fullScreenAdvertiseSecondTimer = false;
+                                    openStoreFragment(model);
+                                }
+                            });
+                            fullScreenAdvertiseSecondTimer = true;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (fullScreenAdvertiseSecondTimer) {
+                                        fullScreenAdvertiseSecondTimer = false;
+                                        openStoreFragment(model);
+                                    }
+                                }
+                            }, ADVERTISEMENT_VIEW_TIMEOUT);
+
+                        }
+                    }
+
+                    @Override
+                    public void onError() {
+
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            openStoreFragment(model);
+                        }
+
+                    }
+                });
     }
 
     public void openStoreFromAdapter(StoreDiscountModel model) {
@@ -160,7 +253,24 @@ public class DealsNearByFragment extends android.support.v4.app.Fragment
                         model.getsId());
         AnalyticsDataModel.saveAnalytic(DEALS_BRAND,
                 model.getbId());
-        openStoreFragment(model);
+        checkForAdvertisement(model);
+    }
+
+
+    private void checkForBannerAdvertise() {
+        String url = DEALS_BANNER_AD + cityCode + ".png";
+        Picasso.with(getContext()).load(url).into((ImageView) view.findViewById(R.id.bannerAdvertise), new Callback() {
+            @Override
+            public void onSuccess() {
+                AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
+                        new AnalyticsAdvertisementModel("ad."  + cityCode + ".png", ADVERTISE_DEALS, BANNER));
+                view.findViewById(R.id.bannerAdvertise).setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onError() {
+            }
+        });
     }
 
 
@@ -261,13 +371,6 @@ public class DealsNearByFragment extends android.support.v4.app.Fragment
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         || ActivityCompat.checkSelfPermission(getActivity(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-//                    Snackbar.make(view.findViewById(R.id.root), R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-//                            .setAction(R.string.i_allow, new View.OnClickListener() {
-//                                @Override
-//                                @TargetApi(Build.VERSION_CODES.M)
-//                                public void onClick(View v) {
-//                                }
-//                            });
 
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
