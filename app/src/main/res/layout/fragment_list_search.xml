@@ -84,6 +84,10 @@
         android:background="@color/colorListOverLay"
         android:visibility="gone"/>
 
+    <include
+        android:id="@+id/nodata"
+        layout="@layout/nodata" />
+
     <com.rey.material.widget.ProgressView
         android:id="@+id/progressBar"
         style="@style/CircularProgressTheme"
@@ -96,10 +100,6 @@
         app:pv_circular="true"
         app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
         app:pv_progressMode="indeterminate" />
-
-    <include
-        android:id="@+id/nodata"
-        layout="@layout/nodata" />
 
     <ImageView
         android:id="@+id/fullScreenAdvertise"

@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.CityListAdapter;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
@@ -34,12 +35,15 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_MAX_COUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISE_MAIN;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEVICE_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FULL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
@@ -227,6 +231,11 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
 
     private void checkForAdvertisement(final CityModel model) {
 
+        if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            StaticData.addShownCount++;
+            return;
+        }
+
         fullScreenAdvertiseTimer = true;
         showFade(listOverLay, true, 500);
         listOverLay.setOnClickListener(new View.OnClickListener() {
@@ -253,6 +262,8 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
                     @Override
                     public void onSuccess() {
                         if (fullScreenAdvertiseTimer) {
+                            AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
+                                    new AnalyticsAdvertisementModel("ad." + model.getId() + ".png", ADVERTISE_MAIN, FULL));
                             fullScreenAdvertiseTimer = false;
                             fullScreenAdImageView.setVisibility(View.VISIBLE);
                             progressView.stop();

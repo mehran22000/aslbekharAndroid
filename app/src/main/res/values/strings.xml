@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Asl Bekhar Android</string>
+    <string name="app_name">Asl Bekhar (اصل بخر)</string>
     <string name="app_name_persian">اصل بخر</string>
     <string name="i_allow">اجازه میدم</string>
 
@@ -51,5 +51,8 @@
     <string name="do_it_later">فعلا نمیخواد</string>
     <string name="you_need_to_update">نسخه جدید برنامه منتشر شده، لطفا برای استفاده از تمام امکانات برنامه باید آن را به روزرسانی کنید.</string>
     <string name="go_on">ادامه</string>
+    <string name="readMore">ادامه</string>
+    <string name="permission_needed">لطفا برای این که بتوانیم فروشگاه های نزدیک شما را پیدا کنیم باید اجازه دسترسی بدهید.</string>
+    <string name="permission_needed_2">لجهت دسترسی به تمامی امکانات اپلیکیشن (فروشگاهها و حراج های نزدیک من)، به اپ امکان دسترسی به جی پی اس را بدهید.</string>
 
 </resources>

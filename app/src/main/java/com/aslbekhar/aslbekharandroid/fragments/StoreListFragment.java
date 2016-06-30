@@ -21,11 +21,13 @@ import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.StoreListAdapter;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
 import com.aslbekhar.aslbekharandroid.models.BrandVerificationModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
+import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -34,8 +36,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_MAX_COUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISE_STORES;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BANNER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_VERIFICATION_DOWNLOAD;
@@ -44,8 +49,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FULL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
@@ -186,6 +191,12 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
 
     public void checkForAdvertisement(final StoreModel model) {
 
+        if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            StaticData.addShownCount++;
+            return;
+        }
+
+
         fullScreenAdvertiseTimer = true;
         Snippets.showFade(listOverLay, true, 500);
         progressView.start();
@@ -202,11 +213,13 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
 
 
         Picasso.with(getContext())
-                .load(CITY_TO_CAT_FULL_AD + cityCode + ".cat" + catNum + "."+ brandName +"." + model.getsId() + ".png")
+                .load(CAT_BANNER_AD + cityCode + ".cat" + catNum + "."+ brandName +"." + model.getsId() + ".png")
                 .into(fullScreenAdImageView, new Callback() {
                     @Override
                     public void onSuccess() {
                         if (fullScreenAdvertiseTimer) {
+                            AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
+                                    new AnalyticsAdvertisementModel("ad." + cityCode + ".cat" + catNum + "."+ brandName +"." + model.getsId() + ".png", ADVERTISE_STORES, FULL));
                             fullScreenAdvertiseTimer = false;
                             fullScreenAdImageView.setVisibility(View.VISIBLE);
                             progressView.stop();
@@ -269,7 +282,9 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         Picasso.with(getContext()).load(url).into(bannerAdImageView, new Callback() {
             @Override
             public void onSuccess() {
-                bannerAdImageView.setVisibility(View.VISIBLE);
+                AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
+                        new AnalyticsAdvertisementModel("ad." + cityCode + ".cat" + catNum + "." + brandName + ".png", ADVERTISE_STORES, BANNER));
+                                bannerAdImageView.setVisibility(View.VISIBLE);
             }
 
             @Override

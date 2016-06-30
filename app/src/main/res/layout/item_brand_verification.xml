@@ -32,14 +32,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:paddingRight="10dp"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:background="@color/colorPrimaryDark"
-                android:gravity="right"
-                android:padding="2dp"
+                android:gravity="center|right"
                 android:textColor="@color/textColorPrimary"
-                android:textSize="@dimen/item_title_ts_medium"  />
+                android:textSize="@dimen/item_title_ts_smaller"  />
 
             <TextView
                 android:id="@+id/desc"
@@ -55,8 +55,27 @@
                 android:gravity="right"
                 android:maxLines="3"
                 android:padding="2dp"
+                android:ellipsize="end"
                 android:textColor="@color/textColorPrimaryInverse"
                 android:textSize="@dimen/item_title_ts_smaller"  />
+
+            <TextView
+                android:id="@+id/readMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/image"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:maxLines="1"
+                android:padding="2dp"
+                android:textStyle="bold"
+                android:text="@string/readMore"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="@dimen/item_title_ts_larger"  />
 
         </RelativeLayout>
 

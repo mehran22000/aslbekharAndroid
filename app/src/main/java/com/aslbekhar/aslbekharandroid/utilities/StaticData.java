@@ -20,6 +20,7 @@ public class StaticData {
 
     private static List<CityModel> cityModelList = new ArrayList<>();
     private static List<BrandModel> brandModelList = new ArrayList<>();
+    public static int addShownCount = 0;
 
     public static List<BrandModel> getBrandModelList() {
         if (brandModelList == null || brandModelList.size() == 0) {

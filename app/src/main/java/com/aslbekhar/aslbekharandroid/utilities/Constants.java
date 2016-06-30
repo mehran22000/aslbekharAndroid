@@ -17,34 +17,48 @@ public class Constants {
     public static String AMIN_TEST_URL ="http://www.aminkeshavarzian.ir/amintest.txt";
 
     // WS1
-    public static String CITY_STORE_URL = WEB_SERVER + "services/v1/dev/stores/storelist/city/";
+    public static String CITY_STORE_URL =
+            WEB_SERVER + "services/v1/dev/stores/storelist/city/";
 
     // WS15
-    public static String BRAND_LIST_URL = WEB_SERVER + "services/v1/dev/brands/brandlist";
+    public static String BRAND_LIST_URL =
+            WEB_SERVER + "services/v1/dev/brands/brandlist";
 
     // WS2
-    public static String STORESLIST_NEARBY = WEB_SERVER + "services/v1/dev/stores/storelist/all/";
+    public static String STORESLIST_NEARBY =
+            WEB_SERVER + "services/v1/dev/stores/storelist/all/";
 
     // WS3
-    public static String DEALS_NEARBY_URL = WEB_SERVER + "services/v1/dev/stores/storelist/discounts/";
+    public static String DEALS_NEARBY_URL =
+            WEB_SERVER + "services/v1/dev/stores/storelist/discounts/";
 
     // WS4
-    public static String BRAND_VERIFICATION_URL = WEB_SERVER + "services/v1/dev/brands/verification/";
+    public static String BRAND_VERIFICATION_URL =
+            WEB_SERVER + "services/v1/dev/brands/verification/";
 
     // WS5
-    public static String REGISTER_ANDROID_DEVICE_LINK = WEB_SERVER + "services/v1/dev/users/register/android";
+    public static String REGISTER_ANDROID_DEVICE_LINK =
+            WEB_SERVER + "services/v1/dev/users/register/android";
 
     // WS6
-    public static String SEND_ANALYTICS_LINK = WEB_SERVER + "services/v1/dev/users/interests";
+    public static String SEND_ANALYTICS_LINK =
+            WEB_SERVER + "services/v1/dev/users/interests";
+
+    // WS7
+    public static String SEND_ANALYTICS_ADVERTISEMENT_LINK =
+            WEB_SERVER + "services/v1/dev/users/business/ad/displays";
 
     // WS8
-    public static String LOGIN_URL = WEB_SERVER + "services/v1/dev/users/business/login";
+    public static String LOGIN_URL =
+            WEB_SERVER + "services/v1/dev/users/business/login";
 
     // WS11
-    public static String UPDATE_USER_URL = WEB_SERVER + "services/v1/dev/users/business/updateuser";
+    public static String UPDATE_USER_URL =
+            WEB_SERVER + "services/v1/dev/users/business/updateuser";
 
     // WS17
-    public static String CHECK_VERSION = WEB_SERVER + "services/v1/dev/appInfo/version/android";
+    public static String CHECK_VERSION =
+            WEB_SERVER + "services/v1/dev/appInfo/version/android";
 
 
 
@@ -54,16 +68,13 @@ public class Constants {
     // D ?
     public static String FULLSCREEN_ADD_IMAGE_URL = WEB_SERVER + "images/ads/";
 
-    //header token
-    public static String HEADER_TOKEN = WEB_SERVER + "emFuYmlsZGFyYW5naGVybWV6DQo=";
-
-
-
 
     //ADVERTISEMENT LINKS
-    public static String CITY_TO_CAT_FULL_AD = WEB_SERVER + "/images/ads/fullpage/ad.";
-    public static String CAT_BANNER_AD = WEB_SERVER + "/images/ads/banner/ad.";
-    public static String BRAND_VERIFICATION_IMAGE = WEB_SERVER + "/images/verifications/";
+    public static String CITY_TO_CAT_FULL_AD = WEB_SERVER + "images/ads/fullpage/ad.";
+    public static String CAT_BANNER_AD = WEB_SERVER + "images/ads/banner/ad.";
+    public static String DEALS_BANNER_AD = WEB_SERVER + "images/ads/banner/deals/ad.";
+    public static String NEARME_BANNER_AD = WEB_SERVER + "images/ads/banner/nearme/ad.";
+    public static String BRAND_VERIFICATION_IMAGE = WEB_SERVER + "images/verifications/";
 
 
     //AMIN: Name Strings:
@@ -100,6 +111,18 @@ public class Constants {
     public static String DATA_PROCESSED_OR_NOT = "DATA_PROCESSED_OR_NOT";
     public static String LAST_CITY_CODE = "LAST_CITY_CODE";
 
+    // ADVERTISEMENT TYPES:
+    public static String ADVERTISE_MAIN = "MAIN";
+    public static String ADVERTISE_CATEGORIES = "CATEGORIES";
+    public static String ADVERTISE_STORES = "STORES";
+    public static String ADVERTISE_BRANDS = "BRANDS";
+    public static String ADVERTISE_DETAILS = "DETAILS";
+    public static String ADVERTISE_NEARME = "NEARME";
+    public static String ADVERTISE_NEARME_DETAILS = "NEARME_DETAILS";
+    public static String ADVERTISE_DEALS = "DEALS";
+    public static String ADVERTISE_DEALS_DETAIL = "DEALS_DETAIL";
+    public static String BANNER  = "BANNER";
+    public static String FULL = "FULL";
 
 
     //AMIN INTENT KEYS:
@@ -169,6 +192,7 @@ public class Constants {
     //AMIN Numbers:
     public static int DEFAULT_DISTANCE = 10;
     public static int ADVERTISEMENT_TIMEOUT = 3500;
+    public static int ADVERTISEMENT_MAX_COUNT = 4;
     public static int ADVERTISEMENT_VIEW_TIMEOUT = 3000;
     public static int CHECK_FOR_NEW_VERSION_TIMEOUT = 2000;
     public static int NOTIFICATION_CHECK_INTERVAL = 30 * 60 * 1000;

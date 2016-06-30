@@ -63,6 +63,9 @@ public class BrandVerificationAdapter extends RecyclerView.Adapter<BrandVerifica
             holder.desc.setVisibility(View.INVISIBLE);
         }
 
+        holder.readMore.setTypeface(tf);
+        holder.readMore.setVisibility(View.VISIBLE);
+
         Glide.with(fragment)
                 .load(Constants.BRAND_VERIFICATION_IMAGE + model.getSmallImage())
                 .into(holder.image);
@@ -77,7 +80,7 @@ public class BrandVerificationAdapter extends RecyclerView.Adapter<BrandVerifica
 
                 Glide.with(fragment)
                         .load(Constants.BRAND_VERIFICATION_IMAGE + model.getLargeImage())
-                        .into((ImageView) dialogView.findViewById(R.id.image ));
+                        .into((ImageView) dialogView.findViewById(R.id.image));
 
                 ((TextView) dialogView.findViewById(R.id.desc)).setText(model.getLongDesc());
                 ((TextView) dialogView.findViewById(R.id.desc)).setTypeface(tf);
@@ -105,6 +108,7 @@ public class BrandVerificationAdapter extends RecyclerView.Adapter<BrandVerifica
         CardView cv;
         TextView title;
         TextView desc;
+        TextView readMore;
         ImageView image;
 
         GroupViewHolder(View itemView) {
@@ -112,6 +116,7 @@ public class BrandVerificationAdapter extends RecyclerView.Adapter<BrandVerifica
             cv = (CardView) itemView.findViewById(R.id.itemCV);
             title = (TextView) itemView.findViewById(R.id.title);
             desc = (TextView) itemView.findViewById(R.id.desc);
+            readMore = (TextView) itemView.findViewById(R.id.readMore);
             image = (ImageView) itemView.findViewById(R.id.image);
         }
     }

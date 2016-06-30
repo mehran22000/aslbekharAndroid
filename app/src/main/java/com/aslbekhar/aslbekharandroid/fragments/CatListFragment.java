@@ -22,11 +22,13 @@ import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.CategoryListAdapter;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
 import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.CategoryModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
+import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -34,8 +36,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_MAX_COUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISE_CATEGORIES;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BANNER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CATEGORY;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_LIST;
@@ -48,6 +53,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FUL
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEFAULT_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FULL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
@@ -99,8 +105,8 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
         }
 
         fullScreenAdImageView = (ImageView) view.findViewById(R.id.fullScreenAdvertise);
-        listOverLay = (ImageView) view.findViewById(R.id.listOverLay);
         progressView = (ProgressView) view.findViewById(R.id.progressBar);
+        listOverLay = (ImageView) view.findViewById(R.id.listOverLay);
 
         bannerAdImageView = (ImageView) view.findViewById(R.id.bannerAdvertise);
         checkForBannerAdvertise();
@@ -183,6 +189,8 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
         Picasso.with(getContext()).load(url).into(bannerAdImageView, new Callback() {
             @Override
             public void onSuccess() {
+                AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
+                        new AnalyticsAdvertisementModel("ad." + cityCode + ".png", ADVERTISE_CATEGORIES, BANNER));
                 bannerAdImageView.setVisibility(View.VISIBLE);
             }
 
@@ -207,6 +215,12 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
 
     private void checkForAdvertisement(final CategoryModel model) {
 
+        if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            StaticData.addShownCount++;
+            return;
+        }
+
+
         fullScreenAdvertiseTimer = true;
         Snippets.showFade(listOverLay, true, 500);
         progressView.start();
@@ -226,6 +240,8 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
                     @Override
                     public void onSuccess() {
                         if (fullScreenAdvertiseTimer) {
+                            AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
+                                    new AnalyticsAdvertisementModel("ad." + cityCode + ".cat" + model.getcId() + ".png", ADVERTISE_CATEGORIES, FULL));
                             fullScreenAdvertiseTimer = false;
                             fullScreenAdImageView.setVisibility(View.VISIBLE);
                             progressView.stop();

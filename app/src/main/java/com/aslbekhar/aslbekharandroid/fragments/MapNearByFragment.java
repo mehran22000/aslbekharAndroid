@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -23,12 +24,15 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.StoreDiscountModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
+import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -50,14 +54,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_MAX_COUNT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISE_NEARME;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BANNER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEFAULT_DISTANCE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FULL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.GPS_ON_OR_OFF;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
@@ -68,6 +80,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_NEAR_BY;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.NEARME_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORESLIST_NEARBY;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
@@ -103,13 +116,19 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     GoogleApiClient googleApiClient;
     GoogleMap mMap;
     MapView mMapView;
+    String cityCode;
     List<Marker> markerList = new ArrayList<>();
     List<StoreModel> storeModelList = new ArrayList<>();
-    private View listOverLay;
     private ProgressView progressBar;
+    private View nodata;
+    boolean fullScreenAdvertiseTimer = false;
+    boolean fullScreenAdvertiseSecondTimer = false;
+    ImageView fullScreenAdImageView;
+    View listOverLay;
     private Location lastLocation;
     boolean gpsAvailableOrNot = false;
     boolean playServiceAvailableOrNot = false;
+    StoreModel model;
 
     private static final int PERMISSION_REQUEST = 0;
 
@@ -138,17 +157,109 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         }
 
+
+        cityCode = getSP(LAST_CITY_CODE);
+        if (cityCode.equals(FALSE)){
+            cityCode = "021";
+        }
         gpsAvailableOrNot = getSPboolean(GPS_ON_OR_OFF);
 
 
         listOverLay = view.findViewById(R.id.listOverLay);
+        listOverLay = view.findViewById(R.id.listOverLay);
         progressBar = (ProgressView) view.findViewById(R.id.progressBar);
+        fullScreenAdImageView = (ImageView) view.findViewById(R.id.fullScreenAdvertise);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMap = mMapView.getMap();
 
+        checkForBannerAdvertise();
+
         return view;
+    }
+
+
+    private void checkForAdvertisement(final StoreModel model) {
+
+        if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            StaticData.addShownCount++;
+            return;
+        }
+
+        fullScreenAdvertiseTimer = true;
+        Snippets.showFade(listOverLay, true, 500);
+        progressBar.start();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (fullScreenAdvertiseTimer) {
+                    fullScreenAdvertiseTimer = false;
+                    openStoreFragment(model);
+                }
+            }
+        }, ADVERTISEMENT_TIMEOUT);
+        Picasso.with(getContext())
+                .load(CITY_TO_CAT_FULL_AD + ".nearme." + model.getbName() + "." + model.getsId() + ".png")
+                .into(fullScreenAdImageView, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        if (fullScreenAdvertiseTimer) {
+                            AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
+                                    new AnalyticsAdvertisementModel(CITY_TO_CAT_FULL_AD +  ".nearme." + model.getbName() + "." + model.getsId() + ".png", ADVERTISE_NEARME, FULL));
+                            fullScreenAdvertiseTimer = false;
+                            fullScreenAdImageView.setVisibility(View.VISIBLE);
+                            progressBar.stop();
+                            listOverLay.setVisibility(View.GONE);
+                            fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    fullScreenAdvertiseSecondTimer = false;
+                                    openStoreFragment(model);
+                                }
+                            });
+                            fullScreenAdvertiseSecondTimer = true;
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (fullScreenAdvertiseSecondTimer) {
+                                        fullScreenAdvertiseSecondTimer = false;
+                                        openStoreFragment(model);
+                                    }
+                                }
+                            }, ADVERTISEMENT_VIEW_TIMEOUT);
+
+                        }
+                    }
+
+                    @Override
+                    public void onError() {
+
+                        if (fullScreenAdvertiseTimer) {
+                            fullScreenAdvertiseTimer = false;
+                            openStoreFragment(model);
+                        }
+
+                    }
+                });
+    }
+
+
+    private void checkForBannerAdvertise() {
+        String url = NEARME_BANNER_AD + cityCode + ".png";
+        Picasso.with(getContext()).load(url).into((ImageView) view.findViewById(R.id.bannerAdvertise), new Callback() {
+            @Override
+            public void onSuccess() {
+                AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
+                        new AnalyticsAdvertisementModel("ad."  + cityCode + ".png", ADVERTISE_NEARME, BANNER));
+                view.findViewById(R.id.bannerAdvertise).setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onError() {
+            }
+        });
     }
 
     @Override
@@ -193,7 +304,12 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        return false;
+        if (type == Constants.MAP_TYPE_SHOW_SINGLE_STORE){
+            openStoreFragment(model);
+        } else {
+            openStoreFragment(storeModelList.get(Integer.parseInt(marker.getSnippet())));
+        }
+        return true;
     }
 
     @Override
@@ -287,7 +403,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     private void showSingleStore() {
         Bundle bundle = getArguments();
-        StoreModel model = new StoreModel(bundle.getString(TITLE),
+        model = new StoreModel(bundle.getString(TITLE),
                 bundle.getString(LOGO),
                 bundle.getString(ADDRESS),
                 bundle.getString(WORK_HOUR),

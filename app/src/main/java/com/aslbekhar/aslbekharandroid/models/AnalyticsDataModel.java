@@ -22,6 +22,7 @@ public class AnalyticsDataModel {
     String year;
     String lat;
     String lon;
+    String os = "android";
 
     public AnalyticsDataModel(String value, String key) {
         this.value = value;
