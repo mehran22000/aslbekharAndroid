@@ -13,9 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
-import com.aslbekhar.aslbekharandroid.fragments.DealsNearByFragment;
+import com.aslbekhar.aslbekharandroid.fragments.ListNearByFragment;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
-import com.aslbekhar.aslbekharandroid.models.StoreDiscountModel;
+import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -32,13 +32,13 @@ import java.util.List;
  */
 public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscountListAdapter.GroupViewHolder> {
 
-    List<StoreDiscountModel> modelList;
+    List<StoreModel> modelList;
     Context context;
-    private DealsNearByFragment fragment;
+    private ListNearByFragment fragment;
     private String cityCode;
 
-    public StoreDiscountListAdapter(List<StoreDiscountModel> modelList,
-                                    Context context, DealsNearByFragment fragment, String cityCode) {
+    public StoreDiscountListAdapter(List<StoreModel> modelList,
+                                    Context context, ListNearByFragment fragment, String cityCode) {
         this.modelList = modelList;
         this.context = context;
         this.fragment = fragment;
@@ -59,7 +59,7 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
 
     @Override
     public void onBindViewHolder(final GroupViewHolder holder, int position) {
-        final StoreDiscountModel model = modelList.get(position);
+        final StoreModel model = modelList.get(position);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/theme.ttf");
         holder.title.setText(model.getsName());
         holder.title.setTypeface(tf);
@@ -75,8 +75,8 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
         } else {
             holder.saleStart.setVisibility(View.INVISIBLE);
         }
-        if (model.getdPercentage() != null && model.getdPercentage().length() > 1) {
-            holder.percentage.setText("حراج: " + Constants.persianNumbers(model.getdPercentage()) + "%");
+        if (model.getdPrecentage() != null && model.getdPrecentage().length() > 1) {
+            holder.percentage.setText("حراج: " + Constants.persianNumbers(model.getdPrecentage()) + "%");
             holder.percentage.setTypeface(tf);
         } else {
             holder.percentage.setText("حراج");

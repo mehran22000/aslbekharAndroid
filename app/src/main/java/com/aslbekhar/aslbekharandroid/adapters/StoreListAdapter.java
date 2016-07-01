@@ -14,10 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.fragments.ListNearByFragment;
 import com.aslbekhar.aslbekharandroid.fragments.StoreListFragment;
 import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
+import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -35,13 +41,16 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
     List<StoreModel> modelList;
     Context context;
     private StoreListFragment fragment;
+    private ListNearByFragment fragmentDeals;
     private String cityCode;
 
     public StoreListAdapter(List<StoreModel> modelList,
-                            Context context, StoreListFragment fragment, String cityCode) {
+                            Context context, StoreListFragment fragment,
+                            ListNearByFragment listNearByFragment, String cityCode) {
         this.modelList = modelList;
         this.context = context;
         this.fragment = fragment;
+        this.fragmentDeals = listNearByFragment;
         this.cityCode = cityCode;
     }
 
@@ -107,7 +116,11 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
                 Log.d(LOG_TAG, "onClick: mapsssssss");
                 AnalyticsDataModel.saveAnalytic(BRAND_STORE,
                         model.getbId() + "_" + model.getsId());
-                fragment.showOnMap(model);
+                if (fragment != null) {
+                    fragment.showOnMap(model);
+                } else {
+                    fragmentDeals.showOnMap(model);
+                }
             }
         });
         holder.cv.setOnClickListener(new View.OnClickListener() {
@@ -118,10 +131,36 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
                                 model.getsId());
 
                 if (Integer.parseInt(model.getdPrecentage()) > 0) {
-                    fragment.checkForAdvertisement(model);
+                    if (fragment != null) {
+                        fragment.checkForAdvertisement(model);
+                    } else {
+                        fragmentDeals.openStoreFromAdapter(model);
+                    }
                 }
             }
         });
+
+        if (fragmentDeals != null){
+            holder.brandLogo.setVisibility(View.VISIBLE);
+            Glide.with(fragmentDeals)
+                    .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
+                    .listener(new RequestListener<Uri, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
+                            Glide.with(fragmentDeals).load(Constants.BRAND_LOGO_URL +
+                                    BrandModel.getBrandLogo(model.getbName()) + ".png").into(holder.brandLogo);
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(holder.brandLogo);
+        } else {
+            holder.brandLogo.setVisibility(View.GONE);
+        }
 
     }
 

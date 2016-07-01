@@ -183,7 +183,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         // setting the layout manager of recyclerView
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new StoreListAdapter(modelListToShow, getActivity(), this, cityCode);
+        adapter = new StoreListAdapter(modelListToShow, getActivity(), this, null, cityCode);
         recyclerView.setAdapter(adapter);
 
         return view;

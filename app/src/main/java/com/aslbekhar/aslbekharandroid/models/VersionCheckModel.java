@@ -9,8 +9,8 @@ public class VersionCheckModel {
 
     String _id;
     String device;
-    int current;
-    int minSupport;
+    String current;
+    String minSupport;
 
     public String get_id() {
         return _id;
@@ -28,19 +28,19 @@ public class VersionCheckModel {
         this.device = device;
     }
 
-    public int getCurrent() {
+    public String getCurrent() {
         return current;
     }
 
-    public void setCurrent(int current) {
+    public void setCurrent(String current) {
         this.current = current;
     }
 
-    public int getMinSupport() {
+    public String getMinSupport() {
         return minSupport;
     }
 
-    public void setMinSupport(int minSupport) {
+    public void setMinSupport(String minSupport) {
         this.minSupport = minSupport;
     }
 }
