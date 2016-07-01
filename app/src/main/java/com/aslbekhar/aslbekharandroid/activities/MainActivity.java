@@ -184,11 +184,16 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
             Log.d(LOG_TAG, SEND_ANALYTICS_LINK +" onResponse: " + response);
         } else if (tag.equals(CHECK_VERSION)) {
             VersionCheckModel versionCheckModel = null;
+            int current;
+            int minimum;
             try {
                 versionCheckModel = JSON.parseObject(response, VersionCheckModel.class);
-            } catch (Exception ignored) {
+                current = Integer.parseInt(versionCheckModel.getCurrent());
+                minimum = Integer.parseInt(versionCheckModel.getMinSupport());
+            } catch (Exception e) {
+                return;
             }
-            if (versionCheckModel != null && versionCheckModel.getCurrent() > APP_VERSION){
+            if (current > APP_VERSION){
 
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
                 final View dialogView = LayoutInflater.from(this).
@@ -214,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
                     }
                 });
 
-                if (versionCheckModel.getMinSupport() > APP_VERSION) {
+                if (minimum > APP_VERSION) {
                     dialogBuilder.setCancelable(false);
                     dialogView.findViewById(R.id.skip).setVisibility(View.GONE);
                 } else {

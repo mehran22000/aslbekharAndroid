@@ -26,7 +26,6 @@ import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
-import com.aslbekhar.aslbekharandroid.models.StoreDiscountModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
@@ -47,6 +46,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rey.material.widget.ProgressView;
+import com.rey.material.widget.Slider;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -65,8 +65,11 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_TO_CAT_FULL_AD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEAL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEALS_NEARBY_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEFAULT_DISTANCE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISTANCE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FULL;
@@ -81,6 +84,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_NEAR_BY;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NEARME_BANNER_AD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL_OR_DEAL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORESLIST_NEARBY;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
@@ -125,9 +130,10 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     boolean fullScreenAdvertiseSecondTimer = false;
     ImageView fullScreenAdImageView;
     View listOverLay;
+    int distance = DEFAULT_DISTANCE;
     private Location lastLocation;
     boolean gpsAvailableOrNot = false;
-    boolean playServiceAvailableOrNot = false;
+    boolean normalOrDeal = true;
     StoreModel model;
 
     private static final int PERMISSION_REQUEST = 0;
@@ -142,6 +148,10 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             type = getArguments().getInt(MAP_TYPE, 1);
+            if (getArguments().getString(NORMAL_OR_DEAL, FALSE).equals(DEAL)){
+                normalOrDeal = false;
+            }
+            distance = getArguments().getInt(DISTANCE, DEFAULT_DISTANCE);
         }
     }
 
@@ -157,6 +167,17 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         }
 
+        final Slider slider = (Slider) view.findViewById(R.id.slider);
+        slider.setValue(distance, false);
+        slider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (distance != (int) slider.getExactValue()) {
+                    distance = (int) slider.getExactValue();
+                    getStoresNearBy();
+                }
+            }
+        });
 
         cityCode = getSP(LAST_CITY_CODE);
         if (cityCode.equals(FALSE)){
@@ -164,6 +185,24 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         }
         gpsAvailableOrNot = getSPboolean(GPS_ON_OR_OFF);
 
+
+        view.findViewById(R.id.sliderMapListToggle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Bundle bundle = new Bundle();
+
+                bundle.putString(CITY_CODE, cityCode);
+                if (normalOrDeal) {
+                    bundle.putString(NORMAL_OR_DEAL, NORMAL);
+                } else {
+                    bundle.putString(NORMAL_OR_DEAL, DEAL);
+                }
+                ListNearByFragment fragment = new ListNearByFragment();
+                fragment.setArguments(bundle);
+                callBack.openNewContentFragment(fragment);
+            }
+        });
 
         listOverLay = view.findViewById(R.id.listOverLay);
         listOverLay = view.findViewById(R.id.listOverLay);
@@ -515,8 +554,13 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         }
         progressBar.start();
         if (type == MAP_TYPE_SHOW_NEAR_BY) {
-            NetworkRequests.getRequest(STORESLIST_NEARBY + lastLocation.getLatitude() + "/"
-                    + lastLocation.getLongitude() + "/" + DEFAULT_DISTANCE, this, DOWNLOAD);
+            if (normalOrDeal) {
+                NetworkRequests.getRequest(STORESLIST_NEARBY + lastLocation.getLatitude() + "/"
+                        + lastLocation.getLongitude() + "/" + distance, this, DOWNLOAD);
+            } else {
+                NetworkRequests.getRequest(DEALS_NEARBY_URL + lastLocation.getLatitude() + "/"
+                        + lastLocation.getLongitude() + "/" + distance, this, DOWNLOAD);
+            }
         }
     }
 
@@ -648,7 +692,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         }
         markerList.clear();
         try {
-            storeModelList.addAll(JSON.parseArray(response, StoreDiscountModel.class));
+            storeModelList.addAll(JSON.parseArray(response, StoreModel.class));
         } catch (Exception e) {
             e.printStackTrace();
         }

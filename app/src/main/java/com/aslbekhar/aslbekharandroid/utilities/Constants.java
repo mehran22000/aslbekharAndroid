@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
  */
 public class Constants {
 
-    public static int APP_VERSION = 1;
+    public static int APP_VERSION = 200;
 
 
     public static String WEB_SERVER ="https://buyoriginal.herokuapp.com/";
@@ -134,19 +134,12 @@ public class Constants {
     public static String LOGO = "LOGO";
     public static String DISCOUNT = "DISCOUNT";
     public static String VERIFIED = "VERIFIED";
-    public static String STORE_TYPE = "STORE_TYPE";
-    public static String STORE_TYPE_VERIFIED = "STORE_TYPE_VERIFIED";
-    public static String STORE_TYPE_VERIFIED_DISCOUNT = "STORE_TYPE_VERIFIED_DISCOUNT";
-    public static String STORE_TYPE_DISCOUNT = "STORE_TYPE_DISCOUNT";
-    public static String STORE_TYPE_NONE = "STORE_TYPE_NONE";
     public static String STORE_DETAILS = "STORE_DETAILS";
-    public static String MAX_NUMBER = "MAX_NUMBER";
-    public static String HEADER_IMAGE = "HEADER_IMAGE";
-    public static String LINK = "LINK";
-    public static String POSITION = "POSITION";
-    public static String FROM_SPLASH = "FROM_SPLASH";
-    public static String TYPE = "TYPE";
     public static String IMAGE = "IMAGE";
+    public static String NORMAL_OR_DEAL = "NORMAL_OR_DEAL";
+    public static String DEAL = "DEAL";
+    public static String NORMAL = "NORMAL";
+    public static String DISTANCE = "DISTANCE";
     public static String NOTIFICATION_SERVICE_TAG = "NOTIFICATION_SERVICE_TAG";
     public static String IS_FROM_NOTIFICATION = "IS_FROM_NOTIFICATION";
     public static String NOTIFICATION_TYPE = "NOTIFICATION_TYPE";

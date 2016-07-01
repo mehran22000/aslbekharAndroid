@@ -58,7 +58,6 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
         holder.title.setText(model.getbName());
         holder.title.setTypeface(tf);
 
-
         Picasso.with(context)
                 .load(Uri.parse("file:///android_asset/logos/" + model.getbLogo() + ".png"))
                 .into(holder.image, new Callback() {

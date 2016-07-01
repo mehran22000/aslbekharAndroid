@@ -10,15 +10,15 @@
         android:id="@+id/sliderLay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="10dp">
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/minTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
             android:text="1 KM" />
 
         <TextView
@@ -26,8 +26,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
+            android:layout_toLeftOf="@+id/sliderMapListToggle"
+            android:padding="10dp"
             android:text="10 KM" />
+
+        <ImageView
+            android:id="@+id/sliderMapListToggle"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="10dp"
+            android:src="@drawable/icon_maps" />
 
         <com.rey.material.widget.Slider
             android:id="@+id/slider"
@@ -38,16 +49,15 @@
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/maxTxt"
             android:layout_toRightOf="@+id/minTxt"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
             android:gravity="center"
+            android:padding="10dp"
             app:sl_maxValue="10"
             app:sl_minValue="1"
-            app:sl_value="2"
-            app:sl_stepValue="1"
             app:sl_primaryColor="@color/colorPrimary"
             app:sl_secondaryColor="@color/colorAccent"
-            app:sl_transformAnimDuration="200"/>
+            app:sl_stepValue="1"
+            app:sl_transformAnimDuration="200"
+            app:sl_value="2" />
 
     </RelativeLayout>
 
@@ -74,13 +84,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/sad"/>
+            android:src="@drawable/sad" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/no_sales_around_you"/>
+            android:text="@string/no_sales_around_you" />
 
     </LinearLayout>
 
@@ -91,7 +101,7 @@
         android:layout_above="@+id/offlineLay"
         android:layout_below="@+id/sliderLay"
         android:background="@color/colorListOverLay"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <com.rey.material.widget.ProgressView
         android:id="@+id/progressBar"
@@ -102,8 +112,8 @@
         android:visibility="visible"
         app:pv_autostart="false"
         app:pv_circular="true"
-        app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
-        app:pv_progressMode="indeterminate" />
+        app:pv_progressMode="indeterminate"
+        app:pv_progressStyle="@style/Material.Drawable.CircularProgress" />
 
 
     <ImageView
@@ -117,15 +127,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/bannerAdvertise"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
-        android:background="@color/white"/>
+        android:background="@color/white"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/offlineLay"
