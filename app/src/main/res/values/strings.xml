@@ -54,5 +54,8 @@
     <string name="readMore">ادامه</string>
     <string name="permission_needed">لطفا برای این که بتوانیم فروشگاه های نزدیک شما را پیدا کنیم باید اجازه دسترسی بدهید.</string>
     <string name="permission_needed_2">لجهت دسترسی به تمامی امکانات اپلیکیشن (فروشگاهها و حراج های نزدیک من)، به اپ امکان دسترسی به جی پی اس را بدهید.</string>
+    <string name="sale_start">شروع تخفیف:</string>
+    <string name="sale_end">پایان تخفیف:</string>
+    <string name="store_distance">فاصله فروشگاه تا شما:</string>
 
 </resources>

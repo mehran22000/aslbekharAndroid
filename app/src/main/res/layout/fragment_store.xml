@@ -2,41 +2,59 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/silver_light_2">
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/verificationTips"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/red_light"
-        android:textColor="@color/black"
-        android:padding="10dp"
-        android:visibility="gone"
-        android:gravity="center"
         android:layout_alignParentTop="true"
-        android:text="@string/tips_to_verify_product"/>
+        android:background="@color/red_light"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/tips_to_verify_product"
+        android:textColor="@color/black"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/brandLogo"
         android:layout_width="@dimen/store_image_h_sale"
         android:layout_height="@dimen/store_image_h_sale"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp" />
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="@dimen/item_store_image_h"
         android:layout_height="@dimen/item_store_image_h"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/discountPercentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/brandLogo"
+        android:layout_alignRight="@+id/brandLogo"
+        android:paddingTop="10dp"
+        android:layout_below="@+id/brandLogo"
+        android:gravity="center"
+        android:text="50%"
+        android:textColor="@color/textColorSecondary"
+        android:textSize="40dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/brandLogo"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/brandLogo"
-        android:layout_alignBottom="@+id/brandLogo"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
@@ -45,7 +63,6 @@
         android:padding="5dp"
         android:textColor="@color/textColorSecondary"
         android:textSize="25dp" />
-
 
     <TextView
         android:id="@+id/workHour"
@@ -56,8 +73,9 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="2dp"
-        android:layout_toRightOf="@+id/brandLogo"
+        android:layout_toRightOf="@+id/discountPercentage"
         android:gravity="right"
+        android:text="ساعات کار: "
         android:padding="5dp"
         android:textColor="@color/textColorPrimaryInverse"
         android:textSize="@dimen/item_title_ts_medium" />
@@ -71,14 +89,14 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="2dp"
-        android:layout_toRightOf="@+id/brandLogo"
+        android:layout_toRightOf="@+id/discountPercentage"
         android:gravity="right"
         android:padding="5dp"
         android:textColor="@color/textColorPrimaryInverse"
         android:textSize="@dimen/item_title_ts_medium" />
 
     <TextView
-        android:id="@+id/address"
+        android:id="@+id/tell2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -86,25 +104,94 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="2dp"
+        android:layout_toRightOf="@+id/discountPercentage"
         android:gravity="right"
         android:padding="5dp"
         android:textColor="@color/textColorPrimaryInverse"
         android:textSize="@dimen/item_title_ts_medium" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bannerAdvertise"
+        android:layout_below="@+id/tell2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="2dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="آدرس: "
+                android:textColor="@color/textColorPrimaryInverse"
+                android:textSize="@dimen/item_title_ts_medium" />
+
+            <TextView
+                android:id="@+id/saleStart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="2dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="@string/sale_start"
+                android:textColor="@color/textColorPrimaryInverse"
+                android:textSize="@dimen/item_title_ts_medium" />
+
+            <TextView
+                android:id="@+id/saleEnd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="2dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="@string/sale_end"
+                android:textColor="@color/textColorPrimaryInverse"
+                android:textSize="@dimen/item_title_ts_medium" />
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="2dp"
+                android:gravity="right"
+                android:padding="5dp"
+                android:text="@string/store_distance"
+                android:textColor="@color/textColorPrimaryInverse"
+                android:textSize="@dimen/item_title_ts_medium" />
+
+        </LinearLayout>
+    </ScrollView>
+
 
     <ImageView
         android:id="@+id/fullScreenAdvertise"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/bannerAdvertise"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
-        android:background="@color/white"/>
+        android:background="@color/white"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/offlineLay"

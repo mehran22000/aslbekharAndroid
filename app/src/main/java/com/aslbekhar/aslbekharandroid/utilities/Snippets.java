@@ -5,16 +5,19 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
 
@@ -325,5 +328,26 @@ and save it to the base location of app, with a folder name taken from string.xm
         Point size = new Point();
         display.getSize(size);
         return size.x;
+    }
+
+
+
+    public static void setFontForActivity(View view, Typeface tf) {
+        //Set up touch listener for non-text box views to hide keyboard.
+        if (view instanceof TextView) {
+            ((TextView) view).setTypeface(tf);
+        } else {
+            //If a layout container, iterate over children and seed recursion.
+            if (view instanceof ViewGroup) {
+                for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                    View innerView = ((ViewGroup) view).getChildAt(i);
+
+                    setFontForActivity(innerView, tf);
+                }
+            }
+        }
+
+
     }
 }
