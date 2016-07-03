@@ -156,6 +156,11 @@ public class Constants {
     public static String ADD_TO_BACK = "ADD_TO_BACK";
     public static String CHANGE_PASSWORD = "CHANGE_PASSWORD";
     public static String REGISTRATION = "REGISTRATION";
+    public static String STORE_DISCOUNT_PERCENTAGE = "STORE_DISCOUNT_PERCENTAGE";
+    public static String STORE_DISTANCE = "STORE_DISTANCE";
+    public static String STORE_SALE_END = "STORE_SALE_END";
+    public static String STORE_SALE_START = "STORE_SALE_START";
+    
 
     public static String LATITUDE = "LATITUDE";
     public static String LONGITUDE = "LONGITUDE";

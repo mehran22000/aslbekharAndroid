@@ -30,6 +30,11 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DISCOUNT_PERCENTAGE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DISTANCE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_SALE_END;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_SALE_START;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setFontForActivity;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showSlideUp;
 
 /**
@@ -46,6 +51,7 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
     String catNum;
     String brandName;
     String brandId;
+    int discount = 0;
     boolean fragmentAlive;
 
     ImageView bannerAdImageView;
@@ -77,11 +83,17 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
             view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         }
 
+        if (getArguments() != null && getArguments().getInt(STORE_DISCOUNT_PERCENTAGE, 0) > 0) {
+            discount = getArguments().getInt(STORE_DISCOUNT_PERCENTAGE, 0);
+        }
+
         bannerAdImageView = (ImageView) view.findViewById(R.id.bannerAdvertise);
 
         try {
             model = JSON.parseObject(getArguments().getString(STORE_DETAILS), StoreModel.class);
             showStoreInfo(model);
+            Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
+            setFontForActivity(view, tf);
             checkForBannerAdvertise();
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,51 +105,70 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
 
     private void showStoreInfo(final StoreModel model) {
 
-        TextView title;
-        TextView workHour;
-        TextView tell;
-        TextView address;
         final ImageView brandLogo;
         ImageView image;
-        title = (TextView) view.findViewById(R.id.title);
-        workHour = (TextView) view.findViewById(R.id.workHour);
-        tell = (TextView) view.findViewById(R.id.tell);
-        address = (TextView) view.findViewById(R.id.address);
+        TextView title = (TextView) view.findViewById(R.id.title);
+        TextView workHour = (TextView) view.findViewById(R.id.workHour);
+        TextView tell = (TextView) view.findViewById(R.id.tell);
+        TextView tell2 = (TextView) view.findViewById(R.id.tell2);
+        TextView address = (TextView) view.findViewById(R.id.address);
+        TextView discountPercentage = (TextView) view.findViewById(R.id.discountPercentage);
+        TextView saleStart = (TextView) view.findViewById(R.id.saleStart);
+        TextView saleEnd = (TextView) view.findViewById(R.id.saleEnd);
+        TextView distance = (TextView) view.findViewById(R.id.distance);
         image = (ImageView) view.findViewById(R.id.image);
         brandLogo = (ImageView) view.findViewById(R.id.brandLogo);
 
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
         title.setText(model.getsName());
-        title.setTypeface(tf);
         if (model.getsHour() != null && model.getsHour().length() > 1) {
             workHour.setText("ساعات کار: " + model.getsHour());
-            workHour.setTypeface(tf);
-        } else {
-            workHour.setVisibility(View.INVISIBLE);
         }
         if (model.getsTel1() != null && model.getsTel1().length() > 1) {
             tell.setText("تلفن: " + Constants.persianNumbers(model.getsTel1()));
-            tell.setTypeface(tf);
         } else {
             tell.setVisibility(View.INVISIBLE);
         }
+        if (model.getsTel2() != null && model.getsTel2().length() > 1) {
+            tell2.setText("تلفن: " + Constants.persianNumbers(model.getsTel2()));
+        } else {
+            tell2.setVisibility(View.INVISIBLE);
+        }
         if (model.getsAddress() != null && model.getsAddress().length() > 1) {
             address.setText("آدرس: " + model.getsAddress());
-            address.setTypeface(tf);
+        }
+        if (discount > 0 && getArguments() != null) {
+            Bundle bundle = getArguments();
+            if (bundle.getString(STORE_SALE_START, "").length() > 1) {
+                saleStart.setText(getString(R.string.sale_start) + " " + bundle.getString(STORE_SALE_START, ""));
+            }
+            if (bundle.getString(STORE_SALE_END, "").length() > 1) {
+                saleEnd.setText(getString(R.string.sale_end) + " " + bundle.getString(STORE_SALE_END, ""));
+            }
+            if (bundle.getString(STORE_DISTANCE, "").length() > 1) {
+                distance.setText(getString(R.string.sale_end) + " " + bundle.getString(STORE_DISTANCE, ""));
+            }
+            discountPercentage.setText(String.valueOf(discount));
         } else {
-            address.setVisibility(View.INVISIBLE);
+            saleStart.setVisibility(View.INVISIBLE);
+            saleEnd.setVisibility(View.INVISIBLE);
+            distance.setVisibility(View.INVISIBLE);
+
+            if (model.getsDiscount() > 0) {
+                discountPercentage.setText(String.valueOf(model.getsDiscount()));
+            } else {
+                discountPercentage.setVisibility(View.GONE);
+            }
         }
 
-        if (model.getsVerified().equals(Constants.YES)){
-            if (model.getsDiscount() > 0){
+        if (model.getsVerified().equals(Constants.YES)) {
+            if (model.getsDiscount() > 0) {
                 image.setImageResource(R.drawable.discountverified);
             } else {
                 image.setImageResource(R.drawable.verified);
             }
-        } else if (model.getsDiscount() > 0){
+        } else if (model.getsDiscount() > 0 || discount > 0) {
             image.setImageResource(R.drawable.discount);
         }
-
 
 
         Picasso.with(getContext())
