@@ -348,7 +348,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         bundle.putString(WORK_HOUR, model.getsHour());
         bundle.putString(ADDRESS, model.getsAddress());
         bundle.putString(TELL, model.getsTel1());
-        bundle.putInt(DISCOUNT, model.getsDiscount());
+        bundle.putInt(DISCOUNT, model.getdPrecentageInt());
         bundle.putString(VERIFIED, model.getsVerified());
         bundle.putString(LOGO, model.getbName());
         bundle.putInt(MAP_TYPE, MAP_TYPE_SHOW_SINGLE_STORE);

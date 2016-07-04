@@ -36,10 +36,21 @@ import java.util.Stack;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.APP_VERSION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHECK_VERSION;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEVICE_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_ENGLISH_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTERED_DEVICE_ID;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTER_ANDROID_DEVICE_LINK;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTRATION;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTRATION_COMPLETE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SAVED_ANALYTICS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.SEND_ANALYTICS_LINK;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SUCCESS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 
 public class MainActivity extends AppCompatActivity implements Interfaces.MainActivityInterface,
         Interfaces.OfflineInterface, Interfaces.NetworkListeners {
@@ -82,11 +93,24 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
         setupViewPagerAndTabs();
 
         String analyticSavedJson = Snippets.getSP(Constants.SAVED_ANALYTICS);
-        if (!analyticSavedJson.equals(FALSE)){
+        if (!analyticSavedJson.equals(FALSE)) {
             NetworkRequests.postRequest(SEND_ANALYTICS_LINK, this, SEND_ANALYTICS_LINK,
-                    "{\"interests\":\"" + Base64.encodeToString(analyticSavedJson.getBytes(), Base64.DEFAULT) + "\"}");
+                    "{\"interests\":\"" + Base64.encodeToString(analyticSavedJson.getBytes(), Base64.NO_WRAP) + "\"}");
         }
 
+        if (!getSP(DEVICE_ID).equals(FALSE) && !getSP(DEVICE_ID).equals(getSP(REGISTERED_DEVICE_ID))) {
+            String cityName = getSP(LAST_CITY_ENGLISH_NAME).toLowerCase();
+            if (cityName.equals(FALSE)) {
+                cityName = "tehran";
+            }
+            String postJson = "{\"device\":\""
+                    + getSP(DEVICE_ID) + "\",\"city\":\""
+                    + cityName
+                    + "\"}";
+            Log.d(LOG_TAG, "registering token json: " + postJson);
+            NetworkRequests.postRequest(REGISTER_ANDROID_DEVICE_LINK,
+                    this, REGISTRATION, postJson);
+        }
 
         NetworkRequests.getRequest(CHECK_VERSION, this, CHECK_VERSION);
     }
@@ -131,13 +155,12 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
 
 
     @Override
-    public void onBackPressed()
-    {
-        if(!BackStackFragment.handleBackPressed(getSupportFragmentManager())){
-            if (tabStack.size() > 0){
+    public void onBackPressed() {
+        if (!BackStackFragment.handleBackPressed(getSupportFragmentManager())) {
+            if (tabStack.size() > 0) {
                 currentTab = tabStack.pop();
                 viewPager.setCurrentItem(currentTab, true);
-                if (tabStack.size() > 0 && tabStack.peek() == currentTab){
+                if (tabStack.size() > 0 && tabStack.peek() == currentTab) {
                     tabStack.pop();
                 }
             } else {
@@ -175,13 +198,16 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
 
     @Override
     public void offlineMode(boolean offline) {
-            offlineMode = offline;
+        offlineMode = offline;
     }
 
     @Override
     public void onResponse(String response, String tag) {
-        if (tag.equals(SEND_ANALYTICS_LINK)){
-            Log.d(LOG_TAG, SEND_ANALYTICS_LINK +" onResponse: " + response);
+        if (tag.equals(SEND_ANALYTICS_LINK)) {
+            Log.d(LOG_TAG, SEND_ANALYTICS_LINK + " onResponse: " + response);
+            if (response.toLowerCase().contains(SUCCESS.toLowerCase())){
+                setSP(SAVED_ANALYTICS, FALSE);
+            }
         } else if (tag.equals(CHECK_VERSION)) {
             VersionCheckModel versionCheckModel = null;
             int current;
@@ -193,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
             } catch (Exception e) {
                 return;
             }
-            if (current > APP_VERSION){
+            if (current > APP_VERSION) {
 
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
                 final View dialogView = LayoutInflater.from(this).
@@ -241,12 +267,20 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
 
                 dialog.show();
             }
+        } else if (tag.equals(REGISTRATION)) {
+            if (response.toLowerCase().contains(SUCCESS.toLowerCase())) {
+                setSP(REGISTRATION_COMPLETE, TRUE);
+                setSP(REGISTERED_DEVICE_ID, getSP(DEVICE_ID));
+                Log.d(LOG_TAG, REGISTRATION_COMPLETE);
+            } else {
+                Log.d(LOG_TAG, "Problem in registration" + "onResponse: " + response);
+            }
         }
     }
 
     @Override
     public void onError(VolleyError error, String tag) {
-
+        Log.d(LOG_TAG, tag + "onError: " + error.getMessage());
     }
 
     @Override

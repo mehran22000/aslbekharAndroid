@@ -35,6 +35,7 @@ public class GcmListenerServce extends FirebaseMessagingService {
         Intent intent;
         if (NotificationUtils.isAppIsInBackground(getApplicationContext())) {
             intent = new Intent(this, SplashScreen.class);
+            intent.putExtra(Constants.IS_FROM_NOTIFICATION, true);
         } else {
             intent = new Intent(this, NotificationFullScreenActivity.class);
         }
