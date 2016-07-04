@@ -30,10 +30,6 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DISCOUNT_PERCENTAGE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DISTANCE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_SALE_END;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_SALE_START;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setFontForActivity;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showSlideUp;
 
@@ -83,10 +79,6 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
             view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         }
 
-        if (getArguments() != null && getArguments().getInt(STORE_DISCOUNT_PERCENTAGE, 0) > 0) {
-            discount = getArguments().getInt(STORE_DISCOUNT_PERCENTAGE, 0);
-        }
-
         bannerAdImageView = (ImageView) view.findViewById(R.id.bannerAdvertise);
 
         try {
@@ -105,6 +97,7 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
 
     private void showStoreInfo(final StoreModel model) {
 
+        discount = model.getdPrecentageInt();
         final ImageView brandLogo;
         ImageView image;
         TextView title = (TextView) view.findViewById(R.id.title);
@@ -126,47 +119,43 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
         if (model.getsTel1() != null && model.getsTel1().length() > 1) {
             tell.setText("تلفن: " + Constants.persianNumbers(model.getsTel1()));
         } else {
-            tell.setVisibility(View.INVISIBLE);
+            tell.setVisibility(View.GONE);
         }
         if (model.getsTel2() != null && model.getsTel2().length() > 1) {
             tell2.setText("تلفن: " + Constants.persianNumbers(model.getsTel2()));
         } else {
-            tell2.setVisibility(View.INVISIBLE);
+            tell2.setVisibility(View.GONE);
         }
         if (model.getsAddress() != null && model.getsAddress().length() > 1) {
             address.setText("آدرس: " + model.getsAddress());
         }
-        if (discount > 0 && getArguments() != null) {
-            Bundle bundle = getArguments();
-            if (bundle.getString(STORE_SALE_START, "").length() > 1) {
-                saleStart.setText(getString(R.string.sale_start) + " " + bundle.getString(STORE_SALE_START, ""));
+        if (discount > 0) {
+            if (model.getdStartDateFa() != null && model.getdStartDateFa().length() > 1) {
+                saleStart.setText(getString(R.string.sale_start) + " " + Constants.persianNumbers(model.getdStartDateFa()));
             }
-            if (bundle.getString(STORE_SALE_END, "").length() > 1) {
-                saleEnd.setText(getString(R.string.sale_end) + " " + bundle.getString(STORE_SALE_END, ""));
+            if (model.getdEndDateFa() != null && model.getdEndDateFa().length() > 1) {
+                saleEnd.setText(getString(R.string.sale_end) + " " + Constants.persianNumbers(model.getdEndDateFa()));
             }
-            if (bundle.getString(STORE_DISTANCE, "").length() > 1) {
-                distance.setText(getString(R.string.sale_end) + " " + bundle.getString(STORE_DISTANCE, ""));
-            }
-            discountPercentage.setText(String.valueOf(discount));
-        } else {
-            saleStart.setVisibility(View.INVISIBLE);
-            saleEnd.setVisibility(View.INVISIBLE);
-            distance.setVisibility(View.INVISIBLE);
-
-            if (model.getsDiscount() > 0) {
-                discountPercentage.setText(String.valueOf(model.getsDiscount()));
+            if (model.getDistance() != null && model.getDistance().length() > 0) {
+                distance.setText(getString(R.string.store_distance) + " " + model.getDistance());
             } else {
-                discountPercentage.setVisibility(View.GONE);
+                distance.setVisibility(View.GONE);
             }
+            discountPercentage.setText(String.valueOf(discount) + "%");
+        } else {
+            saleStart.setVisibility(View.GONE);
+            saleEnd.setVisibility(View.GONE);
+            distance.setVisibility(View.GONE);
+            discountPercentage.setVisibility(View.GONE);
         }
 
         if (model.getsVerified().equals(Constants.YES)) {
-            if (model.getsDiscount() > 0) {
+            if (discount > 0) {
                 image.setImageResource(R.drawable.discountverified);
             } else {
                 image.setImageResource(R.drawable.verified);
             }
-        } else if (model.getsDiscount() > 0 || discount > 0) {
+        } else if (discount > 0) {
             image.setImageResource(R.drawable.discount);
         }
 

@@ -41,8 +41,12 @@ import static android.provider.Settings.SettingNotFoundException;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHECK_VERSION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DATA_PROCESSED_OR_NOT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEVICE_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.GPS_ON_OR_OFF;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.IMAGE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.IS_FROM_NOTIFICATION;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.PLAY_SERVICES_ON_OR_OFF;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
@@ -73,6 +77,12 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
 
         setContentView(R.layout.splash_layout);
         ProgressView progressView = (ProgressView) findViewById(R.id.progressBar);
+
+
+        if (!Snippets.getSP(DEVICE_ID).equals(FALSE)) {
+            android.util.Log.d(LOG_TAG, "firebase token: " + Snippets.getSP(DEVICE_ID));
+        }
+
         progressView.start();
         checkForPermission();
 
@@ -171,9 +181,17 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     }
 
     private void openMainActivity() {
-        Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean(IS_FROM_NOTIFICATION, false)) {
+            Intent intent = new Intent(SplashScreen.this, NotificationFullScreenActivity.class);
+            intent.putExtra(IS_FROM_NOTIFICATION, true);
+            intent.putExtra(IMAGE, getIntent().getExtras().getString(IMAGE, FALSE));
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override

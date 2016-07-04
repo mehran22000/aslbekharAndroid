@@ -42,7 +42,7 @@ public class Constants {
 
     // WS6
     public static String SEND_ANALYTICS_LINK =
-            WEB_SERVER + "services/v1/dev/users/interests";
+            WEB_SERVER + "services/v1/dev/users/interests/base64";
 
     // WS7
     public static String SEND_ANALYTICS_ADVERTISEMENT_LINK =
@@ -106,10 +106,12 @@ public class Constants {
     public static String SENT_TOKEN_TO_SERVER = "SENT_TOKEN_TO_SERVER";
     public static String REGISTRATION_COMPLETE = "REGISTRATION_COMPLETE";
     public static String DEVICE_ID = "DEVICE_ID";
+    public static String REGISTERED_DEVICE_ID = "REGISTERED_DEVICE_ID";
     public static String GPS_ON_OR_OFF = "GPS_ON_OR_OFF";
     public static String PLAY_SERVICES_ON_OR_OFF = "PLAY_SERVICES_ON_OR_OFF";
     public static String DATA_PROCESSED_OR_NOT = "DATA_PROCESSED_OR_NOT";
     public static String LAST_CITY_CODE = "LAST_CITY_CODE";
+    public static String LAST_CITY_ENGLISH_NAME = "LAST_CITY_ENGLISH_NAME";
 
     // ADVERTISEMENT TYPES:
     public static String ADVERTISE_MAIN = "MAIN";

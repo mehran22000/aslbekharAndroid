@@ -92,12 +92,12 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
         }
 
         if (model.getsVerified().equals(Constants.YES)){
-            if (Integer.parseInt(model.getdPrecentage()) > 0){
+            if (model.getdPrecentageInt() > 0){
                 holder.image.setImageResource(R.drawable.discountverified);
             } else {
                 holder.image.setImageResource(R.drawable.verified);
             }
-        } else if (Integer.parseInt(model.getdPrecentage()) > 0){
+        } else if (model.getdPrecentageInt() > 0){
             holder.image.setImageResource(R.drawable.discount);
         }
 
@@ -130,7 +130,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.Grou
                         model.getbId() + "_" +
                                 model.getsId());
 
-                if (Integer.parseInt(model.getdPrecentage()) > 0) {
+                if (model.getdPrecentageInt() > 0) {
                     if (fragment != null) {
                         fragment.checkForAdvertisement(model);
                     } else {

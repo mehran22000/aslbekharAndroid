@@ -39,7 +39,6 @@ public class StoreModel {
     String sTel2;
     String sLat;
     String sLong;
-    int sDiscount;
     String sVerified;
     String bCategoryId;
     String dStartDate;
@@ -61,7 +60,7 @@ public class StoreModel {
         this.sTel1 = sTel1;
         this.sLat = sLat;
         this.sLong = sLong;
-        this.sDiscount = sDiscount;
+        this.dPrecentage = String.valueOf(sDiscount);
         this.sVerified = sVerified;
     }
 
@@ -185,14 +184,6 @@ public class StoreModel {
         this.sLong = sLong;
     }
 
-    public int getsDiscount() {
-        return sDiscount;
-    }
-
-    public void setsDiscount(int sDiscount) {
-        this.sDiscount = sDiscount;
-    }
-
     public String getsVerified() {
         return sVerified;
     }
@@ -251,6 +242,16 @@ public class StoreModel {
 
     public String getdPrecentage() {
         return dPrecentage;
+    }
+
+    public int getdPrecentageInt() {
+        int discount;
+        try{
+            discount = Integer.parseInt(dPrecentage);
+        } catch (Exception e){
+            discount = 0;
+        }
+        return discount;
     }
 
     public void setdPrecentage(String dPrecentage) {

@@ -75,16 +75,11 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
         } else {
             holder.saleStart.setVisibility(View.INVISIBLE);
         }
-        if (model.getdPrecentage() != null && model.getdPrecentage().length() > 1) {
-            holder.percentage.setText("حراج: " + Constants.persianNumbers(model.getdPrecentage()) + "%");
-            holder.percentage.setTypeface(tf);
-        } else {
-            holder.percentage.setText("حراج");
-            holder.percentage.setTypeface(tf);
-        }
+        holder.percentage.setText("حراج: " + Constants.persianNumbers(model.getdPrecentage()) + "%");
+        holder.percentage.setTypeface(tf);
 
-        if (model.getsVerified().equals(Constants.YES)){
-                holder.image.setImageResource(R.drawable.discountverified);
+        if (model.getsVerified().equals(Constants.YES)) {
+            holder.image.setImageResource(R.drawable.discountverified);
         } else {
             holder.image.setImageResource(R.drawable.discount);
         }
@@ -93,7 +88,7 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:"+ cityCode + model.getsTel1()));
+                intent.setData(Uri.parse("tel:" + cityCode + model.getsTel1()));
                 context.startActivity(intent);
             }
         });

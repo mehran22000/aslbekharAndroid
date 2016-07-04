@@ -24,6 +24,9 @@ public class AnalyticsDataModel {
     String lon;
     String os = "android";
 
+    public AnalyticsDataModel() {
+    }
+
     public AnalyticsDataModel(String value, String key) {
         this.value = value;
         this.key = key;
@@ -42,7 +45,10 @@ public class AnalyticsDataModel {
         if (!jsonData.equals(Constants.FALSE)){
             try {
                 analyticsDataModels = JSON.parseArray(jsonData, AnalyticsDataModel.class);
-            } catch (Exception ignored){}
+            } catch (Exception ignored){
+                String temp = ignored.getMessage();
+                temp = temp + ignored.toString();
+            }
         }
         analyticsDataModels.add(new AnalyticsDataModel(value, key));
         Snippets.setSP(Constants.SAVED_ANALYTICS, JSON.toJSONString(analyticsDataModels));

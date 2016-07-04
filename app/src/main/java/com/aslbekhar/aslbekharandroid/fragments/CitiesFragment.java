@@ -26,7 +26,6 @@ import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
-import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Callback;
@@ -41,13 +40,12 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_V
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISE_MAIN;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_NAME;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEVICE_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FULL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_ENGLISH_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTER_ANDROID_DEVICE_LINK;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTRATION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTRATION_COMPLETE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.SUCCESS;
@@ -145,7 +143,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
 
         recyclerView.setHasFixedSize(true);
 
-        layoutManager = new GridLayoutManager(getActivity(),3);
+        layoutManager = new GridLayoutManager(getActivity(), 3);
 
         // setting the layout manager of recyclerView
         recyclerView.setLayoutManager(layoutManager);
@@ -168,18 +166,8 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
     }
 
     public void openCatFromAdapter(CityModel model) {
-        Log.d(LOG_TAG, "gcm id " + getSP(DEVICE_ID));
-        if (getSP(Constants.REGISTRATION).equals(TRUE)
-                && getSP(REGISTRATION_COMPLETE).equals(FALSE)) {
-            String postJson = "{\"device\":\""
-                    + getSP(DEVICE_ID) + "\",\"city\":\""
-                    + model.getEnglishName()
-                    + "\"}";
-            Log.d(LOG_TAG, "gcm post json " + postJson);
-            NetworkRequests.postRequest(REGISTER_ANDROID_DEVICE_LINK,
-                    CitiesFragment.this, REGISTRATION, postJson);
-        }
         setSP(LAST_CITY_CODE, model.getId());
+        setSP(LAST_CITY_ENGLISH_NAME, model.getEnglishName());
         checkForAdvertisement(model);
     }
 
@@ -307,6 +295,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
         fullScreenAdvertiseSecondTimer = false;
         Bundle bundle = new Bundle();
         bundle.putString(CITY_CODE, model.getId());
+        bundle.putString(CITY_NAME, model.getPersianName());
         bundle.putString(CITY_NAME, model.getPersianName());
 
         CatListFragment fragment = new CatListFragment();

@@ -2,14 +2,12 @@ package com.aslbekhar.aslbekharandroid.utilities;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.aslbekhar.aslbekharandroid.services.GcmRegistrationIntentService;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
@@ -30,10 +28,6 @@ public class AppController extends Application {
         super.onCreate();
         applicationContext = getApplicationContext();
         mInstance = this;
-
-        // Start IntentService to register this application with GCM.
-        Intent intent = new Intent(this, GcmRegistrationIntentService.class);
-        startService(intent);
 
         // for setting Typefaces for textViews
 //        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
