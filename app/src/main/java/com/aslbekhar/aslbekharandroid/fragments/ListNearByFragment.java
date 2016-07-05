@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +32,6 @@ import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -109,6 +109,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     boolean fullScreenAdvertiseSecondTimer = false;
     ImageView fullScreenAdImageView;
     boolean normalOrDeal = false;
+    boolean isDownloading = false;
     View listOverLay;
 
     // for location
@@ -150,7 +151,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
         }
 
         if (getArguments() != null) {
-            if (getArguments().getString(NORMAL_OR_DEAL, FALSE).equals(NORMAL)){
+            if (getArguments().getString(NORMAL_OR_DEAL, FALSE).equals(NORMAL)) {
                 normalOrDeal = true;
             }
             distance = getArguments().getInt(DISTANCE, DEFAULT_DISTANCE);
@@ -175,13 +176,10 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
             recyclerView.setAdapter(adapterDeals);
         }
 
-        // First we need to check availability of play services
-        if (checkPlayServices()) {
+        createLocationRequest();
+        // Building the GoogleApi client
+        buildGoogleApiClient();
 
-            createLocationRequest();
-            // Building the GoogleApi client
-            buildGoogleApiClient();
-        }
 
         view.findViewById(R.id.sliderMapListToggle).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -351,6 +349,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     }
 
     private void getDealsNearBy() {
+
         if (recyclerView.getVisibility() == View.VISIBLE && listOverLay.getVisibility() != View.VISIBLE) {
             listOverLay.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -362,6 +361,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
         }
         if (lastLocation != null) {
             progressBar.start();
+            isDownloading = true;
             if (normalOrDeal) {
                 NetworkRequests.getRequest(Constants.STORESLIST_NEARBY + lastLocation.getLatitude() + "/"
                         + lastLocation.getLongitude() + "/" + distance, this, Constants.DOWNLOAD);
@@ -444,20 +444,20 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     }
 
 
-    private boolean checkPlayServices() {
-        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-        int result = googleAPI.isGooglePlayServicesAvailable(getContext());
-        if (result != ConnectionResult.SUCCESS) {
-            if (googleAPI.isUserResolvableError(result)) {
-                googleAPI.getErrorDialog(getActivity(), result,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            }
-
-            return false;
-        }
-
-        return true;
-    }
+//    private boolean checkPlayServices() {
+//        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+//        int result = googleAPI.isGooglePlayServicesAvailable(getContext());
+//        if (result != ConnectionResult.SUCCESS) {
+//            if (googleAPI.isUserResolvableError(result)) {
+//                googleAPI.getErrorDialog(getActivity(), result,
+//                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+//            }
+//
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
     @Override
     public void onPause() {
@@ -478,8 +478,9 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     @Override
     public void onResume() {
         super.onResume();
-
-        checkPlayServices();
+        if (!isDownloading){
+            listOverLay.setVisibility(View.GONE);
+        }
     }
 
     /*
@@ -518,28 +519,31 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
 
     @Override
     public void onResponse(String response, String tag) {
-        view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
-        offlineCallBack.offlineMode(false);
-        modelList.clear();
-        try {
-            modelList.addAll(JSON.parseArray(response, StoreModel.class));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (normalOrDeal) {
-            adapterNormal.notifyDataSetChanged();
-        } else {
-            adapterDeals.notifyDataSetChanged();
-        }
-        if (listOverLay.getVisibility() == View.VISIBLE) {
-            showFade(listOverLay, false, 500);
-        }
-        progressBar.stop();
-        if (modelList.size() == 0) {
-            showFade(nodata, true, 500);
-        } else {
-            if (nodata.getVisibility() == View.VISIBLE) {
-                showFade(nodata, false, 300);
+        if (isAdded() && getActivity() != null) {
+            view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
+            offlineCallBack.offlineMode(false);
+            modelList.clear();
+            try {
+                modelList.addAll(JSON.parseArray(response, StoreModel.class));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (normalOrDeal) {
+                adapterNormal.notifyDataSetChanged();
+            } else {
+                adapterDeals.notifyDataSetChanged();
+            }
+            if (listOverLay.getVisibility() == View.VISIBLE) {
+                showFade(listOverLay, false, 500);
+            }
+            progressBar.stop();
+            isDownloading = false;
+            if (modelList.size() == 0) {
+                showFade(nodata, true, 500);
+            } else {
+                if (nodata.getVisibility() == View.VISIBLE) {
+                    showFade(nodata, false, 300);
+                }
             }
         }
     }
@@ -548,11 +552,16 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     public void onError(VolleyError error, String tag) {
         view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
         offlineCallBack.offlineMode(false);
+        listOverLay.setVisibility(View.GONE);
+        progressBar.stop();
+        Snackbar.make(view.findViewById(R.id.root), R.string.connection_error, Snackbar.LENGTH_INDEFINITE).show();
+        isDownloading = false;
     }
 
     @Override
     public void onOffline(String tag) {
         progressBar.stop();
+        isDownloading = false;
         view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         offlineCallBack.offlineMode(true);
     }

@@ -440,7 +440,7 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
 
             StaticData.setBrandModelList(BrandModel.getBrandListFromAssets());
 
-            StoreModel.getStoreListFromAssets();
+            StoreModel.getCatAndStoreListFromAssets();
 
             setSP(DATA_PROCESSED_OR_NOT, TRUE);
 
