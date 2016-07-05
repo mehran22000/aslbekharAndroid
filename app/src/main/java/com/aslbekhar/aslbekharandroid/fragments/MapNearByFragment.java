@@ -9,15 +9,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
@@ -118,7 +116,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         GoogleMap.OnMarkerClickListener,
         OnMapReadyCallback,
         LocationListener,
-        Interfaces.NetworkListeners, GoogleMap.InfoWindowAdapter {
+        Interfaces.NetworkListeners {
 
 
     int type = 1;
@@ -141,6 +139,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     private Location lastLocation;
     boolean gpsAvailableOrNot = false;
     boolean normalOrDeal = true;
+    boolean isDownloading = false;
     StoreModel model;
 
     private static final int PERMISSION_REQUEST = 0;
@@ -210,7 +209,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             }
         });
 
-        listOverLay = view.findViewById(R.id.listOverLay);
         listOverLay = view.findViewById(R.id.listOverLay);
         progressBar = (ProgressView) view.findViewById(R.id.progressBar);
         fullScreenAdImageView = (ImageView) view.findViewById(R.id.fullScreenAdvertise);
@@ -399,6 +397,9 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        if (!isDownloading){
+            listOverLay.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -533,7 +534,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.setInfoWindowAdapter(this);
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -580,6 +580,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         }
         progressBar.start();
         if (type == MAP_TYPE_SHOW_NEAR_BY) {
+            isDownloading = true;
             if (normalOrDeal) {
                 NetworkRequests.getRequest(STORESLIST_NEARBY + lastLocation.getLatitude() + "/"
                         + lastLocation.getLongitude() + "/" + distance, this, DOWNLOAD);
@@ -591,97 +592,81 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     }
 
 
-    @Override
-    public View getInfoWindow(Marker marker) {
-
-        // Getting view from the layout file info_window_layout
-        View view = getLayoutInflater(null).inflate(R.layout.info_window_layout, null);
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
-
-        final StoreModel model = storeModelList.get(Integer.parseInt(marker.getSnippet()));
-
-        TextView textView = (TextView) view.findViewById(R.id.title);
-        textView.setText(model.getsName());
-        textView.setTypeface(tf);
-
-
-        textView = (TextView) view.findViewById(R.id.workHour);
-        if (model.getsHour() != null && model.getsHour().length() > 1) {
-            textView.setText("ساعات کار: " + model.getsHour());
-            textView.setTypeface(tf);
-        } else {
-            textView.setVisibility(View.GONE);
-        }
-        textView = (TextView) view.findViewById(R.id.tell);
-        if (model.getsTel1() != null && model.getsTel1().length() > 1) {
-            textView.setText("تلفن: " + Constants.persianNumbers(model.getsTel1()));
-            textView.setTypeface(tf);
-        } else {
-            textView.setVisibility(View.GONE);
-        }
-        textView = (TextView) view.findViewById(R.id.address);
-        if (model.getsAddress() != null && model.getsAddress().length() > 1) {
-            textView.setText("آدرس: " + model.getsAddress());
-            textView.setTypeface(tf);
-        } else {
-            textView.setVisibility(View.GONE);
-        }
-
-        ImageView image = (ImageView) view.findViewById(R.id.image);
-        if (model.getsVerified().equals(Constants.YES)) {
-            if (model.getdPrecentageInt() > 0) {
-                image.setImageResource(R.drawable.discountverified);
-            } else {
-                image.setImageResource(R.drawable.verified);
-            }
-        } else {
-            if (model.getdPrecentageInt() > 0) {
-                image.setImageResource(R.drawable.discount);
-            } else {
-                image.setVisibility(View.GONE);
-            }
-        }
-
-        final ImageView brandLogo = (ImageView) view.findViewById(R.id.brandLogo);
-//        Glide.with(this)
+//    @Override
+//    public View getInfoWindow(Marker marker) {
+//
+//        // Getting view from the layout file info_window_layout
+//        View view = getLayoutInflater(null).inflate(R.layout.info_window_layout, null);
+//        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
+//
+//        final StoreModel model = storeModelList.get(Integer.parseInt(marker.getSnippet()));
+//
+//        TextView textView = (TextView) view.findViewById(R.id.title);
+//        textView.setText(model.getsName());
+//        textView.setTypeface(tf);
+//
+//
+//        textView = (TextView) view.findViewById(R.id.workHour);
+//        if (model.getsHour() != null && model.getsHour().length() > 1) {
+//            textView.setText("ساعات کار: " + model.getsHour());
+//            textView.setTypeface(tf);
+//        } else {
+//            textView.setVisibility(View.GONE);
+//        }
+//        textView = (TextView) view.findViewById(R.id.tell);
+//        if (model.getsTel1() != null && model.getsTel1().length() > 1) {
+//            textView.setText("تلفن: " + Constants.persianNumbers(model.getsTel1()));
+//            textView.setTypeface(tf);
+//        } else {
+//            textView.setVisibility(View.GONE);
+//        }
+//        textView = (TextView) view.findViewById(R.id.address);
+//        if (model.getsAddress() != null && model.getsAddress().length() > 1) {
+//            textView.setText("آدرس: " + model.getsAddress());
+//            textView.setTypeface(tf);
+//        } else {
+//            textView.setVisibility(View.GONE);
+//        }
+//
+//        ImageView image = (ImageView) view.findViewById(R.id.image);
+//        if (model.getsVerified().equals(Constants.YES)) {
+//            if (model.getdPrecentageInt() > 0) {
+//                image.setImageResource(R.drawable.discountverified);
+//            } else {
+//                image.setImageResource(R.drawable.verified);
+//            }
+//        } else {
+//            if (model.getdPrecentageInt() > 0) {
+//                image.setImageResource(R.drawable.discount);
+//            } else {
+//                image.setVisibility(View.GONE);
+//            }
+//        }
+//
+//        final ImageView brandLogo = (ImageView) view.findViewById(R.id.brandLogo);
+//
+//        Picasso.with(getContext())
 //                .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
-//                .listener(new RequestListener<Uri, GlideDrawable>() {
+//                .into(brandLogo, new Callback() {
 //                    @Override
-//                    public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
-//                        Glide.with(MapNearByFragment.this).load(Constants.BRAND_LOGO_URL +
-//                                BrandModel.getBrandLogo(model.getbName()) + ".png").into(brandLogo);
-//                        return true;
+//                    public void onSuccess() {
+//                        Log.d(LOG_TAG, "onSuccess: ssssssssssssss");
+//                        brandLogo.refreshDrawableState();
 //                    }
 //
 //                    @Override
-//                    public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                        return false;
+//                    public void onError() {
+//                        Log.d(LOG_TAG, "onSuccess: errrrrrrrrr");
+//                        Picasso.with(getContext())
+//                                .load(Constants.BRAND_LOGO_URL +
+//                                        BrandModel.getBrandLogo(model.getbName()) + ".png")
+//                                .into(brandLogo);
 //                    }
-//                })
-//                .into(brandLogo);
-
-        Picasso.with(getContext())
-                .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
-                .into(brandLogo, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        Log.d(LOG_TAG, "onSuccess: ssssssssssssss");
-                        brandLogo.refreshDrawableState();
-                    }
-
-                    @Override
-                    public void onError() {
-                        Log.d(LOG_TAG, "onSuccess: errrrrrrrrr");
-                        Picasso.with(getContext())
-                                .load(Constants.BRAND_LOGO_URL +
-                                        BrandModel.getBrandLogo(model.getbName()) + ".png")
-                                .into(brandLogo);
-                    }
-                });
-
-
-        return view;
-    }
+//                });
+//
+//
+//        return view;
+//    }
 
     private void openStoreFragment(StoreModel model) {
 
@@ -700,39 +685,42 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     }
 
-    @Override
-    public View getInfoContents(Marker marker) {
-        return null;
-    }
+//    @Override
+//    public View getInfoContents(Marker marker) {
+//        return null;
+//    }
 
 
     @Override
     public void onResponse(String response, String tag) {
 
-        view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
-        offlineCallBack.offlineMode(false);
+        if (isAdded() && getActivity() != null) {
+            view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
+            offlineCallBack.offlineMode(false);
 
-        storeModelList.clear();
-        for (Marker marker : markerList) {
-            marker.remove();
-        }
-        markerList.clear();
-        try {
-            storeModelList.addAll(JSON.parseArray(response, StoreModel.class));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (listOverLay.getVisibility() == View.VISIBLE) {
-            showFade(listOverLay, false, 500);
-        }
-        progressBar.stop();
-        for (int i = 0; i < storeModelList.size(); i++) {
-            StoreModel store = storeModelList.get(i);
-            LatLng position = new LatLng(Double.parseDouble(store.getsLat()), Double.parseDouble(store.getsLong()));
-            Bitmap bitmap = createBitMpaForMarker(store);
-            markerList.add(mMap.addMarker(
-                    new MarkerOptions().position(position).title(store.getsName())
-                            .snippet(String.valueOf(i)).icon(BitmapDescriptorFactory.fromBitmap(bitmap))));
+            storeModelList.clear();
+            for (Marker marker : markerList) {
+                marker.remove();
+            }
+            markerList.clear();
+            try {
+                storeModelList.addAll(JSON.parseArray(response, StoreModel.class));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (listOverLay.getVisibility() == View.VISIBLE) {
+                showFade(listOverLay, false, 500);
+            }
+            progressBar.stop();
+            isDownloading = false;
+            for (int i = 0; i < storeModelList.size(); i++) {
+                StoreModel store = storeModelList.get(i);
+                LatLng position = new LatLng(Double.parseDouble(store.getsLat()), Double.parseDouble(store.getsLong()));
+                Bitmap bitmap = createBitMpaForMarker(store);
+                markerList.add(mMap.addMarker(
+                        new MarkerOptions().position(position).title(store.getsName())
+                                .snippet(String.valueOf(i)).icon(BitmapDescriptorFactory.fromBitmap(bitmap))));
+            }
         }
     }
 
@@ -768,6 +756,12 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     @Override
     public void onError(VolleyError error, String tag) {
 
+        view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
+        offlineCallBack.offlineMode(false);
+        listOverLay.setVisibility(View.GONE);
+        progressBar.stop();
+        Snackbar.make(view.findViewById(R.id.root), R.string.connection_error, Snackbar.LENGTH_INDEFINITE).show();
+        isDownloading = false;
     }
 
     @Override
@@ -775,6 +769,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         progressBar.stop();
         view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         offlineCallBack.offlineMode(true);
+        isDownloading = false;
     }
 
 }

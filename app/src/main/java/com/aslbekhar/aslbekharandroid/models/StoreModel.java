@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_LIST;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_LIST_FILE_POSTFIX;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_LIST_FILE_POSTFIX;
@@ -274,6 +275,46 @@ public class StoreModel {
         this.distance = distance;
     }
 
+    public static void getCatAndStoreListFromAssets(){
+
+        for (CityModel city : StaticData.getCityModelList()) {
+            if (getSP(city.getId() + CAT_LIST).equals(FALSE)) {
+                String json = null;
+                try {
+                    InputStream is = AppController.getInstance().getAssets().open(city.getId() + CAT_LIST_FILE_POSTFIX);
+                    int size = is.available();
+                    byte[] buffer = new byte[size];
+                    is.read(buffer);
+                    is.close();
+                    json = new String(buffer, "UTF-8");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    setSP(city.getId() + CAT_LIST, FALSE);
+                }
+                if (json != null) {
+                    setSP(city.getId() + CAT_LIST, json);
+                }
+                if (getSP(city.getId() + STORE_LIST).equals(FALSE)) {
+                    json = null;
+                    try {
+                        InputStream is = AppController.getInstance().getAssets().open(city.getId() + STORE_LIST_FILE_POSTFIX);
+                        int size = is.available();
+                        byte[] buffer = new byte[size];
+                        is.read(buffer);
+                        is.close();
+                        json = new String(buffer, "UTF-8");
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                        setSP(city.getId() + STORE_LIST, FALSE);
+                    }
+                    if (json != null) {
+                        setSP(city.getId() + STORE_LIST, json);
+                    }
+                }
+            }
+        }
+    }
+
     public static void getStoreListFromAssets() {
         for (CityModel city : StaticData.getCityModelList()) {
             if (getSP(city.getId() + CAT_LIST).equals(FALSE)) {
@@ -293,6 +334,7 @@ public class StoreModel {
                     if (json != null){
                         List<StoreModel> storeModelList = JSON.parseArray(json, StoreModel.class);
                         setSP(city.getId() + STORE_LIST, json);
+                        String cityCat = JSON.toJSONString(getCatsFromStoreList(city.getId(), storeModelList));
                         setSP(city.getId() + CAT_LIST, JSON.toJSONString(getCatsFromStoreList(city.getId(), storeModelList)));
                     }
                 }

@@ -103,6 +103,7 @@ public class Constants {
     public static String BRAND_LIST = "CAT_LIST";
     public static String SAVED_ANALYTICS = "SAVED_ANALYTICS";
     public static String STORE_LIST_FILE_POSTFIX = "-StoreList.txt";
+    public static String CAT_LIST_FILE_POSTFIX = "-CatList.txt";
     public static String SENT_TOKEN_TO_SERVER = "SENT_TOKEN_TO_SERVER";
     public static String REGISTRATION_COMPLETE = "REGISTRATION_COMPLETE";
     public static String DEVICE_ID = "DEVICE_ID";
