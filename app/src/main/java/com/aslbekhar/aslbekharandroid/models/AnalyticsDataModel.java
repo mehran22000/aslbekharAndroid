@@ -46,8 +46,6 @@ public class AnalyticsDataModel {
             try {
                 analyticsDataModels = JSON.parseArray(jsonData, AnalyticsDataModel.class);
             } catch (Exception ignored){
-                String temp = ignored.getMessage();
-                temp = temp + ignored.toString();
             }
         }
         analyticsDataModels.add(new AnalyticsDataModel(value, key));
