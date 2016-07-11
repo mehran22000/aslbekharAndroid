@@ -26,7 +26,7 @@ android {
     buildToolsVersion "23.0.3"
     dexOptions {
         maxProcessCount 2
-        javaMaxHeapSize "2g"
+        javaMaxHeapSize "3g"
     }
 
     defaultConfig {
@@ -54,42 +54,34 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:cardview-v7:23.4.0'
-
     //google analytics
-    compile 'com.google.android.gms:play-services-analytics:9.0.2'
-
+//    compile 'com.google.android.gms:play-services-analytics:9.0.2'
     // Google Volley for network
     compile 'com.android.volley:volley:1.0.0'
-
     // Alibaba fastjson Library for json parsing
     compile 'com.alibaba:fastjson:1.2.11'
-
     // Google Gson, alternative json parsing
     compile 'com.google.code.gson:gson:2.6.2'
-
     // Glide for image loading
     compile 'com.github.bumptech.glide:glide:3.7.0'
 
-    // Calligraphy for changing typefaces
-    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+
+
+    //google analytics
+    compile 'com.google.android.gms:play-services-analytics:7.8.0'
 
     // Google Maps
-    compile 'com.google.android.gms:play-services-maps:9.0.2'
-    compile 'com.google.android.gms:play-services-location:9.0.2'
-
-    //GCM
-    compile "com.google.android.gms:play-services-gcm:9.0.2"
+    compile 'com.google.android.gms:play-services-maps:7.8.0'
+    compile 'com.google.android.gms:play-services-location:7.8.0'
 
     // Material widgets
     compile 'com.github.rey5137:material:1.2.4'
-
     // Picasso image downloading
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     // Firebase
-    compile 'com.google.firebase:firebase-core:9.0.2'
-    compile 'com.google.firebase:firebase-messaging:9.0.2'
-
+//    compile 'com.google.firebase:firebase-core:9.0.0'
+//    compile 'com.google.firebase:firebase-messaging:9.0.0'
 }
 
-apply plugin: 'com.google.gms.google-services'
+//apply plugin: 'com.google.gms.google-services'
