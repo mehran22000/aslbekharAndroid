@@ -210,16 +210,12 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
             }
         } else if (tag.equals(CHECK_VERSION)) {
             VersionCheckModel versionCheckModel = null;
-            int current;
-            int minimum;
             try {
                 versionCheckModel = JSON.parseObject(response, VersionCheckModel.class);
-                current = Integer.parseInt(versionCheckModel.getCurrent());
-                minimum = Integer.parseInt(versionCheckModel.getMinSupport());
             } catch (Exception e) {
                 return;
             }
-            if (current > APP_VERSION) {
+            if (versionCheckModel.getCurrent().compareTo(APP_VERSION) > 0) {
 
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
                 final View dialogView = LayoutInflater.from(this).
@@ -245,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
                     }
                 });
 
-                if (minimum > APP_VERSION) {
+                if (versionCheckModel.getMinSupport().compareTo(APP_VERSION) > 0) {
                     dialogBuilder.setCancelable(false);
                     dialogView.findViewById(R.id.skip).setVisibility(View.GONE);
                 } else {

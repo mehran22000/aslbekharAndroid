@@ -592,82 +592,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     }
 
 
-//    @Override
-//    public View getInfoWindow(Marker marker) {
-//
-//        // Getting view from the layout file info_window_layout
-//        View view = getLayoutInflater(null).inflate(R.layout.info_window_layout, null);
-//        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
-//
-//        final StoreModel model = storeModelList.get(Integer.parseInt(marker.getSnippet()));
-//
-//        TextView textView = (TextView) view.findViewById(R.id.title);
-//        textView.setText(model.getsName());
-//        textView.setTypeface(tf);
-//
-//
-//        textView = (TextView) view.findViewById(R.id.workHour);
-//        if (model.getsHour() != null && model.getsHour().length() > 1) {
-//            textView.setText("ساعات کار: " + model.getsHour());
-//            textView.setTypeface(tf);
-//        } else {
-//            textView.setVisibility(View.GONE);
-//        }
-//        textView = (TextView) view.findViewById(R.id.tell);
-//        if (model.getsTel1() != null && model.getsTel1().length() > 1) {
-//            textView.setText("تلفن: " + Constants.persianNumbers(model.getsTel1()));
-//            textView.setTypeface(tf);
-//        } else {
-//            textView.setVisibility(View.GONE);
-//        }
-//        textView = (TextView) view.findViewById(R.id.address);
-//        if (model.getsAddress() != null && model.getsAddress().length() > 1) {
-//            textView.setText("آدرس: " + model.getsAddress());
-//            textView.setTypeface(tf);
-//        } else {
-//            textView.setVisibility(View.GONE);
-//        }
-//
-//        ImageView image = (ImageView) view.findViewById(R.id.image);
-//        if (model.getsVerified().equals(Constants.YES)) {
-//            if (model.getdPrecentageInt() > 0) {
-//                image.setImageResource(R.drawable.discountverified);
-//            } else {
-//                image.setImageResource(R.drawable.verified);
-//            }
-//        } else {
-//            if (model.getdPrecentageInt() > 0) {
-//                image.setImageResource(R.drawable.discount);
-//            } else {
-//                image.setVisibility(View.GONE);
-//            }
-//        }
-//
-//        final ImageView brandLogo = (ImageView) view.findViewById(R.id.brandLogo);
-//
-//        Picasso.with(getContext())
-//                .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
-//                .into(brandLogo, new Callback() {
-//                    @Override
-//                    public void onSuccess() {
-//                        Log.d(LOG_TAG, "onSuccess: ssssssssssssss");
-//                        brandLogo.refreshDrawableState();
-//                    }
-//
-//                    @Override
-//                    public void onError() {
-//                        Log.d(LOG_TAG, "onSuccess: errrrrrrrrr");
-//                        Picasso.with(getContext())
-//                                .load(Constants.BRAND_LOGO_URL +
-//                                        BrandModel.getBrandLogo(model.getbName()) + ".png")
-//                                .into(brandLogo);
-//                    }
-//                });
-//
-//
-//        return view;
-//    }
-
     private void openStoreFragment(StoreModel model) {
 
         Bundle bundle = new Bundle();
@@ -685,10 +609,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     }
 
-//    @Override
-//    public View getInfoContents(Marker marker) {
-//        return null;
-//    }
 
 
     @Override

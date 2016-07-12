@@ -8,7 +8,7 @@ import java.text.DecimalFormat;
  */
 public class Constants {
 
-    public static int APP_VERSION = 200;
+    public static String APP_VERSION = "2.0.0";
 
 
     public static String WEB_SERVER ="https://buyoriginal.herokuapp.com/";

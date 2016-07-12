@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -110,6 +111,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     ImageView fullScreenAdImageView;
     boolean normalOrDeal = false;
     boolean isDownloading = false;
+    boolean googlePlayServices = false;
     View listOverLay;
 
     // for location
@@ -406,8 +408,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     /**
      * Starting the location updates
      */
-    protected void startLocationUpdates() {
-
+    protected void startLocationUpdates(boolean googlePlayOrNot) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (
                 ActivityCompat.checkSelfPermission(getActivity(),
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -416,17 +417,38 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
 
             requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
-
         } else {
-            LocationServices.FusedLocationApi.requestLocationUpdates(
-                    googleApiClient, mLocationRequest, this);
-            lastLocation = LocationServices
-                    .FusedLocationApi
-                    .getLastLocation(googleApiClient);
-            setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
-            setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
-            getDealsNearBy();
+            if (googlePlayOrNot) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(
+                        googleApiClient, mLocationRequest, this);
+                lastLocation = LocationServices
+                        .FusedLocationApi
+                        .getLastLocation(googleApiClient);
+                setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
+                setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
+                getDealsNearBy();
+
+            } else {
+                android.location.LocationManager locationManager = (android.location.LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+                // Define a listener that responds to location updates
+                android.location.LocationListener locationListener = new android.location.LocationListener() {
+                    public void onLocationChanged(Location location) {
+                        lastLocation = location;
+                        getDealsNearBy();
+                    }
+
+                    public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+                    public void onProviderEnabled(String provider) {}
+
+                    public void onProviderDisabled(String provider) {}
+                };
+
+                // Register the listener with the Location Manager to receive location updates
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 120000, 300, locationListener);
+            }
         }
+
     }
 
 
@@ -438,26 +460,10 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
                                            @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST) {
             if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startLocationUpdates();
+                startLocationUpdates(googlePlayServices);
             }
         }
     }
-
-
-//    private boolean checkPlayServices() {
-//        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-//        int result = googleAPI.isGooglePlayServicesAvailable(getContext());
-//        if (result != ConnectionResult.SUCCESS) {
-//            if (googleAPI.isUserResolvableError(result)) {
-//                googleAPI.getErrorDialog(getActivity(), result,
-//                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-//            }
-//
-//            return false;
-//        }
-//
-//        return true;
-//    }
 
     @Override
     public void onPause() {
@@ -478,7 +484,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     @Override
     public void onResume() {
         super.onResume();
-        if (!isDownloading){
+        if (!isDownloading) {
             listOverLay.setVisibility(View.GONE);
         }
     }
@@ -488,7 +494,8 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
      */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        startLocationUpdates();
+        googlePlayServices = true;
+        startLocationUpdates(googlePlayServices);
     }
 
     @Override
@@ -498,6 +505,8 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        googlePlayServices = false;
+        startLocationUpdates(googlePlayServices);
 
     }
 

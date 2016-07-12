@@ -32,7 +32,6 @@ import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.rey.material.app.SimpleDialog;
 import com.rey.material.widget.ProgressView;
 
@@ -155,12 +154,13 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         } else {
             Snippets.setSP(GPS_ON_OR_OFF, FALSE);
         }
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        googleApiClient.connect();
+//        googleApiClient = new GoogleApiClient.Builder(this)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .addApi(LocationServices.API)
+//                .build();
+//        googleApiClient.connect();
+        continueToCheckForData(true);
     }
 
     private void continueToCheckForData(boolean playServiceOnOrOff) {

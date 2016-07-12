@@ -145,7 +145,9 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
 
                                     @Override
                                     public void onError() {
-                                        loadCatImage(imageView,model.getLatestBrandLogoUsed() +1, model);
+                                        if (model.getImages().size() > model.getLatestBrandLogoUsed()+1) {
+                                            loadCatImage(imageView,model.getLatestBrandLogoUsed() +1, model);
+                                        }
                                     }
                                 });
                     }
