@@ -199,8 +199,12 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
 
     private void checkForAdvertisement(final BrandModel model) {
 
+        if (!Snippets.isOnline(getActivity())){
+            openStoreListFromAdapter(model);
+            return;
+        }
+
         if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
-            StaticData.addShownCount++;
             return;
         }
 
@@ -225,6 +229,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
                     @Override
                     public void onSuccess() {
                         if (fullScreenAdvertiseTimer) {
+                            StaticData.addShownCount++;
                             AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
                                     new AnalyticsAdvertisementModel("ad." + cityCode + ".cat" + catNum + "." + model.getbName() +  ".png", ADVERTISE_BRANDS, FULL));
                             fullScreenAdvertiseTimer = false;
@@ -310,8 +315,8 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
     }
 
     private void openStoreListFragment(BrandModel brandModel) {
-        Bundle bundle = new Bundle();
 
+        Bundle bundle = new Bundle();
         bundle.putString(CITY_CODE, cityCode);
         bundle.putString(CAT_NAME, catName);
         bundle.putString(CAT_NUMBER, catNum);

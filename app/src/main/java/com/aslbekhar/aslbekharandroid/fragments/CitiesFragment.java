@@ -26,7 +26,7 @@ import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
-import com.aslbekhar.aslbekharandroid.utilities.StaticData;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -53,6 +53,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
+import static com.aslbekhar.aslbekharandroid.utilities.StaticData.addShownCount;
+import static com.aslbekhar.aslbekharandroid.utilities.StaticData.getCityModelList;
 
 /**
  * Created by Amin on 14/05/2016.
@@ -65,7 +67,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
     Interfaces.MainActivityInterface callBack;
     RecyclerView recyclerView;
     CityListAdapter adapter;
-    List<CityModel> modelList = StaticData.getCityModelList();
+    List<CityModel> modelList = getCityModelList();
     List<CityModel> modelListToShow = new ArrayList<>();
     LinearLayoutManager layoutManager;
 
@@ -219,8 +221,13 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
 
     private void checkForAdvertisement(final CityModel model) {
 
-        if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
-            StaticData.addShownCount++;
+        if (!Snippets.isOnline(getActivity())){
+            openCatListFragment(model);
+            return;
+        }
+
+        if (addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            openCatListFragment(model);
             return;
         }
 
@@ -250,6 +257,7 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
                     @Override
                     public void onSuccess() {
                         if (fullScreenAdvertiseTimer) {
+                            addShownCount++;
                             AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
                                     new AnalyticsAdvertisementModel("ad." + model.getId() + ".png", ADVERTISE_MAIN, FULL));
                             fullScreenAdvertiseTimer = false;

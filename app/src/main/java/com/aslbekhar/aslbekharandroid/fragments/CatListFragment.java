@@ -28,7 +28,6 @@ import com.aslbekhar.aslbekharandroid.models.CategoryModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
-import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -57,6 +56,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.FULL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
+import static com.aslbekhar.aslbekharandroid.utilities.StaticData.addShownCount;
 
 /**
  * Created by Amin on 19/05/2016.
@@ -215,8 +215,12 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
 
     private void checkForAdvertisement(final CategoryModel model) {
 
-        if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
-            StaticData.addShownCount++;
+        if (!Snippets.isOnline(getActivity())){
+            openBrandListFragment(model);
+            return;
+        }
+
+        if (addShownCount > ADVERTISEMENT_MAX_COUNT) {
             return;
         }
 
@@ -240,6 +244,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
                     @Override
                     public void onSuccess() {
                         if (fullScreenAdvertiseTimer) {
+                            addShownCount++;
                             AnalyticsAdvertisementModel.sendAdvertisementAnalytics(
                                     new AnalyticsAdvertisementModel("ad." + cityCode + ".cat" + model.getcId() + ".png", ADVERTISE_CATEGORIES, FULL));
                             fullScreenAdvertiseTimer = false;
