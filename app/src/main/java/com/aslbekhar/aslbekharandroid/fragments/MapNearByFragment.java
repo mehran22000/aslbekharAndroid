@@ -2,6 +2,8 @@ package com.aslbekhar.aslbekharandroid.fragments;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,12 +16,14 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +88,6 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_NEAR_BY;
@@ -105,7 +108,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
 
 /**
  * Created by Amin on 14/05/2016.
- * <p>
+ * <p/>
  * This class will be used for
  */
 public class MapNearByFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
@@ -141,6 +144,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     boolean normalOrDeal = true;
     boolean isDownloading = false;
     StoreModel model;
+    private static final int GPS_SETTING_REQUEST_CODE = 9002;
 
     private static final int PERMISSION_REQUEST = 0;
 
@@ -311,13 +315,96 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         setHasOptionsMenu(true);
 
         if (gpsAvailableOrNot) {
-            googleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
+            view.findViewById(R.id.GPSOffLay).setVisibility(View.GONE);
+        } else {
+            view.findViewById(R.id.GPSOffLay).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.GPSOffLay).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    turnOnGPS();
+                }
+            });
+        }
+        googleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+
+    private void turnOnGPS() {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivityForResult(intent, GPS_SETTING_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GPS_SETTING_REQUEST_CODE && resultCode == 0) {
+            if (isGpsEnabled(getActivity())) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(getString(R.string.gps_turned_on_succesfully))
+                        .setIcon(getResources().getDrawable(R.drawable.icon))
+                        .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                view.findViewById(R.id.GPSOffLay).setVisibility(View.GONE);
+                            }
+                        })
+                        .show();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(getString(R.string.gps_didnt_turn_on))
+                        .setPositiveButton(getString(R.string.ok_i_try_again), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                turnOnGPS();
+                            }
+                        })
+                        .setCancelable(false)
+                        .setNegativeButton(getString(R.string.no_idont_want), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .show();
+            }
         }
     }
+
+
+
+    public static boolean isGpsEnabled(Context context) {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            String providers = Settings.Secure.getString(context.getContentResolver(),
+                    Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            if (TextUtils.isEmpty(providers)) {
+                return false;
+            }
+            return providers.contains(LocationManager.GPS_PROVIDER);
+        } else {
+            final int locationMode;
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(),
+                        Settings.Secure.LOCATION_MODE);
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+            switch (locationMode) {
+
+                case Settings.Secure.LOCATION_MODE_HIGH_ACCURACY:
+                case Settings.Secure.LOCATION_MODE_SENSORS_ONLY:
+                case Settings.Secure.LOCATION_MODE_BATTERY_SAVING:
+                    return true;
+                case Settings.Secure.LOCATION_MODE_OFF:
+                default:
+                    return false;
+            }
+        }
+    }
+
 
     @Override
     public void onConnectionSuspended(int i) {
@@ -331,7 +418,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Log.d(LOG_TAG, "onInfoWindowClick: asdasdadasdasd");
         openStoreFragment(storeModelList.get(Integer.parseInt(marker.getSnippet())));
     }
 
@@ -347,7 +433,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Log.d(LOG_TAG, "on marker fucking ckick: asdasdadasdasd");
         if (type == Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
             openStoreFragment(model);
         } else {
@@ -397,7 +482,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     public void onResume() {
         super.onResume();
         mMapView.onResume();
-        if (!isDownloading){
+        if (!isDownloading) {
             listOverLay.setVisibility(View.GONE);
         }
     }
@@ -610,7 +695,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     }
 
 
-
     @Override
     public void onResponse(String response, String tag) {
 
@@ -663,7 +747,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         try {
             InputStream bitmap = getActivity().getAssets().open("logos/" + BrandModel.getBrandLogo(store.getbName()) + ".png");
             logo = BitmapFactory.decodeStream(bitmap);
-            canvas.drawBitmap(logo,null, targetRect, color);
+            canvas.drawBitmap(logo, null, targetRect, color);
         } catch (Exception e1) {
             return BitmapFactory.decodeResource(getActivity().getResources(),
                     R.drawable.map_pin_store);

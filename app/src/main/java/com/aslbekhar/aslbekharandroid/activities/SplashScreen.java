@@ -124,25 +124,26 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
 
     private void continueToCheckGps() {
         if (!isGpsEnabled(this)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(getString(R.string.gps_is_off))
-                    .setMessage(getString(R.string.you_need_yo_turn_on_gps))
-                    .setIcon(getResources().getDrawable(R.drawable.icon))
-                    .setPositiveButton(getString(R.string.ok_lets_turn_it_on), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            turnOnGPS();
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.no_idont_want), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            continueToCheckForPlayServices(false);
-                        }
-                    })
-                    .setCancelable(false)
-                    .show();
+//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle(getString(R.string.gps_is_off))
+//                    .setMessage(getString(R.string.you_need_yo_turn_on_gps))
+//                    .setIcon(getResources().getDrawable(R.drawable.icon))
+//                    .setPositiveButton(getString(R.string.ok_lets_turn_it_on), new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            turnOnGPS();
+//                        }
+//                    })
+//                    .setNegativeButton(getString(R.string.no_idont_want), new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            continueToCheckForPlayServices(false);
+//                        }
+//                    })
+//                    .setCancelable(false)
+//                    .show();
 
+            continueToCheckForPlayServices(false);
         } else {
             continueToCheckForPlayServices(true);
         }
@@ -247,7 +248,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     }
 
     public static boolean isGpsEnabled(Context context) {
-
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             String providers = Secure.getString(context.getContentResolver(),

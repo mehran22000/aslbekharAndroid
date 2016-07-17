@@ -57,56 +57,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--
-        // for GCM : Not needed for Fiberbase
+
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
-                <category android:name="com.ionicframework.aslbekhar192325" />
+                <category android:name="com.example.gcm" />
             </intent-filter>
         </receiver>
-        -->
-        <!-- [START gcm_listener] -->
-        <!--<service-->
-            <!--android:name=".services.GcmListenerServce"-->
-            <!--android:exported="false" >-->
-            <!--<intent-filter>-->
-            <!--&lt;!&ndash;       <action android:name="com.google.android.c2dm.intent.RECEIVE" /> &ndash;&gt;-->
-                <!--<action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-
-            <!--</intent-filter>-->
-        <!--</service>-->
-        <!-- [END gcm_listener] -->
-        <!-- [START instanceId_listener] -->
-        <!--<service-->
-            <!--android:name=".services.GcmInstanceIDListenerService"-->
-            <!--android:exported="false">-->
-            <!--<intent-filter>-->
-             <!--&lt;!&ndash;   <action android:name="com.google.android.gms.iid.InstanceID"/> &ndash;&gt;-->
-                <!--<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />-->
-            <!--</intent-filter>-->
-        <!--</service>-->
-        <!-- [END instanceId_listener] -->
+        <service
+            android:name="com.aslbekhar.aslbekharandroid.services.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.aslbekhar.aslbekharandroid.services.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAv5_7_7_tYCwy3cBJOWGPZp2AqAT2iiHw" />
 
-        <!--<meta-data-->
-            <!--android:name="com.google.android.gms.version"-->
-            <!--android:value="@integer/google_play_services_version" />-->
-
-        <!--<meta-data-->
-        <!--android:name="com.google.android.maps.v2.API_KEY"-->
-        <!--android:value="AIzaSyBW8ZxH04eIghsvQp3PuFXe2502ARD4am4" />-->
-
-        <!--<meta-data-->
-        <!--android:name="com.google.android.geo.API_KEY"-->
-        <!--android:value="AIzaSyBW8ZxH04eIghsvQp3PuFXe2502ARD4am4"/>-->
 
     </application>
 
