@@ -58,6 +58,6 @@
     <string name="sale_end">پایان تخفیف:</string>
     <string name="store_distance">فاصله فروشگاه تا شما:</string>
     <string name="gps_off_tap_here_to_turn_on">برای روشن کردن GPS اینجا را کلیک کنید</string>
-    <string name="gcm_defaultSenderId">####</string>
+    <string name="gcm_defaultSenderId">472796603076</string>
 
 </resources>

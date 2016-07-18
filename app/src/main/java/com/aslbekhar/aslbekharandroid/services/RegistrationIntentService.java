@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.utilities.Constants;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -38,6 +40,9 @@ public class RegistrationIntentService extends IntentService {
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
             // [END get_token]
             Log.i(TAG, "GCM Registration Token: " + token);
+
+            android.util.Log.d(TAG, "Refreshed token: " + token);
+            Snippets.setSP(Constants.DEVICE_ID, token);
 
             // TODO: Implement this method to send any registration to your app's servers.
             sendRegistrationToServer(token);
