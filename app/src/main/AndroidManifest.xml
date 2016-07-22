@@ -16,21 +16,6 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.GET_TASKS" />
 
-    <!--
-    Not Necessary for Fiberbase
-    <permission android:name="com.ionicframework.aslbekhar192325.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="com.ionicframework.aslbekhar192325.permission.C2D_MESSAGE" />
-    -->
-
-    <!--<meta-data-->
-    <!--android:name="com.google.android.gms.version"-->
-    <!--android:value="@integer/google_play_services_version" />-->
-
-
-    <!--<meta-data-->
-    <!--android:name="com.google.android.geo.API_KEY"-->
-    <!--android:value="AIzaSyAv5_7_7_tYCwy3cBJOWGPZp2AqAT2iiHw"/>-->
 
     <application
         android:name=".utilities.AppController"
@@ -58,35 +43,23 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.example.gcm" />
-            </intent-filter>
-        </receiver>
         <service
-            android:name="com.aslbekhar.aslbekharandroid.services.MyGcmListenerService"
-            android:exported="false" >
+            android:name=".services.GcmInstanceIDListenerService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
+
         <service
-            android:name="com.aslbekhar.aslbekharandroid.services.MyInstanceIDListenerService"
-            android:exported="false">
+            android:name=".services.GcmListenerServce">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAv5_7_7_tYCwy3cBJOWGPZp2AqAT2iiHw" />
-
-
     </application>
 
 </manifest>

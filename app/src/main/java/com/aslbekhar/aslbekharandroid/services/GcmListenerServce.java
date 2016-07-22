@@ -6,39 +6,30 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
 
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.activities.NotificationFullScreenActivity;
 import com.aslbekhar.aslbekharandroid.activities.SplashScreen;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.NotificationUtils;
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.Map;
 
 /**
- * Created by Amin on 17/07/2016.
+ * Created by Amin on 30/05/2016.
  */
-public class MyGcmListenerService extends GcmListenerService {
+public class GcmListenerServce extends FirebaseMessagingService {
 
     private static final String TAG = "MyGcmListenerService";
 
-    /**
-     * Called when message is received.
-     *
-     * @param from SenderID of the sender.
-     * @param data Data bundle containing message data as key/value pairs.
-     *             For Set of keys use data.keySet().
-     */
-    // [START receive_message]
     @Override
-    public void onMessageReceived(String from, Bundle data) {
-        String message = data.getString("message");
-        Log.d(TAG, "From: " + from);
-        Log.d(TAG, "Message: " + message);
-        sendNotification((String) data.get("Type"), (String) data.get("AdUrl"), "", (String) data.get("AdUrl"));
+    public void onMessageReceived(RemoteMessage message){
+        String from = message.getFrom();
+        Map data = message.getData();
+        sendNotification( (String) data.get("Type"), (String) data.get("AdUrl"), "", (String) data.get("AdUrl"));
     }
-
 
     private void sendNotification(String type, String title, String message, String url) {
         Intent intent;
@@ -58,9 +49,9 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setContentTitle(title)
                 .setContentText("")
                 .setAutoCancel(true)
-                .setSound(Uri.parse("android.resource://"
-                        + getApplicationContext().getPackageName() + "/"
-                        + R.raw.notification))
+        .setSound(Uri.parse("android.resource://"
+                + getApplicationContext().getPackageName() + "/"
+                + R.raw.notification))
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
