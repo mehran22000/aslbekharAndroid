@@ -198,6 +198,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
 
 
         if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            openStoreFragment(model);
             return;
         }
 

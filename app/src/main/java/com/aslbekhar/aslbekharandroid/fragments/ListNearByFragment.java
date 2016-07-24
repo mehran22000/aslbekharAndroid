@@ -221,11 +221,22 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
 
     private void checkForAdvertisement(final StoreModel model) {
 
+        if (!Snippets.isOnline(getActivity())){
+            openStoreFragment(model);
+            return;
+        }
+
+
+        if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            openStoreFragment(model);
+            return;
+        }
 
         if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
             StaticData.addShownCount++;
             return;
         }
+
         fullScreenAdvertiseTimer = true;
         Snippets.showFade(listOverLay, true, 500);
         progressBar.start();

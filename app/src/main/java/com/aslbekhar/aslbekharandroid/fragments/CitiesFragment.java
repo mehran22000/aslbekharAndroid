@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.CityListAdapter;
 import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
+import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
@@ -38,6 +39,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_M
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISEMENT_VIEW_TIMEOUT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADVERTISE_MAIN;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
@@ -170,6 +173,8 @@ public class CitiesFragment extends android.support.v4.app.Fragment implements I
     public void openCatFromAdapter(CityModel model) {
         setSP(LAST_CITY_CODE, model.getId());
         setSP(LAST_CITY_ENGLISH_NAME, model.getEnglishName());
+        AnalyticsDataModel.saveAnalytic(CITY,
+                model.getId());
         checkForAdvertisement(model);
     }
 

@@ -221,6 +221,7 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
         }
 
         if (addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            openBrandListFragment(model);
             return;
         }
 

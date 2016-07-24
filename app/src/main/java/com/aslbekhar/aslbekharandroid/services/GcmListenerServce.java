@@ -19,6 +19,7 @@ import java.util.Map;
 
 /**
  * Created by Amin on 30/05/2016.
+ *
  */
 public class GcmListenerServce extends FirebaseMessagingService {
 
@@ -28,7 +29,7 @@ public class GcmListenerServce extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage message){
         String from = message.getFrom();
         Map data = message.getData();
-        sendNotification( (String) data.get("Type"), (String) data.get("AdUrl"), "", (String) data.get("AdUrl"));
+        sendNotification( (String) data.get("Type"), (String) data.get("Title"), "", (String) data.get("AdUrl"));
     }
 
     private void sendNotification(String type, String title, String message, String url) {

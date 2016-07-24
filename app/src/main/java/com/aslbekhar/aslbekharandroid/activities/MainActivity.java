@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
                     "{\"interests\":\"" + Base64.encodeToString(analyticSavedJson.getBytes(), Base64.NO_WRAP) + "\"}");
         }
 
-        if (!getSP(DEVICE_ID).equals(FALSE) && !getSP(DEVICE_ID).equals(getSP(REGISTERED_DEVICE_ID))) {
+        if (!getSP(DEVICE_ID).equals(FALSE)) {
             String cityName = getSP(LAST_CITY_ENGLISH_NAME).toLowerCase();
             if (cityName.equals(FALSE)) {
                 cityName = "tehran";

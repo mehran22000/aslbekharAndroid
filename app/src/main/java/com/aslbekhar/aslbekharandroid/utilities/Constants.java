@@ -150,6 +150,7 @@ public class Constants {
     public static String CITY_CODE = "CITY_CODE";
     public static String DEFAULT_CITY_CODE = "021";
     public static String CITY_NAME = "CITY_NAME";
+    public static String CITY = "CITY";
     public static String CAT_NAME = "CAT_NAME";
     public static String CAT_NUMBER = "CAT_NUMBER";
     public static String BRAND_ID = "BRAND_ID";

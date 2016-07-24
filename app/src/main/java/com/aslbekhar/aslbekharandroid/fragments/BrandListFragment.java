@@ -205,6 +205,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
         }
 
         if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            openStoreListFromAdapter(model);
             return;
         }
 
