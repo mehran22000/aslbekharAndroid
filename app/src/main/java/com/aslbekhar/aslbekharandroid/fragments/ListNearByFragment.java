@@ -26,6 +26,7 @@ import com.aslbekhar.aslbekharandroid.adapters.StoreDiscountListAdapter;
 import com.aslbekhar.aslbekharandroid.adapters.StoreListAdapter;
 import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
 import com.aslbekhar.aslbekharandroid.models.AnalyticsDataModel;
+import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
@@ -131,6 +132,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     private static final int PERMISSION_REQUEST = 0;
 
     private LocationRequest mLocationRequest;
+    private boolean locationAccess = false;
 
     public ListNearByFragment() {
 
@@ -425,10 +427,15 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
                         Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                         || ActivityCompat.checkSelfPermission(getActivity(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-
-            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
+            locationAccess = false;
+            lastLocation = new Location("");
+            lastLocation.setLatitude(Double.parseDouble(CityModel.findCityById(cityCode).getLat()));
+            lastLocation.setLongitude(Double.parseDouble(CityModel.findCityById(cityCode).getLon()));
+            setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
+            setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
+            getDealsNearBy();
         } else {
+            locationAccess = true;
             if (googlePlayOrNot) {
                 LocationServices.FusedLocationApi.requestLocationUpdates(
                         googleApiClient, mLocationRequest, this);
