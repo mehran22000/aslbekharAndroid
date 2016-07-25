@@ -32,7 +32,6 @@ import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.rey.material.app.SimpleDialog;
 import com.rey.material.widget.ProgressView;
 
 import static android.provider.Settings.Secure;
@@ -45,6 +44,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.GPS_ON_OR_OFF;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.IMAGE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.IS_FROM_NOTIFICATION;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOCATION_PERMISSION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOG_TAG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.PLAY_SERVICES_ON_OR_OFF;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
@@ -87,33 +87,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
 
     }
 
-    private void checkForPermission() {
-        // we will continue with checking for the permissions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (
-                ActivityCompat.checkSelfPermission(getApplicationContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                        || ActivityCompat.checkSelfPermission(getApplicationContext(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-
-            com.rey.material.app.Dialog.Builder builder = new SimpleDialog.Builder(R.style.SimpleDialogLight){
-                @Override
-                public void onPositiveActionClicked(com.rey.material.app.DialogFragment fragment) {
-                    requestForPermission();
-                    super.onPositiveActionClicked(fragment);
-                }
-            };
-
-            ((SimpleDialog.Builder)builder).message(getString(R.string.permission_needed))
-                    .positiveAction(getString(R.string.ok));
-            com.rey.material.app.DialogFragment fragment =
-                    com.rey.material.app.DialogFragment.newInstance(builder);
-            fragment.show(getSupportFragmentManager(), null);
-
-        } else {
-            // if permissions we are already ok, we will check for if gps is on or not
-            continueToCheckGps();
-        }
-    }
 
     private void requestForPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -122,7 +95,48 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    private void continueToCheckGps() {
+    private void checkForPermission() {
+        // we will continue with checking for the permissions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (
+                ActivityCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+
+            requestForPermission();
+
+        } else {
+            // if permissions we are already ok, we will check for if gps is on or not
+            continueToCheckGps(true);
+        }
+    }
+
+
+    /**
+     * Callback received when a permissions request has been completed.
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST) {
+            if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                continueToCheckGps(true);
+            } else {
+                continueToCheckGps(false);
+            }
+        } else {
+            continueToCheckGps(false);
+        }
+    }
+
+
+    private void continueToCheckGps(boolean permissionLocation) {
+        if (permissionLocation) {
+            Snippets.setSP(LOCATION_PERMISSION, TRUE);
+        } else {
+            Snippets.setSP(LOCATION_PERMISSION, FALSE);
+        }
+
         if (!isGpsEnabled(this)) {
 //            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //            builder.setTitle(getString(R.string.gps_is_off))
@@ -278,55 +292,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == PERMISSION_REQUEST) {
-            if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                continueToCheckGps();
-            } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(getString(R.string.location_access_denied))
-                        .setIcon(getResources().getDrawable(R.drawable.icon))
-                        .setPositiveButton(getString(R.string.ok_i_try_again), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                requestForPermission();
-                            }
-                        })
-                        .setCancelable(false)
-                        .setNegativeButton(getString(R.string.no_idont_want), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                continueToCheckForPlayServices(false);
-                            }
-                        })
-                        .show();
-            }
-        } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(getString(R.string.location_access_denied))
-                    .setIcon(getResources().getDrawable(R.drawable.icon))
-                    .setPositiveButton(getString(R.string.ok_i_try_again), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            requestForPermission();
-                        }
-                    })
-                    .setCancelable(false)
-                    .setNegativeButton(getString(R.string.no_idont_want), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            continueToCheckForPlayServices(false);
-                        }
-                    })
-                    .show();
-        }
-    }
-
     private void turnOnGPS() {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivityForResult(intent, GPS_SETTING_REQUEST_CODE);
@@ -427,12 +392,13 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
 
             String json = getSP(CITY_LIST);
             if (json.equals(FALSE)) {
-                StaticData.getCityModelList().add(new CityModel("021", "تهران", "Tehran"));
-                StaticData.getCityModelList().add(new CityModel("031", "اصفهان", "Isfahan"));
-                StaticData.getCityModelList().add(new CityModel("076", "کیش", "Kish"));
-                StaticData.getCityModelList().add(new CityModel("071", "شیراز", "Shiraz"));
-                StaticData.getCityModelList().add(new CityModel("041", "تبريز", "Tabriz"));
-                StaticData.getCityModelList().add(new CityModel("051", "مشهد", "Mashhad"));
+                StaticData.getCityModelList().add(new CityModel("021", "تهران", "Tehran", "32.629198", "51.684084"));
+                StaticData.getCityModelList().add(new CityModel("031", "اصفهان", "Isfahan", "32.6546270", "51.667983"));
+                StaticData.getCityModelList().add(new CityModel("076", "کیش", "Kish","26.543289", "53.999226"));
+                StaticData.getCityModelList().add(new CityModel("071", "شیراز", "Shiraz", "29.591768", "52.583698"));
+                StaticData.getCityModelList().add(new CityModel("051", "مشهد", "Mashhad", "36.260462", "59.616755"));
+                StaticData.getCityModelList().add(new CityModel("041", "تبريز", "Tabriz", "38.078940", "46.296548"));
+                StaticData.getCityModelList().add(new CityModel("026", "کرج", "Karaj", "35.840019", "50.939091"));
                 setSP(CITY_LIST, JSON.toJSONString(StaticData.getCityModelList()));
             } else {
                 StaticData.setCityModelList(JSON.parseArray(json, CityModel.class));

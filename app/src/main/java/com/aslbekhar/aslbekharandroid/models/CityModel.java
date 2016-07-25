@@ -8,14 +8,19 @@ public class CityModel {
     String id;
     String persianName;
     String englishName;
+    String lat;
+    String lon;
 
     public CityModel() {
     }
 
-    public CityModel(String id, String persianName, String englishName) {
+
+    public CityModel(String id, String persianName, String englishName, String lat, String lon) {
         this.id = id;
         this.persianName = persianName;
         this.englishName = englishName;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     public String getId() {
@@ -40,5 +45,21 @@ public class CityModel {
 
     public void setEnglishName(String englishName) {
         this.englishName = englishName;
+    }
+
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLon() {
+        return lon;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
     }
 }

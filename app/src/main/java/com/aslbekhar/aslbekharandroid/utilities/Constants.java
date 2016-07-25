@@ -110,6 +110,7 @@ public class Constants {
     public static String REGISTERED_DEVICE_ID = "REGISTERED_DEVICE_ID";
     public static String GPS_ON_OR_OFF = "GPS_ON_OR_OFF";
     public static String PLAY_SERVICES_ON_OR_OFF = "PLAY_SERVICES_ON_OR_OFF";
+    public static String LOCATION_PERMISSION = "LOCATION_PERMISSION";
     public static String DATA_PROCESSED_OR_NOT = "DATA_PROCESSED_OR_NOT";
     public static String LAST_CITY_CODE = "LAST_CITY_CODE";
     public static String LAST_CITY_ENGLISH_NAME = "LAST_CITY_ENGLISH_NAME";

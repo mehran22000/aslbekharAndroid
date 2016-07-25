@@ -100,9 +100,9 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
 
         if (!getSP(DEVICE_ID).equals(FALSE)) {
             String cityName = getSP(LAST_CITY_ENGLISH_NAME).toLowerCase();
-            if (cityName.equals(FALSE)) {
-                cityName = "tehran";
-            }
+//            if (cityName.equals(FALSE)) {
+//                cityName = "tehran";
+//            }
             String postJson = "{\"device\":\""
                     + getSP(DEVICE_ID) + "\",\"city\":\""
                     + cityName
