@@ -1,5 +1,7 @@
 package com.aslbekhar.aslbekharandroid.models;
 
+import com.aslbekhar.aslbekharandroid.utilities.StaticData;
+
 /**
  * Created by Amin on 19/05/2016.
  */
@@ -61,5 +63,15 @@ public class CityModel {
 
     public void setLon(String lon) {
         this.lon = lon;
+    }
+
+    public static CityModel findCityById(String cityCode){
+        for (CityModel model :
+                StaticData.getCityModelList()) {
+            if (model.getId().equals(cityCode)){
+                return model;
+            }
+        }
+        return StaticData.getCityModelList().get(0);
     }
 }

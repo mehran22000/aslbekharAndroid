@@ -34,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.models.AnalyticsAdvertisementModel;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
+import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
@@ -140,6 +141,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     View listOverLay;
     int distance = DEFAULT_DISTANCE;
     private Location lastLocation;
+    boolean locationAccess = false;
     boolean gpsAvailableOrNot = false;
     boolean normalOrDeal = true;
     boolean isDownloading = false;
@@ -183,7 +185,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             public void onClick(View v) {
                 if (distance != (int) slider.getExactValue()) {
                     distance = (int) slider.getExactValue();
-                    getStoresNearBy();
+                    getStoresNearBy(lastLocation);
                 }
             }
         });
@@ -373,7 +375,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     }
 
 
-
     public static boolean isGpsEnabled(Context context) {
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
@@ -518,22 +519,26 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                         || ActivityCompat.checkSelfPermission(getActivity(),
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
 
-            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST);
+            locationAccess = false;
+            lastLocation = new Location("");
+            lastLocation.setLatitude(Double.parseDouble(CityModel.findCityById(cityCode).getLat()));
+            lastLocation.setLongitude(Double.parseDouble(CityModel.findCityById(cityCode).getLon()));
 
         } else {
+            locationAccess = true;
             lastLocation = LocationServices
                     .FusedLocationApi
                     .getLastLocation(googleApiClient);
-            setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
-            setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
 
-            if (type == Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
-                showSingleStore();
-            } else {
-                initCamera(lastLocation);
-                getStoresNearBy();
-            }
+        }
+        setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
+        setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
 
+        if (type == Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
+            showSingleStore();
+        } else {
+            initCamera(lastLocation);
+            getStoresNearBy(lastLocation);
         }
     }
 
@@ -570,14 +575,14 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                     initCamera(lastLocation);
                     setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
                     setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
-                    getStoresNearBy();
+                    getStoresNearBy(lastLocation);
                 }
             }
         } else {
             if (type == Constants.MAP_TYPE_SHOW_NEAR_BY) {
                 lastLocation = location;
                 initCamera(lastLocation);
-                getStoresNearBy();
+                getStoresNearBy(lastLocation);
             }
         }
     }
@@ -608,21 +613,33 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         mMap.animateCamera(CameraUpdateFactory
                 .newCameraPosition(position), null);
 
-        mMap.setTrafficEnabled(true);
-        if (ActivityCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            getPermission();
+        if (type != Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
+            mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+                private CameraPosition prevCameraPosition;
+                @Override
+                public void onCameraChange(CameraPosition cameraPosition) {
 
-            return;
+                    if (prevCameraPosition != null) {
+                        Location tempLocation = new Location("");
+                        tempLocation.setLatitude(cameraPosition.target.latitude);
+                        tempLocation.setLongitude(cameraPosition.target.longitude);
+                        if (lastLocation.distanceTo(tempLocation) > 2000){
+                            getStoresNearBy(tempLocation);
+                        }
+                    }
+                    prevCameraPosition = cameraPosition;
+                }
+            });
         }
-        mMap.setMyLocationEnabled(true);
+
+        mMap.setTrafficEnabled(true);
+        if (locationAccess) {
+            mMap.setMyLocationEnabled(true);
+        }
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
                 if (type == Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
                     openStoreFragment(model);
                 } else {
@@ -653,7 +670,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     }
 
 
-    private void getStoresNearBy() {
+    private void getStoresNearBy(Location location) {
         if (listOverLay.getVisibility() != View.VISIBLE) {
             listOverLay.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -667,11 +684,11 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         if (type == MAP_TYPE_SHOW_NEAR_BY) {
             isDownloading = true;
             if (normalOrDeal) {
-                NetworkRequests.getRequest(STORESLIST_NEARBY + lastLocation.getLatitude() + "/"
-                        + lastLocation.getLongitude() + "/" + distance, this, DOWNLOAD);
+                NetworkRequests.getRequest(STORESLIST_NEARBY + location.getLatitude() + "/"
+                        + location.getLongitude() + "/" + distance, this, DOWNLOAD);
             } else {
-                NetworkRequests.getRequest(DEALS_NEARBY_URL + lastLocation.getLatitude() + "/"
-                        + lastLocation.getLongitude() + "/" + distance, this, DOWNLOAD);
+                NetworkRequests.getRequest(DEALS_NEARBY_URL + location.getLatitude() + "/"
+                        + location.getLongitude() + "/" + distance, this, DOWNLOAD);
             }
         }
     }
