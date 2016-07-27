@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -32,6 +31,7 @@ import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.rey.material.widget.ProgressView;
 
 import static android.provider.Settings.Secure;
@@ -169,13 +169,12 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         } else {
             Snippets.setSP(GPS_ON_OR_OFF, FALSE);
         }
-//        googleApiClient = new GoogleApiClient.Builder(this)
-//                .addConnectionCallbacks(this)
-//                .addOnConnectionFailedListener(this)
-//                .addApi(LocationServices.API)
-//                .build();
-//        googleApiClient.connect();
-        continueToCheckForData(true);
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        googleApiClient.connect();
     }
 
     private void continueToCheckForData(boolean playServiceOnOrOff) {
@@ -305,26 +304,11 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnectionSuspended(int i) {
         continueToCheckForData(true);
-
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        if (!mResolvingError) {
-            if (connectionResult.hasResolution()) {
-                try {
-                    mResolvingError = true;
-                    connectionResult.startResolutionForResult(this, REQUEST_RESOLVE_ERROR);
-                } catch (IntentSender.SendIntentException e) {
-                    // There was an error with the resolution intent. Try again.
-                    googleApiClient.connect();
-                }
-            } else {
-                // Show dialog using GoogleApiAvailability.getErrorDialog()
-                showErrorDialog(connectionResult.getErrorCode());
-                mResolvingError = true;
-            }
-        }
+        continueToCheckForData(false);
     }
 
     /* Creates a dialog for an error message */
@@ -398,7 +382,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
                 StaticData.getCityModelList().add(new CityModel("071", "شیراز", "Shiraz", "29.591768", "52.583698"));
                 StaticData.getCityModelList().add(new CityModel("051", "مشهد", "Mashhad", "36.260462", "59.616755"));
                 StaticData.getCityModelList().add(new CityModel("041", "تبريز", "Tabriz", "38.078940", "46.296548"));
-                StaticData.getCityModelList().add(new CityModel("026", "کرج", "Karaj", "35.840019", "50.939091"));
                 setSP(CITY_LIST, JSON.toJSONString(StaticData.getCityModelList()));
             } else {
                 StaticData.setCityModelList(JSON.parseArray(json, CityModel.class));

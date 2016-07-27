@@ -520,7 +520,8 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
 
             locationAccess = false;
-            lastLocation = new Location("");
+            lastLocation = new Location("reverseGeocoded");
+            CityModel city = CityModel.findCityById(cityCode);
             lastLocation.setLatitude(Double.parseDouble(CityModel.findCityById(cityCode).getLat()));
             lastLocation.setLongitude(Double.parseDouble(CityModel.findCityById(cityCode).getLon()));
 
@@ -620,7 +621,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                 public void onCameraChange(CameraPosition cameraPosition) {
 
                     if (prevCameraPosition != null) {
-                        Location tempLocation = new Location("");
+                        Location tempLocation = new Location("reverseGeocoded");
                         tempLocation.setLatitude(cameraPosition.target.latitude);
                         tempLocation.setLongitude(cameraPosition.target.longitude);
                         if (lastLocation.distanceTo(tempLocation) > 2000){

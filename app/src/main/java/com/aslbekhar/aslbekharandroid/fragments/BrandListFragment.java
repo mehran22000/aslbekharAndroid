@@ -166,7 +166,7 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
         adapter = new BrandListAdapter(modelListToShow, getActivity(), this);
         recyclerView.setAdapter(adapter);
 
-        view.findViewById(R.id.root).setBackgroundColor(getResources().getColor(R.color.white));
+//        view.findViewById(R.id.root).setBackgroundColor(getResources().getColor(R.color.white));
 
         return view;
     }

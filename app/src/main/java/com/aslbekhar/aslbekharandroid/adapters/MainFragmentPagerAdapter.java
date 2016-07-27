@@ -1,5 +1,6 @@
 package com.aslbekhar.aslbekharandroid.adapters;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -11,6 +12,12 @@ import com.aslbekhar.aslbekharandroid.fragments.MapNearByFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL_OR_DEAL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.PLAY_SERVICES_ON_OR_OFF;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 
 /**
  * Created by Amin on 15/05/2016.
@@ -31,7 +38,15 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private void initializeTabs() {
         tabs.add(HostFragment.newInstance(new CitiesFragment()));
-        tabs.add(HostFragment.newInstance(new MapNearByFragment()));
+        if (getSP(PLAY_SERVICES_ON_OR_OFF).equals(TRUE)) {
+            tabs.add(HostFragment.newInstance(new MapNearByFragment()));
+        } else {
+            Bundle bundle = new Bundle();
+            bundle.putString(NORMAL_OR_DEAL, NORMAL);
+            ListNearByFragment fragment = new ListNearByFragment();
+            fragment.setArguments(bundle);
+            tabs.add(fragment);
+        }
         tabs.add(HostFragment.newInstance(new ListNearByFragment()));
 //        tabs.add(HostFragment.newInstance(new MyStoreAccountFragment()));
     }

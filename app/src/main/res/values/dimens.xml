@@ -14,7 +14,7 @@
     <dimen name="item_city_margin">8dp</dimen>
     <dimen name="item_new_city_margin">6dp</dimen>
     <dimen name="item_city_image_h">100dp</dimen>
-    <dimen name="item_brand_image_h">60dp</dimen>
+    <dimen name="item_brand_image_h">70dp</dimen>
 
     // store list
     <dimen name="item_store_h">190dp</dimen>
