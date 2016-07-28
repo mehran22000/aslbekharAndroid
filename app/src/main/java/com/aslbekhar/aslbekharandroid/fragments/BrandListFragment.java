@@ -200,12 +200,12 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
     private void checkForAdvertisement(final BrandModel model) {
 
         if (!Snippets.isOnline(getActivity())){
-            openStoreListFromAdapter(model);
+            openStoreListFragment(model);
             return;
         }
 
         if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
-            openStoreListFromAdapter(model);
+            openStoreListFragment(model);
             return;
         }
 

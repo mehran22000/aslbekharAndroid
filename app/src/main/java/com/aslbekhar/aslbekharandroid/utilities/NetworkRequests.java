@@ -129,7 +129,6 @@ public class NetworkRequests {
                     Log.d(LOG_TAG, " response for url " + url + " ===== " + response);
                 }
                 listener.onResponse(response, tag);
-
             }
         }, new Response.ErrorListener() {
 

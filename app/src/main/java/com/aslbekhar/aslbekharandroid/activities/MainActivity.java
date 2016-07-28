@@ -29,6 +29,7 @@ import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
+import com.rey.material.widget.ProgressView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 
 public class MainActivity extends AppCompatActivity implements Interfaces.MainActivityInterface,
-        Interfaces.OfflineInterface, Interfaces.NetworkListeners {
+        Interfaces.OfflineInterface, Interfaces.NetworkListeners, Interfaces.showProgressBar {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -282,5 +283,14 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     @Override
     public void onOffline(String tag) {
 
+    }
+
+    @Override
+    public void showProgressBar(boolean showOrHide) {
+        if (showOrHide) {
+            ((ProgressView) findViewById(R.id.toolbar).findViewById(R.id.toolbarProgressBar)).start();
+        } else {
+            ((ProgressView) findViewById(R.id.toolbar).findViewById(R.id.toolbarProgressBar)).stop();
+        }
     }
 }

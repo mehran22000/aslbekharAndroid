@@ -133,22 +133,20 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     String cityCode;
     List<Marker> markerList = new ArrayList<>();
     List<StoreModel> storeModelList = new ArrayList<>();
-    private ProgressView progressBar;
     private View nodata;
     boolean fullScreenAdvertiseTimer = false;
     boolean fullScreenAdvertiseSecondTimer = false;
     ImageView fullScreenAdImageView;
-    View listOverLay;
     int distance = DEFAULT_DISTANCE;
     private Location lastLocation;
     boolean locationAccess = false;
     boolean gpsAvailableOrNot = false;
     boolean normalOrDeal = true;
-    boolean isDownloading = false;
     StoreModel model;
     private static final int GPS_SETTING_REQUEST_CODE = 9002;
 
     private static final int PERMISSION_REQUEST = 0;
+    private Interfaces.showProgressBar progressbar;
 
 
     public MapNearByFragment() {
@@ -215,8 +213,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             }
         });
 
-        listOverLay = view.findViewById(R.id.listOverLay);
-        progressBar = (ProgressView) view.findViewById(R.id.progressBar);
         fullScreenAdImageView = (ImageView) view.findViewById(R.id.fullScreenAdvertise);
 
         mMapView = (MapView) view.findViewById(R.id.mapView);
@@ -237,8 +233,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         }
 
         fullScreenAdvertiseTimer = true;
-        Snippets.showFade(listOverLay, true, 500);
-        progressBar.start();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -259,8 +253,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                                     new AnalyticsAdvertisementModel(CITY_TO_CAT_FULL_AD + ".nearme." + model.getbName() + "." + model.getsId() + ".png", ADVERTISE_NEARME, FULL));
                             fullScreenAdvertiseTimer = false;
                             fullScreenAdImageView.setVisibility(View.VISIBLE);
-                            progressBar.stop();
-                            listOverLay.setVisibility(View.GONE);
                             fullScreenAdImageView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -483,9 +475,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     public void onResume() {
         super.onResume();
         mMapView.onResume();
-        if (!isDownloading) {
-            listOverLay.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -570,7 +559,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     @Override
     public void onLocationChanged(Location location) {
         if (lastLocation != null) {
-            if (lastLocation.distanceTo(location) > 400) {
+            if (lastLocation.distanceTo(location) > 1000) {
                 if (type == Constants.MAP_TYPE_SHOW_NEAR_BY) {
                     lastLocation = location;
                     initCamera(lastLocation);
@@ -617,6 +606,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         if (type != Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
             mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                 private CameraPosition prevCameraPosition;
+
                 @Override
                 public void onCameraChange(CameraPosition cameraPosition) {
 
@@ -624,7 +614,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                         Location tempLocation = new Location("reverseGeocoded");
                         tempLocation.setLatitude(cameraPosition.target.latitude);
                         tempLocation.setLongitude(cameraPosition.target.longitude);
-                        if (lastLocation.distanceTo(tempLocation) > 2000){
+                        if (lastLocation.distanceTo(tempLocation) > 5000) {
                             getStoresNearBy(tempLocation);
                         }
                     }
@@ -667,23 +657,14 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
         callBack = (Interfaces.MainActivityInterface) getActivity();
         offlineCallBack = (Interfaces.OfflineInterface) getActivity();
+        progressbar = (Interfaces.showProgressBar) getActivity();
 
     }
 
 
     private void getStoresNearBy(Location location) {
-        if (listOverLay.getVisibility() != View.VISIBLE) {
-            listOverLay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-            showFade(listOverLay, true, 500);
-        }
-        progressBar.start();
+        progressbar.showProgressBar(true);
         if (type == MAP_TYPE_SHOW_NEAR_BY) {
-            isDownloading = true;
             if (normalOrDeal) {
                 NetworkRequests.getRequest(STORESLIST_NEARBY + location.getLatitude() + "/"
                         + location.getLongitude() + "/" + distance, this, DOWNLOAD);
@@ -730,11 +711,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (listOverLay.getVisibility() == View.VISIBLE) {
-                showFade(listOverLay, false, 500);
-            }
-            progressBar.stop();
-            isDownloading = false;
             for (int i = 0; i < storeModelList.size(); i++) {
                 StoreModel store = storeModelList.get(i);
                 LatLng position = new LatLng(Double.parseDouble(store.getsLat()), Double.parseDouble(store.getsLong()));
@@ -780,18 +756,13 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
         view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
         offlineCallBack.offlineMode(false);
-        listOverLay.setVisibility(View.GONE);
-        progressBar.stop();
         Snackbar.make(view.findViewById(R.id.root), R.string.connection_error, Snackbar.LENGTH_INDEFINITE).show();
-        isDownloading = false;
     }
 
     @Override
     public void onOffline(String tag) {
-        progressBar.stop();
         view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         offlineCallBack.offlineMode(true);
-        isDownloading = false;
     }
 
 }

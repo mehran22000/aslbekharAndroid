@@ -19,6 +19,10 @@ public class Interfaces {
         public void offlineMode(boolean offline);
     }
 
+    public interface showProgressBar {
+        public void showProgressBar(boolean showOrHide);
+    }
+
 
     public interface NetworkListeners {
         public void onResponse(String response, String tag);
