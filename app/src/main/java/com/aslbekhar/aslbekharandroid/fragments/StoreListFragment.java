@@ -54,8 +54,9 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.FULL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_SINGLE_STORE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OR_SINGLE_STORE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OF_STORES;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
@@ -74,7 +75,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
     Interfaces.MainActivityInterface callBack;
     RecyclerView recyclerView;
     StoreListAdapter adapter;
-    List<StoreModel> modelList;
+    List<StoreModel> modelList = new ArrayList<>();
     List<StoreModel> modelListToShow = new ArrayList<>();
     LinearLayoutManager layoutManager;
     String cityCode;
@@ -158,16 +159,20 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listView);
 
-        cityCode = getArguments().getString(CITY_CODE);
+        if (getArguments().getInt(LIST_OR_SINGLE_STORE, LIST_OF_STORES) == SINGLE_STORE) {
+            try {
+                modelList.add(JSON.parseObject(getArguments().getString(STORE_DETAILS), StoreModel.class));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            modelList = StoreModel.getStoreListBasedOnCatNameAndBrand(cityCode, catName, brandId);
+        }
         catName = getArguments().getString(CAT_NAME);
         catNum = getArguments().getString(CAT_NUMBER);
         brandName = getArguments().getString(BRAND_NAME);
         brandId = getArguments().getString(BRAND_ID);
-
-        modelList = StoreModel.getStoreListBasedOnCatNameAndBrand(
-                cityCode,
-                catName,
-                brandId);
+        cityCode = getArguments().getString(CITY_CODE);
 
         modelListToShow.clear();
         modelListToShow.addAll(modelList);
@@ -358,7 +363,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         bundle.putInt(DISCOUNT, model.getdPrecentageInt());
         bundle.putString(VERIFIED, model.getsVerified());
         bundle.putString(LOGO, model.getbName());
-        bundle.putInt(MAP_TYPE, MAP_TYPE_SHOW_SINGLE_STORE);
+        bundle.putInt(LIST_OR_SINGLE_STORE, SINGLE_STORE);
 
         MapNearByFragment fragment = new MapNearByFragment();
         fragment.setArguments(bundle);
@@ -388,7 +393,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
                 view.findViewById(R.id.verificationTips).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        openBrandVarificationFragment(response);
+                        openBrandVerificationFragment(response);
                     }
                 });
             }
@@ -396,7 +401,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         }
     }
 
-    private void openBrandVarificationFragment(String response) {
+    private void openBrandVerificationFragment(String response) {
 
         Bundle bundle = new Bundle();
 

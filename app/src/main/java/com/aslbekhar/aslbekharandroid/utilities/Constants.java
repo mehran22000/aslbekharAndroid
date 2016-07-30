@@ -169,7 +169,7 @@ public class Constants {
 
     public static String LATITUDE = "LATITUDE";
     public static String LONGITUDE = "LONGITUDE";
-    public static String MAP_TYPE = "MAP_TYPE";
+    public static String LIST_OR_SINGLE_STORE = "LIST_OR_SINGLE_STORE";
     public static String CATEGORY = "category";
     public static String BRAND = "brand";
     public static String BRAND_STORE = "Brand_Store";
@@ -178,8 +178,8 @@ public class Constants {
     public static String DEALS_BRAND = "Deal_Brand";
     public static String DEALS_BRAND_STORE = "Deal_Brand_Store";
     public static String VERIFICATION = "Verification";
-    public static int MAP_TYPE_SHOW_NEAR_BY = 1;
-    public static int MAP_TYPE_SHOW_SINGLE_STORE = 2;
+    public static int LIST_OF_STORES = 1;
+    public static int SINGLE_STORE = 2;
 
 
 

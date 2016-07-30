@@ -73,8 +73,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_SINGLE_STORE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OR_SINGLE_STORE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL_OR_DEAL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
@@ -355,7 +355,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
         bundle.putInt(DISCOUNT, model.getdPrecentageInt());
         bundle.putString(VERIFIED, model.getsVerified());
         bundle.putString(LOGO, model.getbName());
-        bundle.putInt(MAP_TYPE, MAP_TYPE_SHOW_SINGLE_STORE);
+        bundle.putInt(LIST_OR_SINGLE_STORE, SINGLE_STORE);
 
         MapNearByFragment fragment = new MapNearByFragment();
         fragment.setArguments(bundle);

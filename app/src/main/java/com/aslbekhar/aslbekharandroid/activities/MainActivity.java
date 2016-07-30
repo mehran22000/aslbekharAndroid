@@ -144,6 +144,9 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
             public void onPageSelected(int position) {
                 // adding previous tab to stack
                 tabStack.push(currentTab);
+                if (tabStack.size() > 3){
+                    tabStack.remove(0);
+                }
                 currentTab = position;
             }
 

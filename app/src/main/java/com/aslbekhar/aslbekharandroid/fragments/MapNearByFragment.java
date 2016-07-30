@@ -39,7 +39,6 @@ import com.aslbekhar.aslbekharandroid.models.StoreModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
-import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -54,7 +53,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.rey.material.widget.ProgressView;
 import com.rey.material.widget.Slider;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -90,8 +88,9 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.MAP_TYPE_SHOW_NEAR_BY;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OR_SINGLE_STORE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OF_STORES;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NEARME_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL_OR_DEAL;
@@ -105,7 +104,6 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSPboolean;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
-import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
 
 /**
  * Created by Amin on 14/05/2016.
@@ -117,7 +115,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnMapLongClickListener,
         GoogleMap.OnMapClickListener,
-        GoogleMap.OnMarkerClickListener,
         OnMapReadyCallback,
         LocationListener,
         Interfaces.NetworkListeners {
@@ -132,6 +129,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     MapView mMapView;
     String cityCode;
     List<Marker> markerList = new ArrayList<>();
+    List<MarkerOptions> markerOptionsList = new ArrayList<>();
     List<StoreModel> storeModelList = new ArrayList<>();
     private View nodata;
     boolean fullScreenAdvertiseTimer = false;
@@ -142,11 +140,15 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     boolean locationAccess = false;
     boolean gpsAvailableOrNot = false;
     boolean normalOrDeal = true;
+    Location tempLocation = new Location("reverseGeocoded");
+    boolean cameraAnimatedBefore = false;
+    CameraPosition cameraPosition;
     StoreModel model;
     private static final int GPS_SETTING_REQUEST_CODE = 9002;
 
     private static final int PERMISSION_REQUEST = 0;
     private Interfaces.showProgressBar progressbar;
+    private boolean waitingForRefreshMap = false;
 
 
     public MapNearByFragment() {
@@ -157,7 +159,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            type = getArguments().getInt(MAP_TYPE, 1);
+            type = getArguments().getInt(LIST_OR_SINGLE_STORE, 1);
             if (getArguments().getString(NORMAL_OR_DEAL, FALSE).equals(DEAL)) {
                 normalOrDeal = false;
             }
@@ -425,30 +427,24 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
-        if (type == Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
-            openStoreFragment(model);
-        } else {
-            openStoreFragment(storeModelList.get(Integer.parseInt(marker.getSnippet())));
-        }
-        return true;
-    }
-
-    @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mMap = googleMap;
-        this.mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-
-                if (type == Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
-                    openStoreFragment(model);
-                } else {
-                    openStoreFragment(storeModelList.get(Integer.parseInt(marker.getSnippet())));
-                }
-                return true;
-            }
-        });
+//        this.mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+//            @Override
+//            public boolean onMarkerClick(Marker marker) {
+//                if (type == Constants.SINGLE_STORE) {
+//                    openStoreFragment(model);
+//                } else {
+//                    for (StoreModel storeModel : storeModelList) {
+//                        if (storeModel.getsId().equals(marker.getSnippet())){
+//                            openStoreFragment(storeModelList.get(Integer.parseInt(marker.getSnippet())));
+//                            break;
+//                        }
+//                    }
+//                }
+//                return true;
+//            }
+//        });
         this.mMap.setOnMapLongClickListener(this);
         this.mMap.setOnInfoWindowClickListener(this);
         this.mMap.setOnMapClickListener(this);
@@ -475,6 +471,9 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        if (mMap != null && storeModelList != null && storeModelList.size() > 0) {
+            showStoresOnMap(null, false);
+        }
     }
 
     @Override
@@ -493,12 +492,12 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     public void onPause() {
         super.onPause();
         mMapView.onPause();
+        cameraPosition = mMap.getCameraPosition();
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         onLocationConnected();
-
     }
 
     private void onLocationConnected() {
@@ -524,7 +523,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
         setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
 
-        if (type == Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
+        if (type == Constants.SINGLE_STORE) {
             showSingleStore();
         } else {
             initCamera(lastLocation);
@@ -560,7 +559,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     public void onLocationChanged(Location location) {
         if (lastLocation != null) {
             if (lastLocation.distanceTo(location) > 1000) {
-                if (type == Constants.MAP_TYPE_SHOW_NEAR_BY) {
+                if (type == Constants.LIST_OF_STORES) {
                     lastLocation = location;
                     initCamera(lastLocation);
                     setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
@@ -569,7 +568,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                 }
             }
         } else {
-            if (type == Constants.MAP_TYPE_SHOW_NEAR_BY) {
+            if (type == Constants.LIST_OF_STORES) {
                 lastLocation = location;
                 initCamera(lastLocation);
                 getStoresNearBy(lastLocation);
@@ -592,18 +591,25 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     }
 
     private void initCamera(Location location) {
-        CameraPosition position = CameraPosition.builder()
-                .target(new LatLng(location.getLatitude(),
-                        location.getLongitude()))
-                .zoom(13f)
-                .bearing(0.0f)
-                .tilt(0.0f)
-                .build();
+        if (!cameraAnimatedBefore) {
+            cameraPosition = CameraPosition.builder()
+                    .target(new LatLng(location.getLatitude(),
+                            location.getLongitude()))
+                    .zoom(13f)
+                    .bearing(0.0f)
+                    .tilt(0.0f)
+                    .build();
 
-        mMap.animateCamera(CameraUpdateFactory
-                .newCameraPosition(position), null);
+            mMap.animateCamera(CameraUpdateFactory
+                    .newCameraPosition(cameraPosition), null);
 
-        if (type != Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
+            cameraAnimatedBefore = true;
+        } else {
+            mMap.moveCamera(CameraUpdateFactory
+                    .newCameraPosition(cameraPosition));
+        }
+
+        if (type != Constants.SINGLE_STORE) {
             mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
                 private CameraPosition prevCameraPosition;
 
@@ -611,11 +617,19 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                 public void onCameraChange(CameraPosition cameraPosition) {
 
                     if (prevCameraPosition != null) {
-                        Location tempLocation = new Location("reverseGeocoded");
                         tempLocation.setLatitude(cameraPosition.target.latitude);
                         tempLocation.setLongitude(cameraPosition.target.longitude);
-                        if (lastLocation.distanceTo(tempLocation) > 5000) {
-                            getStoresNearBy(tempLocation);
+                        if (lastLocation.distanceTo(tempLocation) > 3000) {
+                            if (!waitingForRefreshMap) {
+                                waitingForRefreshMap = true;
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getStoresNearBy(tempLocation);
+                                        waitingForRefreshMap = false;
+                                    }
+                                }, 2000);
+                            }
                         }
                     }
                     prevCameraPosition = cameraPosition;
@@ -631,10 +645,15 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (type == Constants.MAP_TYPE_SHOW_SINGLE_STORE) {
+                if (type == Constants.SINGLE_STORE) {
                     openStoreFragment(model);
                 } else {
-                    openStoreFragment(storeModelList.get(Integer.parseInt(marker.getSnippet())));
+                    for (StoreModel storeModel : storeModelList) {
+                        if (storeModel.getsId().equals(marker.getSnippet())){
+                            openStoreFragment(storeModel);
+                            break;
+                        }
+                    }
                 }
                 return true;
             }
@@ -664,7 +683,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     private void getStoresNearBy(Location location) {
         progressbar.showProgressBar(true);
-        if (type == MAP_TYPE_SHOW_NEAR_BY) {
+        if (type == LIST_OF_STORES) {
             if (normalOrDeal) {
                 NetworkRequests.getRequest(STORESLIST_NEARBY + location.getLatitude() + "/"
                         + location.getLongitude() + "/" + distance, this, DOWNLOAD);
@@ -686,8 +705,9 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         bundle.putString(BRAND_ID, model.getbId());
         bundle.putString(BRAND_NAME, model.getbName());
         bundle.putString(STORE_DETAILS, JSON.toJSONString(model));
+        bundle.putInt(LIST_OR_SINGLE_STORE, SINGLE_STORE);
 
-        StoreFragment fragment = new StoreFragment();
+        StoreListFragment fragment = new StoreListFragment();
         fragment.setArguments(bundle);
         callBack.openNewContentFragment(fragment);
 
@@ -700,24 +720,70 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         if (isAdded() && getActivity() != null) {
             view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
             offlineCallBack.offlineMode(false);
-
-            storeModelList.clear();
-            for (Marker marker : markerList) {
-                marker.remove();
-            }
-            markerList.clear();
+            List<StoreModel> downloadedStoreModels = new ArrayList<>();
             try {
-                storeModelList.addAll(JSON.parseArray(response, StoreModel.class));
+                downloadedStoreModels.addAll(JSON.parseArray(response, StoreModel.class));
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            showStoresOnMap(downloadedStoreModels, true);
+        }
+    }
+
+    private void showStoresOnMap(List<StoreModel> downloadedStoreModels, boolean isDownloaded) {
+        if (isDownloaded) {
+            for (int i = 0; i < downloadedStoreModels.size(); i++) {
+                StoreModel store = downloadedStoreModels.get(i);
+                boolean found = false;
+                for (Marker marker : markerList) {
+                    if (marker.getPosition().latitude == Double.parseDouble(store.getsLat())
+                            && marker.getPosition().longitude == Double.parseDouble(store.getsLong())
+                            && marker.getTitle().equals(store.getsName())) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    storeModelList.add(store);
+                    LatLng position = new LatLng(Double.parseDouble(store.getsLat()), Double.parseDouble(store.getsLong()));
+                    Bitmap bitmap = createBitMpaForMarker(store);
+                    MarkerOptions markerOptions = new MarkerOptions().position(position).title(store.getsName())
+                            .snippet(store.getsId()).icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                    markerOptionsList.add(markerOptions);
+                    markerList.add(mMap.addMarker(markerOptions));
+                }
+                if (storeModelList.size() > 80) {
+                    for (int j = 0; j < (storeModelList.size() - 80); j++) {
+                        storeModelList.remove(0);
+                        markerList.get(0).remove();
+                        markerList.remove(0);
+                    }
+                }
+            }
+        } else {
             for (int i = 0; i < storeModelList.size(); i++) {
                 StoreModel store = storeModelList.get(i);
-                LatLng position = new LatLng(Double.parseDouble(store.getsLat()), Double.parseDouble(store.getsLong()));
-                Bitmap bitmap = createBitMpaForMarker(store);
-                markerList.add(mMap.addMarker(
-                        new MarkerOptions().position(position).title(store.getsName())
-                                .snippet(String.valueOf(i)).icon(BitmapDescriptorFactory.fromBitmap(bitmap))));
+                boolean found = false;
+                for (Marker marker : markerList) {
+                    if (marker.getPosition().latitude == Double.parseDouble(store.getsLat())
+                            && marker.getPosition().longitude == Double.parseDouble(store.getsLong())
+                            && marker.getTitle().equals(store.getsName())) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    LatLng position = new LatLng(Double.parseDouble(store.getsLat()), Double.parseDouble(store.getsLong()));
+                    Bitmap bitmap = createBitMpaForMarker(store);
+                    MarkerOptions markerOptions = new MarkerOptions().position(position).title(store.getsName())
+                            .snippet(store.getsId()).icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                    markerOptionsList.add(markerOptions);
+                    markerList.add(mMap.addMarker(markerOptions));
+                } else {
+                    mMap.addMarker(markerOptionsList.get(i));
+                }
             }
         }
     }
