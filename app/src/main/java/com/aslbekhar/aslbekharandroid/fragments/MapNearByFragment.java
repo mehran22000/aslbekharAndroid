@@ -106,6 +106,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSPboolean;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
+import static com.aslbekhar.aslbekharandroid.utilities.StaticData.addShownCount;
 
 /**
  * Created by Amin on 14/05/2016.
@@ -230,8 +231,12 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     private void checkForAdvertisement(final StoreModel model) {
 
-        if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
+        if (StaticData.addShownCount < ADVERTISEMENT_MAX_COUNT) {
             StaticData.addShownCount++;
+        }
+
+        if (addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            openStoreFragment(model);
             return;
         }
 
@@ -625,11 +630,11 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if (type == Constants.SINGLE_STORE) {
-                    openStoreFragment(model);
+                    checkForAdvertisement(model);
                 } else {
                     for (StoreModel storeModel : storeModelList) {
                         if (storeModel.get_id().equals(marker.getSnippet())) {
-                            openStoreFragment(storeModel);
+                            checkForAdvertisement(storeModel);
                             break;
                         }
                     }
