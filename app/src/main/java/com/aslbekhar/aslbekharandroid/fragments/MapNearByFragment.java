@@ -779,7 +779,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         display.getSize(size);
         int width = size.x;
 
-        float ratio = size.x / 1440;
+        float ratio = size.x / 1440f;
 
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
         Bitmap bmp = Bitmap.createBitmap((int) (200 * ratio), (int) (200 * ratio), conf);
