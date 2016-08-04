@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.RectF;
 import android.location.Location;
 import android.location.LocationManager;
@@ -24,6 +25,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,15 +88,15 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OF_STORES;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OR_SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OR_SINGLE_STORE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OF_STORES;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NEARME_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL_OR_DEAL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORESLIST_NEARBY;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
@@ -104,6 +106,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSPboolean;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
+import static com.aslbekhar.aslbekharandroid.utilities.StaticData.addShownCount;
 
 /**
  * Created by Amin on 14/05/2016.
@@ -112,7 +115,6 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
  */
 public class MapNearByFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleMap.OnInfoWindowClickListener,
         GoogleMap.OnMapLongClickListener,
         GoogleMap.OnMapClickListener,
         OnMapReadyCallback,
@@ -229,8 +231,12 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     private void checkForAdvertisement(final StoreModel model) {
 
-        if (StaticData.addShownCount > ADVERTISEMENT_MAX_COUNT) {
+        if (StaticData.addShownCount < ADVERTISEMENT_MAX_COUNT) {
             StaticData.addShownCount++;
+        }
+
+        if (addShownCount > ADVERTISEMENT_MAX_COUNT) {
+            openStoreFragment(model);
             return;
         }
 
@@ -412,11 +418,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     }
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
-        openStoreFragment(storeModelList.get(Integer.parseInt(marker.getSnippet())));
-    }
-
-    @Override
     public void onMapClick(LatLng latLng) {
 
     }
@@ -429,24 +430,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mMap = googleMap;
-//        this.mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//                if (type == Constants.SINGLE_STORE) {
-//                    openStoreFragment(model);
-//                } else {
-//                    for (StoreModel storeModel : storeModelList) {
-//                        if (storeModel.getsId().equals(marker.getSnippet())){
-//                            openStoreFragment(storeModelList.get(Integer.parseInt(marker.getSnippet())));
-//                            break;
-//                        }
-//                    }
-//                }
-//                return true;
-//            }
-//        });
         this.mMap.setOnMapLongClickListener(this);
-        this.mMap.setOnInfoWindowClickListener(this);
         this.mMap.setOnMapClickListener(this);
 
     }
@@ -471,7 +455,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     public void onResume() {
         super.onResume();
         mMapView.onResume();
-        if (mMap != null && storeModelList != null && storeModelList.size() > 0) {
+        if (mMap != null && storeModelList != null && storeModelList.size() > 0 && type == LIST_OF_STORES) {
             showStoresOnMap(null, false);
         }
     }
@@ -547,7 +531,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         LatLng position = new LatLng(Double.parseDouble(model.getsLat()), Double.parseDouble(model.getsLong()));
         markerList.add(mMap.addMarker(new MarkerOptions()
                 .position(position).title(model.getsName())
-                .snippet(String.valueOf(0))
+                .snippet(model.get_id())
                 .icon(BitmapDescriptorFactory.fromBitmap(createBitMpaForMarker(model)))));
         Location temp = new Location(LocationManager.GPS_PROVIDER);
         temp.setLatitude(position.latitude);
@@ -646,11 +630,11 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if (type == Constants.SINGLE_STORE) {
-                    openStoreFragment(model);
+                    checkForAdvertisement(model);
                 } else {
                     for (StoreModel storeModel : storeModelList) {
-                        if (storeModel.getsId().equals(marker.getSnippet())){
-                            openStoreFragment(storeModel);
+                        if (storeModel.get_id().equals(marker.getSnippet())) {
+                            checkForAdvertisement(storeModel);
                             break;
                         }
                     }
@@ -749,7 +733,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                     LatLng position = new LatLng(Double.parseDouble(store.getsLat()), Double.parseDouble(store.getsLong()));
                     Bitmap bitmap = createBitMpaForMarker(store);
                     MarkerOptions markerOptions = new MarkerOptions().position(position).title(store.getsName())
-                            .snippet(store.getsId()).icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                            .snippet(store.get_id()).icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                     markerOptionsList.add(markerOptions);
                     markerList.add(mMap.addMarker(markerOptions));
                 }
@@ -778,7 +762,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                     LatLng position = new LatLng(Double.parseDouble(store.getsLat()), Double.parseDouble(store.getsLong()));
                     Bitmap bitmap = createBitMpaForMarker(store);
                     MarkerOptions markerOptions = new MarkerOptions().position(position).title(store.getsName())
-                            .snippet(store.getsId()).icon(BitmapDescriptorFactory.fromBitmap(bitmap));
+                            .snippet(store.get_id()).icon(BitmapDescriptorFactory.fromBitmap(bitmap));
                     markerOptionsList.add(markerOptions);
                     markerList.add(mMap.addMarker(markerOptions));
                 } else {
@@ -789,21 +773,28 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     }
 
     private Bitmap createBitMpaForMarker(StoreModel store) {
+
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+
+        float ratio = size.x / 1440f;
+
         Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-        Bitmap bmp = Bitmap.createBitmap(200, 200, conf);
+        Bitmap bmp = Bitmap.createBitmap((int) (200 * ratio), (int) (200 * ratio), conf);
         Canvas canvas = new Canvas(bmp);
 
         // paint defines the text color, stroke width and size
         Paint color = new Paint();
-        color.setTextSize(25);
         color.setColor(Color.BLACK);
 
-        RectF targetRect = new RectF(0, 0, 200, 200);
+        RectF targetRect = new RectF(0, 0, (int) (200 * ratio), (int) (200 * ratio));
 
         Bitmap logo = null;
         canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),
                 R.drawable.map_pin_store_base), null, targetRect, color);
-        targetRect = new RectF(28, 15, 174, 162);
+        targetRect = new RectF((int) (28 * ratio), (int) (15 * ratio), (int) (174 * ratio), (int) (162 * ratio));
         try {
             InputStream bitmap = getActivity().getAssets().open("logos/" + BrandModel.getBrandLogo(store.getbName()) + ".png");
             logo = BitmapFactory.decodeStream(bitmap);

@@ -158,9 +158,15 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         checkForBannerAdvertise();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listView);
+        catName = getArguments().getString(CAT_NAME);
+        catNum = getArguments().getString(CAT_NUMBER);
+        brandName = getArguments().getString(BRAND_NAME);
+        brandId = getArguments().getString(BRAND_ID);
+        cityCode = getArguments().getString(CITY_CODE);
 
         if (getArguments().getInt(LIST_OR_SINGLE_STORE, LIST_OF_STORES) == SINGLE_STORE) {
             try {
+                modelList.clear();
                 modelList.add(JSON.parseObject(getArguments().getString(STORE_DETAILS), StoreModel.class));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -168,11 +174,6 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         } else {
             modelList = StoreModel.getStoreListBasedOnCatNameAndBrand(cityCode, catName, brandId);
         }
-        catName = getArguments().getString(CAT_NAME);
-        catNum = getArguments().getString(CAT_NUMBER);
-        brandName = getArguments().getString(BRAND_NAME);
-        brandId = getArguments().getString(BRAND_ID);
-        cityCode = getArguments().getString(CITY_CODE);
 
         modelListToShow.clear();
         modelListToShow.addAll(modelList);
@@ -368,7 +369,7 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
         MapNearByFragment fragment = new MapNearByFragment();
         fragment.setArguments(bundle);
 
-        callBack.openNewContentFragment(fragment, 0);
+        callBack.openNewContentFragment(fragment);
     }
 
 
