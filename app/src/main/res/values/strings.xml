@@ -12,6 +12,7 @@
     <string name="no_item_to_show">هیج آیتمی برای نمایش وجود ندارد</string>
     <string name="call">تماس</string>
     <string name="show_on_map">نمایش روی نقشه</string>
+    <string name="map">نقشه</string>
     <string name="you_are_offline">شما به اینترنت وصل نیستید</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
     completions."</string>
