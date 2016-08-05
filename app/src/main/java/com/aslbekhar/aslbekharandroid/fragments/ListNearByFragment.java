@@ -44,6 +44,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
@@ -552,6 +553,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
             modelList.clear();
             try {
                 modelList.addAll(JSON.parseArray(response, StoreModel.class));
+                Collections.sort(modelList);
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -21,9 +21,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 
 /**
  * Created by Amin on 19/05/2016.
- *
  */
-public class StoreModel {
+public class StoreModel  implements Comparable<StoreModel>{
 
     String _id;
     String bId;
@@ -247,9 +246,9 @@ public class StoreModel {
 
     public int getdPrecentageInt() {
         int discount;
-        try{
+        try {
             discount = Integer.parseInt(dPrecentage);
-        } catch (Exception e){
+        } catch (Exception e) {
             discount = 0;
         }
         return discount;
@@ -275,7 +274,7 @@ public class StoreModel {
         this.distance = distance;
     }
 
-    public static void getCatAndStoreListFromAssets(){
+    public static void getCatAndStoreListFromAssets() {
 
         for (CityModel city : StaticData.getCityModelList()) {
             if (getSP(city.getId() + CAT_LIST).equals(FALSE)) {
@@ -318,7 +317,7 @@ public class StoreModel {
     public static void getStoreListFromAssets() {
         for (CityModel city : StaticData.getCityModelList()) {
             if (getSP(city.getId() + CAT_LIST).equals(FALSE)) {
-                if (getSP(city.getId() + STORE_LIST).equals(FALSE)){
+                if (getSP(city.getId() + STORE_LIST).equals(FALSE)) {
                     String json = null;
                     try {
                         InputStream is = AppController.getInstance().getAssets().open(city.getId() + STORE_LIST_FILE_POSTFIX);
@@ -331,10 +330,9 @@ public class StoreModel {
                         ex.printStackTrace();
                         setSP(city.getId() + STORE_LIST, FALSE);
                     }
-                    if (json != null){
+                    if (json != null) {
                         List<StoreModel> storeModelList = JSON.parseArray(json, StoreModel.class);
                         setSP(city.getId() + STORE_LIST, json);
-                        String cityCat = JSON.toJSONString(getCatsFromStoreList(city.getId(), storeModelList));
                         setSP(city.getId() + CAT_LIST, JSON.toJSONString(getCatsFromStoreList(city.getId(), storeModelList)));
                     }
                 }
@@ -342,13 +340,43 @@ public class StoreModel {
         }
     }
 
-    public static List<StoreModel> getStoreListBasedOnCatNameAndBrand(String cityCode, String catName, String brandId){
-        List<StoreModel> storeModelList = JSON.parseArray(getSP(cityCode + STORE_LIST), StoreModel.class);
+
+    public static List<StoreModel> getStoreListFromAssetsByCityCode(String CityCode) {
+        List<StoreModel> storeModelList = new ArrayList<>();
+        String json = null;
+        try {
+            InputStream is = AppController.getInstance().getAssets().open(CityCode + STORE_LIST_FILE_POSTFIX);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            setSP(CityCode + STORE_LIST, FALSE);
+        }
+        if (json != null) {
+            storeModelList = JSON.parseArray(json, StoreModel.class);
+            setSP(CityCode + STORE_LIST, json);
+            setSP(CityCode + CAT_LIST, JSON.toJSONString(getCatsFromStoreList(CityCode, storeModelList)));
+        }
+        return storeModelList;
+    }
+
+    public static List<StoreModel> getStoreListBasedOnCatNameAndBrand(String cityCode, String catName, String brandId) {
+
+        List<StoreModel> storeModelList;
+        String jsonData = getSP(cityCode + STORE_LIST);
+        if (!jsonData.equals(FALSE)) {
+            storeModelList = JSON.parseArray(getSP(cityCode + STORE_LIST), StoreModel.class);
+        } else {
+            storeModelList = getStoreListFromAssetsByCityCode(cityCode);
+        }
 
         List<StoreModel> storeListBasedOnCatNameAndBrand = new ArrayList<>();
 
         for (StoreModel storeModel : storeModelList) {
-            if (storeModel.getbCategory().equals(catName) && storeModel.getbId().equals(brandId)){
+            if (storeModel.getbCategory().equals(catName) && storeModel.getbId().equals(brandId)) {
                 storeListBasedOnCatNameAndBrand.add(storeModel);
             }
         }
@@ -361,12 +389,12 @@ public class StoreModel {
         for (StoreModel storeModel : storeModelList) {
             boolean catFound = false;
             for (CategoryModel catModel : categoryModelList) {
-                if (catModel.getTitle().equals(storeModel.bCategory)){
+                if (catModel.getTitle().equals(storeModel.bCategory)) {
                     catFound = true;
                     break;
                 }
             }
-            if (!catFound){
+            if (!catFound) {
                 categoryModelList.add(new CategoryModel(storeModel.getbCategory(),
                         storeModel.getbCategoryId(),
                         BrandModel.getBrandLogosBasedOnCat(cityCode, storeModel.getbCategory(),
@@ -383,4 +411,25 @@ public class StoreModel {
         return categoryModelList;
     }
 
+    @Override
+    public int compareTo(StoreModel another) {
+        if (distance == null || distance.length() == 0 || another.distance == null || another.distance.length() == 0){
+            return 0;
+        }
+
+        try {
+            if (Float.parseFloat(distance ) > Float.parseFloat(distance) ) {
+                return 1;
+            }
+            else if (Float.parseFloat(distance ) < Float.parseFloat(distance) ) {
+                return -1;
+            }
+            else {
+                return 0;
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }
