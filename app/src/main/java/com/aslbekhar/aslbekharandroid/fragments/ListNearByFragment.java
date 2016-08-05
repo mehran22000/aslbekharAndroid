@@ -548,6 +548,10 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     @Override
     public void onResponse(String response, String tag) {
         if (isAdded() && getActivity() != null) {
+            if (listOverLay.getVisibility() == View.VISIBLE) {
+                showFade(listOverLay, false, 500);
+            }
+            progressBar.stop();
             view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
             offlineCallBack.offlineMode(false);
             modelList.clear();

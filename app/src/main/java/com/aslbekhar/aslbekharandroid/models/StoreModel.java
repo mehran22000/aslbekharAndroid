@@ -417,19 +417,14 @@ public class StoreModel  implements Comparable<StoreModel>{
             return 0;
         }
 
-        try {
-            if (Float.parseFloat(distance ) > Float.parseFloat(distance) ) {
+            if (distance.compareTo(another.distance) > 0 ) {
                 return 1;
             }
-            else if (Float.parseFloat(distance ) < Float.parseFloat(distance) ) {
+            else if (distance.compareTo(another.distance) < 0 ) {
                 return -1;
             }
             else {
                 return 0;
             }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            return 0;
-        }
     }
 }
