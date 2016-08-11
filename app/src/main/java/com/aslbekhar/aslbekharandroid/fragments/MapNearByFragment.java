@@ -492,10 +492,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
 
             locationAccess = false;
-            lastLocation = new Location("reverseGeocoded");
-            CityModel city = CityModel.findCityById(cityCode);
-            lastLocation.setLatitude(Double.parseDouble(CityModel.findCityById(cityCode).getLat()));
-            lastLocation.setLongitude(Double.parseDouble(CityModel.findCityById(cityCode).getLon()));
 
         } else {
             locationAccess = true;
@@ -503,6 +499,16 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
                     .FusedLocationApi
                     .getLastLocation(googleApiClient);
 
+        }
+        if (lastLocation == null) {
+            lastLocation = new Location("");
+            if (getSP(LAST_LAT).equals(FALSE) || getSP(LAST_LONG).equals(FALSE)) {
+                lastLocation.setLatitude(Double.parseDouble(CityModel.findCityById(cityCode).getLat()));
+                lastLocation.setLongitude(Double.parseDouble(CityModel.findCityById(cityCode).getLon()));
+            } else {
+                lastLocation.setLatitude(Double.parseDouble(getSP(LAST_LAT)));
+                lastLocation.setLongitude(Double.parseDouble(getSP(LAST_LONG)));
+            }
         }
         setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
         setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
