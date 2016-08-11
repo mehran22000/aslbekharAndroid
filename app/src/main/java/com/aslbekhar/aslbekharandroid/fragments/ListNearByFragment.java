@@ -430,8 +430,13 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
                         Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             locationAccess = false;
             lastLocation = new Location("");
-            lastLocation.setLatitude(Double.parseDouble(CityModel.findCityById(cityCode).getLat()));
-            lastLocation.setLongitude(Double.parseDouble(CityModel.findCityById(cityCode).getLon()));
+            if (getSP(LAST_LAT).equals(FALSE) || getSP(LAST_LONG).equals(FALSE)) {
+                lastLocation.setLatitude(Double.parseDouble(CityModel.findCityById(cityCode).getLat()));
+                lastLocation.setLongitude(Double.parseDouble(CityModel.findCityById(cityCode).getLon()));
+            } else {
+                lastLocation.setLatitude(Double.parseDouble(getSP(LAST_LAT)));
+                lastLocation.setLongitude(Double.parseDouble(getSP(LAST_LONG)));
+            }
             setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
             setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
             getDealsNearBy();
@@ -443,6 +448,16 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
                 lastLocation = LocationServices
                         .FusedLocationApi
                         .getLastLocation(googleApiClient);
+                if (lastLocation == null) {
+                    lastLocation = new Location("");
+                    if (getSP(LAST_LAT).equals(FALSE) || getSP(LAST_LONG).equals(FALSE)) {
+                        lastLocation.setLatitude(Double.parseDouble(CityModel.findCityById(cityCode).getLat()));
+                        lastLocation.setLongitude(Double.parseDouble(CityModel.findCityById(cityCode).getLon()));
+                    } else {
+                        lastLocation.setLatitude(Double.parseDouble(getSP(LAST_LAT)));
+                        lastLocation.setLongitude(Double.parseDouble(getSP(LAST_LONG)));
+                    }
+                }
                 setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
                 setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
                 getDealsNearBy();

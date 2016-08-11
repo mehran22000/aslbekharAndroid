@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
@@ -72,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     // for keeping record of previous tabs, for clicking on back
     Stack<Integer> tabStack = new Stack<>();
     int currentTab = 0;
+    private boolean exitOnBackPress;
+    Toast toast;
     Dialog dialog;
 
     @Override
@@ -144,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
             public void onPageSelected(int position) {
                 // adding previous tab to stack
                 tabStack.push(currentTab);
-                if (tabStack.size() > 3){
+                if (tabStack.size() > 1){
                     tabStack.remove(0);
                 }
                 currentTab = position;
@@ -168,7 +171,21 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
                     tabStack.pop();
                 }
             } else {
-                super.onBackPressed();
+                if (exitOnBackPress) {
+                    toast.cancel();
+                    finish();
+                }
+                else {
+                    toast = Toast.makeText(this, R.string.confirm_exit, Toast.LENGTH_SHORT);
+                    toast.show();
+                    exitOnBackPress = true;
+                    new android.os.Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            exitOnBackPress = false;
+                        }
+                    }, 2000);
+                }
             }
         }
     }
