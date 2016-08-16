@@ -24,12 +24,14 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.text.TextUtils;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
@@ -180,13 +182,22 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         }
 
-        final Slider slider = (Slider) view.findViewById(R.id.slider);
-        slider.setValue(distance, false);
-        slider.setOnClickListener(new View.OnClickListener() {
+        final AppCompatSeekBar seekBar = (AppCompatSeekBar) view.findViewById(R.id.slider);
+        seekBar.setProgress(distance);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (distance != (int) slider.getExactValue()) {
-                    distance = (int) slider.getExactValue();
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (distance != seekBar.getProgress()) {
+                    distance = seekBar.getProgress();
                     getStoresNearBy(lastLocation);
                 }
             }
@@ -706,6 +717,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
 
     @Override
     public void onResponse(String response, String tag) {
+        progressbar.showProgressBar(false);
 
         if (isAdded() && getActivity() != null) {
             view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
@@ -817,6 +829,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     @Override
     public void onError(VolleyError error, String tag) {
 
+        progressbar.showProgressBar(false);
         view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
         offlineCallBack.offlineMode(false);
         Snackbar.make(view.findViewById(R.id.root), R.string.connection_error, Snackbar.LENGTH_INDEFINITE).show();

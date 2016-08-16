@@ -29,12 +29,14 @@
 
         <com.rey.material.widget.ProgressView
             android:id="@+id/toolbarProgressBar"
+            app:pv_progressStyle="@style/CircularProgressWhite"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/toolbar_title_image"
-            app:pv_autostart="true"
+            app:pv_autostart="false"
             app:pv_circular="true"
+            app:pv_progressMode="indeterminate"
             android:visibility="visible"/>
 
         <ImageView

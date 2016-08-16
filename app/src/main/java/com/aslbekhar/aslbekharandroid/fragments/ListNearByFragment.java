@@ -12,12 +12,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
@@ -39,7 +41,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.rey.material.widget.ProgressView;
-import com.rey.material.widget.Slider;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -72,12 +73,12 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OR_SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OR_SINGLE_STORE;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.NORMAL_OR_DEAL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
@@ -203,15 +204,22 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
                 callBack.openNewContentFragment(fragment);
             }
         });
-
-
-        final Slider slider = (Slider) view.findViewById(R.id.slider);
-        slider.setValue(distance, false);
-        slider.setOnClickListener(new View.OnClickListener() {
+        final AppCompatSeekBar seekBar = (AppCompatSeekBar) view.findViewById(R.id.slider);
+        seekBar.setProgress(distance);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onClick(View v) {
-                if (distance != (int) slider.getExactValue()) {
-                    distance = (int) slider.getExactValue();
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (distance != seekBar.getProgress()) {
+                    distance = seekBar.getProgress();
                     getDealsNearBy();
                 }
             }

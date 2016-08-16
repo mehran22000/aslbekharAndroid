@@ -26,7 +26,7 @@
 
     <style name="CircularProgressWhite" parent="Material.Drawable.CircularProgress">
         <item name="cpd_strokeColor">@color/white</item>
-        <item name="cpd_strokeSize">2dp</item>
+        <item name="cpd_strokeSize">1dp</item>
     </style>
 
     <style name="CircularProgressTheme" parent="Material.Drawable.CircularProgress">
