@@ -16,7 +16,6 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.GET_TASKS" />
 
-
     <application
         android:name=".utilities.AppController"
         android:allowBackup="true"
@@ -26,12 +25,10 @@
         android:theme="@style/MyMaterialTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activities.NotificationFullScreenActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activities.SplashScreen"
             android:screenOrientation="portrait"
@@ -43,23 +40,22 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".services.GcmInstanceIDListenerService">
+        <service android:name=".services.GcmInstanceIDListenerService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-
-        <service
-            android:name=".services.GcmListenerServce">
+        <service android:name=".services.GcmListenerServce">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDeIgRNJEp_ZWihm6afIVN9g1BrosFUVmE" />
+
+        <activity android:name=".activities.RegisterActivity"></activity>
     </application>
 
 </manifest>
