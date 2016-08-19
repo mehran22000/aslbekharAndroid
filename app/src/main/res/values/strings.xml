@@ -62,5 +62,7 @@
     <string name="confirm_exit">برای خروج بازگشت را دوباره لمس کنید</string>
     <string name="next">بعدی</string>
     <string name="username">نام کاربری</string>
+    <string name="choose_city">انتخاب شهر</string>
+    <string name="choose_brand">انتخاب برند</string>
 
 </resources>
