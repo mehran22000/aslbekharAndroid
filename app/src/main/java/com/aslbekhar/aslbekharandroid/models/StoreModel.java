@@ -22,7 +22,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 /**
  * Created by Amin on 19/05/2016.
  */
-public class StoreModel  implements Comparable<StoreModel>{
+public class StoreModel implements Comparable<StoreModel> {
 
     String _id;
     String bId;
@@ -413,18 +413,16 @@ public class StoreModel  implements Comparable<StoreModel>{
 
     @Override
     public int compareTo(StoreModel another) {
-        if (distance == null || distance.length() == 0 || another.distance == null || another.distance.length() == 0){
+        if (distance == null || distance.length() == 0 || another.distance == null || another.distance.length() == 0) {
             return 0;
         }
 
-            if (distance.compareTo(another.distance) > 0 ) {
-                return 1;
-            }
-            else if (distance.compareTo(another.distance) < 0 ) {
-                return -1;
-            }
-            else {
-                return 0;
-            }
+        if (distance.compareTo(another.distance) > 0) {
+            return 1;
+        } else if (distance.compareTo(another.distance) < 0) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }
