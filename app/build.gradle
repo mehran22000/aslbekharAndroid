@@ -65,6 +65,8 @@ dependencies {
     // Glide for image loading
     compile 'com.github.bumptech.glide:glide:3.7.0'
 
+    // View Animator
+    compile 'com.github.florent37:viewanimator:1.0.4'
 
     // Google Maps
     compile 'com.google.android.gms:play-services-maps:9.0.0'

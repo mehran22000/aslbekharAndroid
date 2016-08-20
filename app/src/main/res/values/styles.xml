@@ -45,4 +45,11 @@
         <item name="di_layoutDirection">rtl</item>
     </style>
 
+
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
+        <item name="android:background">@color/shoppingCartDialogBackground</item>
+    </style>
+
 </resources>

@@ -201,6 +201,7 @@ public class Constants {
     public static int NOTIFICATION_CHECK_INTERVAL = 30 * 60 * 1000;
     public static final int VOLLEY_TIME_OUT = 25000;
     public static int COUNT = 7;
+    public static int TRANSITION_DURATION = 400;
 
 
     public static final int NOTIFICATION_ID = 900;
