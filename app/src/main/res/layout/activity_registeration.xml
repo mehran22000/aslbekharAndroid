@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/silver_light"
+    android:background="@color/silver_light_2"
     android:orientation="vertical">
 
     <include
@@ -18,8 +19,8 @@
         android:layout_above="@+id/bottomLay"
         android:layout_below="@+id/toolbar"
         android:layout_margin="10dp"
-        card_view:cardCornerRadius="8dp"
-        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="2dp"
         card_view:cardUseCompatPadding="true"
         android:alpha="0">
 
@@ -58,10 +59,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/colorPrimary"
-                    android:foreground="?android:attr/selectableItemBackground"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <AutoCompleteTextView
+                    <EditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -69,7 +69,8 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:nextFocusForward="@+id/password"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="14dp"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -78,7 +79,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColorHint="@color/colorPrimary"
-                    android:foreground="?android:attr/selectableItemBackground"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
                     <EditText
@@ -86,12 +86,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_password"
-                        android:imeActionId="@+id/login"
-                        android:imeActionLabel="@string/action_sign_in_short"
-                        android:imeOptions="actionUnspecified"
                         android:inputType="textPassword"
                         android:maxLines="1"
-                        android:textColor="@color/colorPrimaryDark" />
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="14dp" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -109,8 +107,8 @@
         android:layout_above="@+id/bottomLay"
         android:layout_below="@+id/toolbar"
         android:layout_margin="10dp"
-        card_view:cardCornerRadius="8dp"
-        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="2dp"
         card_view:cardUseCompatPadding="true"
         android:alpha="0">
 
@@ -137,7 +135,7 @@
                 android:layout_below="@+id/cityLayTitle"/>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/cityLayForm"
+                android:id="@+id/cityRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/cityLayTitle"
@@ -155,8 +153,8 @@
         android:layout_above="@+id/bottomLay"
         android:layout_below="@+id/toolbar"
         android:layout_margin="10dp"
-        card_view:cardCornerRadius="8dp"
-        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="2dp"
         card_view:cardUseCompatPadding="true"
         android:alpha="0">
 
@@ -218,10 +216,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:background="@color/white"
             android:foreground="?android:attr/selectableItemBackground"
             android:text="@string/next"
-            android:textColor="@color/white" />
+            android:textColor="@color/gray" />
 
     </LinearLayout>
 

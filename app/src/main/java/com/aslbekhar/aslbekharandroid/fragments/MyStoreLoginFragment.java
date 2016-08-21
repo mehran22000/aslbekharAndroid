@@ -2,6 +2,7 @@ package com.aslbekhar.aslbekharandroid.fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.activities.RegisterActivity;
 import com.aslbekhar.aslbekharandroid.models.UserModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
@@ -71,6 +73,14 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
                         (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 login();
+            }
+        });
+
+        view.findViewById(R.id.signUpBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                startActivity(intent);
             }
         });
 

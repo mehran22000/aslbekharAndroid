@@ -25,12 +25,21 @@ public class UserModel extends ResponseModel{
     String buAreaCode;
     String buTel;
     String buBrandLogoName;
-    String dStartDate;
-    String dEndDate;
-    String dStartDateFa;
-    String dEndDateFa;
-    int dPrecentage;
-    String dNote;
+//    String dStartDate;
+//    String dEndDate;
+//    String dStartDateFa;
+//    String dEndDateFa;
+//    int dPrecentage;
+//    String dNote;
+
+
+    public UserModel() {
+    }
+
+    public UserModel(String buEmail, String buPassword) {
+        this.buEmail = buEmail;
+        this.buPassword = buPassword;
+    }
 
     public String getBuId() {
         return buId;
@@ -174,54 +183,6 @@ public class UserModel extends ResponseModel{
 
     public void setBuBrandLogoName(String buBrandLogoName) {
         this.buBrandLogoName = buBrandLogoName;
-    }
-
-    public String getdStartDate() {
-        return dStartDate;
-    }
-
-    public void setdStartDate(String dStartDate) {
-        this.dStartDate = dStartDate;
-    }
-
-    public String getdEndDate() {
-        return dEndDate;
-    }
-
-    public void setdEndDate(String dEndDate) {
-        this.dEndDate = dEndDate;
-    }
-
-    public String getdStartDateFa() {
-        return dStartDateFa;
-    }
-
-    public void setdStartDateFa(String dStartDateFa) {
-        this.dStartDateFa = dStartDateFa;
-    }
-
-    public String getdEndDateFa() {
-        return dEndDateFa;
-    }
-
-    public void setdEndDateFa(String dEndDateFa) {
-        this.dEndDateFa = dEndDateFa;
-    }
-
-    public int getdPrecentage() {
-        return dPrecentage;
-    }
-
-    public void setdPrecentage(int dPrecentage) {
-        this.dPrecentage = dPrecentage;
-    }
-
-    public String getdNote() {
-        return dNote;
-    }
-
-    public void setdNote(String dNote) {
-        this.dNote = dNote;
     }
 
 }

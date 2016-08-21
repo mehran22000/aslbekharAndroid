@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.activities.RegisterActivity;
 import com.aslbekhar.aslbekharandroid.fragments.CitiesFragment;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
@@ -31,12 +32,20 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
     List<CityModel> modelList;
     Context context;
     private Fragment fragment;
+    private RegisterActivity activity;
+    View selectedItem;
 
     public CityListAdapter(List<CityModel> modelList,
                            Context context, Fragment fragment) {
         this.modelList = modelList;
         this.context = context;
         this.fragment = fragment;
+    }
+
+    public CityListAdapter(List<CityModel> modelList, Context context, RegisterActivity activity) {
+        this.modelList = modelList;
+        this.context = context;
+        this.activity = activity;
     }
 
     @Override
@@ -52,7 +61,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
     }
 
     @Override
-    public void onBindViewHolder(GroupViewHolder holder, int position) {
+    public void onBindViewHolder(final GroupViewHolder holder, int position) {
         final CityModel model = modelList.get(position);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/theme.ttf");
         holder.title.setText(model.getPersianName());
@@ -87,7 +96,12 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
         }
 
 
-        Display display = fragment.getActivity().getWindowManager().getDefaultDisplay();
+        Display display;
+        if (fragment != null) {
+            display = fragment.getActivity().getWindowManager().getDefaultDisplay();
+        } else {
+            display = activity.getWindowManager().getDefaultDisplay();
+        }
         Point size = new Point();
         display.getSize(size);
         int width = (size.x / 3) - Snippets.dpToPixels(context, 11);
@@ -96,10 +110,21 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
                 .resize(width, 0)
                 .into(holder.image);
 
+        holder.selectedIcon.setVisibility(View.GONE);
+
         holder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((CitiesFragment) fragment).openCatFromAdapter(model);
+                if (fragment != null) {
+                    ((CitiesFragment) fragment).openCatFromAdapter(model);
+                } else {
+                    if (selectedItem != null){
+                        selectedItem.setVisibility(View.GONE);
+                    }
+                    selectedItem = holder.selectedIcon;
+                    selectedItem.setVisibility(View.VISIBLE);
+                    activity.onCityClicked(model);
+                }
             }
         });
 
@@ -110,12 +135,14 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
         View cv;
         TextView title;
         ImageView image;
+        ImageView selectedIcon;
 
         GroupViewHolder(View itemView) {
             super(itemView);
             cv = itemView.findViewById(R.id.itemCV);
             title = (TextView) itemView.findViewById(R.id.title);
             image = (ImageView) itemView.findViewById(R.id.image);
+            selectedIcon = (ImageView) itemView.findViewById(R.id.selectedIcon);
         }
     }
 
