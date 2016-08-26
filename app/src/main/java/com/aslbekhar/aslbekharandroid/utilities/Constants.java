@@ -56,11 +56,13 @@ public class Constants {
     public static String UPDATE_USER_URL =
             WEB_SERVER + "services/v1/dev/users/business/updateuser";
 
+    // WS16
+    public static String REGISTER_USER =
+            WEB_SERVER + "services/v1/dev/users/business/adduser";
+
     // WS17
     public static String CHECK_VERSION =
             WEB_SERVER + "services/v1/dev/appInfo/version/android";
-
-
 
     // D2
     public static String BRAND_LOGO_URL = WEB_SERVER + "images/logos/";
@@ -97,6 +99,8 @@ public class Constants {
     public static String LAST_LONG = "LAST_LONG";
     public static String IS_LOGGED_IN = "IS_LOGGED_IN";
     public static String USER_INFO = "USER_INFO";
+    public static String EMAIL = "EMAIL";
+    public static String PASSWORD = "PASSWORD";
     public static String CITY_LIST = "CITY_LIST";
     public static String STORE_LIST = "STORE_LIST";
     public static String CAT_LIST = "CAT_LIST";
@@ -114,6 +118,7 @@ public class Constants {
     public static String DATA_PROCESSED_OR_NOT = "DATA_PROCESSED_OR_NOT";
     public static String LAST_CITY_CODE = "LAST_CITY_CODE";
     public static String LAST_CITY_ENGLISH_NAME = "LAST_CITY_ENGLISH_NAME";
+    public static String RESULT = "RESULT";
 
     // ADVERTISEMENT TYPES:
     public static String ADVERTISE_MAIN = "MAIN";

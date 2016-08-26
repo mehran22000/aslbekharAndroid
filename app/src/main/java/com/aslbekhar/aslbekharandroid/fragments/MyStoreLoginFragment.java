@@ -1,5 +1,6 @@
 package com.aslbekhar.aslbekharandroid.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,8 +37,11 @@ import com.rey.material.widget.ProgressView;
 
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.EMAIL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.IS_LOGGED_IN;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGIN_URL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.PASSWORD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.USER_INFO;
 
@@ -81,7 +85,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RegisterActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 100);
             }
         });
 
@@ -96,6 +100,18 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
 
 
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK){
+            ((TextView) view.findViewById(R.id.email)).setText(data.getExtras().getString(EMAIL, FALSE));
+            ((TextView) view.findViewById(R.id.password)).setText(data.getExtras().getString(PASSWORD, FALSE));
+            InputMethodManager imm =
+                    (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            login();
+        }
     }
 
     private void login() {

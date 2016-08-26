@@ -16,6 +16,7 @@ import com.aslbekhar.aslbekharandroid.activities.RegisterActivity;
 import com.aslbekhar.aslbekharandroid.fragments.BrandListFragment;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
+import com.github.florent37.viewanimator.ViewAnimator;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -75,7 +76,7 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
 
         if (selectedModel != null && selectedModel.get_id().equals(model.get_id())){
             selectedItem = holder.selectedIcon;
-            selectedItemBackground = holder.cv;
+            selectedItemBackground = holder.background;
             selectedItemBackground.setBackgroundColor(activity.getResources().getColor(R.color.colorAccent));
             selectedItem.setVisibility(View.VISIBLE);
         } else {
@@ -108,12 +109,18 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
                 } else {
                     if (selectedItem != null){
                         selectedItem.setVisibility(View.GONE);
-                        selectedItemBackground.setBackgroundColor(activity.getResources().getColor(R.color.white));
+                        ViewAnimator.animate(selectedItemBackground)
+                                .backgroundColor(activity.getResources().getColor(R.color.colorAccent),
+                                        activity.getResources().getColor(R.color.white))
+                                .duration(400).start();
                     }
                     selectedItem = holder.selectedIcon;
-                    selectedItemBackground = holder.cv;
+                    selectedItemBackground = holder.background;
                     selectedModel = model;
-                    selectedItemBackground.setBackgroundColor(activity.getResources().getColor(R.color.colorAccent));
+                    ViewAnimator.animate(selectedItemBackground)
+                            .backgroundColor(activity.getResources().getColor(R.color.white),
+                                    activity.getResources().getColor(R.color.colorAccent))
+                            .duration(400).start();
                     selectedItem.setVisibility(View.VISIBLE);
                     activity.onBrandClicked(model);
                 }
