@@ -643,22 +643,6 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             mMap.setMyLocationEnabled(true);
         }
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                if (type == Constants.SINGLE_STORE) {
-                    checkForAdvertisement(model);
-                } else {
-                    for (StoreModel storeModel : storeModelList) {
-                        if (storeModel.get_id().equals(marker.getSnippet())) {
-                            checkForAdvertisement(storeModel);
-                            break;
-                        }
-                    }
-                }
-                return true;
-            }
-        });
     }
 
     private void getPermission() {

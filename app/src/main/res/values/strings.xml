@@ -65,5 +65,14 @@
     <string name="choose_city">انتخاب شهر</string>
     <string name="choose_brand">انتخاب برند</string>
     <string name="incorrectEmail">لطفا ایمل را درست وارد کنید</string>
+    <string name="store_name">نام فروشگاه</string>
+    <string name="store_address">آدرس فروشگاه:</string>
+    <string name="work_hour">ساعت کار (مثال 22-12)</string>
+    <string name="distributor">پخش کننده (اختیاری)</string>
+    <string name="store_details">اطلاعات فروشگاه</string>
+    <string name="store_location">مکان یابی فروشکاه</string>
+    <string name="store_name_validation">نام فروشگاه حداقل بایذ سه حرف باشد.</string>
+    <string name="store_address_validation">آدرس فروشگاه باید حداقل 10 حرف باشد</string>
+    <string name="store_work_hour_validation">ساعات کاری  را درست وارد کنید</string>
 
 </resources>

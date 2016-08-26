@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +84,15 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
                 startActivity(intent);
             }
         });
+
+
+        Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/theme.ttf");
+        ((EditText) view.findViewById(R.id.password)).setTypeface(tf);
+        ((EditText) view.findViewById(R.id.email)).setTypeface(tf);
+        ((TextInputLayout) view.findViewById(R.id.emailInputLay)).setTypeface(tf);
+        ((TextInputLayout) view.findViewById(R.id.passwordInputLay)).setTypeface(tf);
+
+        Snippets.setFontForActivity(view.findViewById(R.id.root), tf);
 
 
         return view;
@@ -193,7 +203,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
     @Override
     public void onError(VolleyError error, String tag) {
         ((ProgressView) view.findViewById(R.id.signInBtnProgress)).stop();
-        Snackbar snackbar = Snackbar.make(view.findViewById(R.id.rootLayout),
+        Snackbar snackbar = Snackbar.make(view.findViewById(R.id.root),
                 getString(R.string.connection_error), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(R.string.try_again), new View.OnClickListener() {
                     @Override
@@ -207,7 +217,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
     @Override
     public void onOffline(String tag) {
         ((ProgressView) view.findViewById(R.id.signInBtnProgress)).stop();
-        Snackbar snackbar = Snackbar.make(view.findViewById(R.id.rootLayout),
+        Snackbar snackbar = Snackbar.make(view.findViewById(R.id.root),
                 getString(R.string.you_are_offline), Snackbar.LENGTH_INDEFINITE)
                 .setAction(getString(R.string.try_again), new View.OnClickListener() {
                     @Override

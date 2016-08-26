@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.activities.RegisterActivity;
 import com.aslbekhar.aslbekharandroid.fragments.BrandListFragment;
 import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
@@ -31,11 +32,21 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
     List<BrandModel> modelList;
     Context context;
     private Fragment fragment;
+    private RegisterActivity activity;
+    View selectedItem;
+    View selectedItemBackground;
+    BrandModel selectedModel;
 
     public BrandListAdapter(List<BrandModel> modelList, Context context, Fragment fragment) {
         this.modelList = modelList;
         this.context = context;
         this.fragment = fragment;
+    }
+
+    public BrandListAdapter(List<BrandModel> modelList, Context context, RegisterActivity activity) {
+        this.modelList = modelList;
+        this.context = context;
+        this.activity = activity;
     }
 
     @Override
@@ -58,6 +69,20 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
         holder.title.setText(model.getbName());
         holder.title.setTypeface(tf);
 
+        if (activity != null){
+            holder.root.setBackgroundColor(activity.getResources().getColor(R.color.white));
+        }
+
+        if (selectedModel != null && selectedModel.get_id().equals(model.get_id())){
+            selectedItem = holder.selectedIcon;
+            selectedItemBackground = holder.cv;
+            selectedItemBackground.setBackgroundColor(activity.getResources().getColor(R.color.colorAccent));
+            selectedItem.setVisibility(View.VISIBLE);
+        } else {
+            holder.selectedIcon.setVisibility(View.GONE);
+            holder.background.setBackgroundColor(activity.getResources().getColor(R.color.white));
+        }
+
         Picasso.with(context)
                 .load(Uri.parse("file:///android_asset/logos/" + model.getbLogo() + ".png"))
                 .into(holder.image, new Callback() {
@@ -78,7 +103,20 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
         holder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((BrandListFragment) fragment).openStoreListFromAdapter(model);
+                if (fragment != null) {
+                    ((BrandListFragment) fragment).openStoreListFromAdapter(model);
+                } else {
+                    if (selectedItem != null){
+                        selectedItem.setVisibility(View.GONE);
+                        selectedItemBackground.setBackgroundColor(activity.getResources().getColor(R.color.white));
+                    }
+                    selectedItem = holder.selectedIcon;
+                    selectedItemBackground = holder.cv;
+                    selectedModel = model;
+                    selectedItemBackground.setBackgroundColor(activity.getResources().getColor(R.color.colorAccent));
+                    selectedItem.setVisibility(View.VISIBLE);
+                    activity.onBrandClicked(model);
+                }
             }
         });
 
@@ -88,10 +126,16 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
         View cv;
         TextView title;
         ImageView image;
+        View root;
+        View selectedIcon;
+        View background;
 
         GroupViewHolder(View itemView) {
             super(itemView);
             cv = itemView.findViewById(R.id.itemCV);
+            root = itemView.findViewById(R.id.root);
+            selectedIcon = itemView.findViewById(R.id.selectedIcon);
+            background = itemView.findViewById(R.id.background);
             title = (TextView) itemView.findViewById(R.id.title);
             image = (ImageView) itemView.findViewById(R.id.image);
         }

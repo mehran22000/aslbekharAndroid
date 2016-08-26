@@ -101,6 +101,137 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
+        android:id="@+id/storeLay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomLay"
+        android:layout_below="@+id/toolbar"
+        android:layout_margin="10dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="2dp"
+        card_view:cardUseCompatPadding="true"
+        android:alpha="0">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_register_activity">
+
+            <TextView
+                android:id="@+id/storeLayTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/store_details"
+                android:gravity="center"
+                android:padding="15dp"
+                android:tag="bold"
+                android:textSize="@dimen/item_title_ts_larger"
+                android:textColor="@color/black"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"
+                android:layout_below="@+id/storeLayTitle"/>
+
+            <ScrollView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_below="@id/storeLayTitle">
+
+                <LinearLayout
+                    android:id="@+id/storeLoginForm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/storeNameInputLay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/colorPrimary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <EditText
+                            android:id="@+id/storeName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/store_name"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:nextFocusForward="@+id/password"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="14dp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/storeAddressInputLay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/colorPrimary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <EditText
+                            android:id="@+id/storeAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/store_address"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="14dp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/storeWorkHourInputLay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/colorPrimary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <EditText
+                            android:id="@+id/storeWorkHour"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/work_hour"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="14dp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/storeDistributorInputLay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/colorPrimary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <EditText
+                            android:id="@+id/storeDistributor"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/distributor"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="14dp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+            </ScrollView>
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
         android:id="@+id/cityLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -181,12 +312,57 @@
                 android:layout_below="@+id/brandLayTitle"/>
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/brandLayForm"
+                android:id="@+id/brandRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/brandLayTitle"
-                android:padding="10dp"
+                android:layout_marginTop="1dp"
                 android:visibility="visible" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/locationLay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomLay"
+        android:layout_below="@+id/toolbar"
+        android:layout_margin="10dp"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="2dp"
+        card_view:cardUseCompatPadding="true"
+        android:alpha="0">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_register_activity">
+
+            <TextView
+                android:id="@+id/locationLayTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/store_location"
+                android:gravity="center"
+                android:padding="15dp"
+                android:tag="bold"
+                android:textSize="@dimen/item_title_ts_larger"
+                android:textColor="@color/black"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"
+                android:layout_below="@+id/locationLayTitle"/>
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/locationLayTitle"
+                android:layout_marginTop="1dp"/>
 
         </RelativeLayout>
 

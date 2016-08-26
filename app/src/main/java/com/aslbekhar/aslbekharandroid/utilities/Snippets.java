@@ -10,6 +10,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.support.v7.widget.AppCompatButton;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
@@ -25,7 +27,9 @@ import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.*;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SP_FILE_NAME_BASE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
 
 /**
  * Created by Amin on 3/29/2015.
@@ -330,11 +334,9 @@ and save it to the base location of app, with a folder name taken from string.xm
         return size.x;
     }
 
-
-
     public static void setFontForActivity(View view, Typeface tf) {
         //Set up touch listener for non-text box views to hide keyboard.
-        if (view instanceof TextView) {
+        if (view instanceof TextView || view instanceof Button || view instanceof AppCompatButton) {
             ((TextView) view).setTypeface(tf);
         } else {
             //If a layout container, iterate over children and seed recursion.

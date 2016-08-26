@@ -1,10 +1,17 @@
 package com.aslbekhar.aslbekharandroid.activities;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -18,32 +25,75 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.adapters.BrandListAdapter;
 import com.aslbekhar.aslbekharandroid.adapters.CityListAdapter;
+import com.aslbekhar.aslbekharandroid.models.BrandModel;
 import com.aslbekhar.aslbekharandroid.models.CityModel;
 import com.aslbekhar.aslbekharandroid.models.UserModel;
+import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.GPS_ON_OR_OFF;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRANSITION_DURATION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSPboolean;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
+import static com.aslbekhar.aslbekharandroid.utilities.StaticData.getBrandModelList;
 import static com.aslbekhar.aslbekharandroid.utilities.StaticData.getCityModelList;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity  implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        GoogleMap.OnMapLongClickListener,
+        GoogleMap.OnMapClickListener,
+        OnMapReadyCallback,
+        LocationListener,
+        Interfaces.NetworkListeners {
 
     View emailLay;
     View cityLay;
     View brandLay;
+    View storeLay;
+    View locationLay;
     View nextBtn;
     boolean nextBtnEnable = false;
     int width;
     int statusStep = 1;
     UserModel registerUserModel;
-    CityListAdapter adapter;
-    List<CityModel> modelList = getCityModelList();
+    CityListAdapter cityListAdapter;
+    BrandListAdapter brandListAdapter;
+    List<CityModel> cityModelList = getCityModelList();
+    List<BrandModel> brandModelList = getBrandModelList();
+    GoogleApiClient googleApiClient;
+    GoogleMap mMap;
+    MapView mMapView;
+    private boolean gpsAvailableOrNot = false;
+    private Location lastLocation;
+    boolean locationAccess = false;
+    boolean cameraAnimatedBefore = false;
+    CameraPosition cameraPosition;
+    String cityCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +103,8 @@ public class RegisterActivity extends AppCompatActivity {
         emailLay = findViewById(R.id.emailLay);
         cityLay = findViewById(R.id.cityLay);
         brandLay = findViewById(R.id.brandLay);
+        storeLay = findViewById(R.id.storeLay);
+        locationLay = findViewById(R.id.locationLay);
 
         nextBtn = findViewById(R.id.next);
         nextBtn.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +124,27 @@ public class RegisterActivity extends AppCompatActivity {
         display.getSize(size);
         width = size.x;
 
+        initEditTexts();
+
+        cityCode = getSP(LAST_CITY_CODE);
+        if (cityCode.equals(FALSE)) {
+            cityCode = "021";
+        }
+        gpsAvailableOrNot = getSPboolean(GPS_ON_OR_OFF);
+
+        mMapView = (MapView) findViewById(R.id.mapView);
+        mMapView.onCreate(savedInstanceState);
+        mMap = mMapView.getMap();
+
+
+        emailLay.setAlpha(1);
+        cityLay.setAlpha(0);
+        brandLay.setAlpha(0);
+        storeLay.setAlpha(0);
+        emailLay.bringToFront();
+    }
+
+    private void initEditTexts() {
         ((EditText) findViewById(R.id.email)).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -80,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 5 && ((TextView) findViewById(R.id.password)).getText().length() >5 && !nextBtnEnable){
+                if (s.length() > 5 && ((TextView) findViewById(R.id.password)).getText().length() > 5 && !nextBtnEnable) {
                     enableNextBtn(true);
                 } else {
                     if (nextBtnEnable) {
@@ -103,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 5 && ((TextView) findViewById(R.id.email)).getText().length() >5 && !nextBtnEnable){
+                if (s.length() > 5 && ((TextView) findViewById(R.id.email)).getText().length() > 5 && !nextBtnEnable) {
                     enableNextBtn(true);
                 } else {
                     if (nextBtnEnable) {
@@ -118,45 +191,169 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        ((EditText) findViewById(R.id.storeName)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        emailLay.setAlpha(1);
-        cityLay.setAlpha(0);
-        brandLay.setAlpha(0);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (validateStoreDetail().equals(TRUE)) {
+                    enableNextBtn(true);
+                } else {
+                    enableNextBtn(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        ((EditText) findViewById(R.id.storeWorkHour)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (validateStoreDetail().equals(TRUE)) {
+                    enableNextBtn(true);
+                } else {
+                    enableNextBtn(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        ((EditText) findViewById(R.id.storeAddress)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (validateStoreDetail().equals(TRUE)) {
+                    enableNextBtn(true);
+                } else {
+                    enableNextBtn(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/theme.ttf");
         ((EditText) findViewById(R.id.password)).setTypeface(tf);
         ((EditText) findViewById(R.id.email)).setTypeface(tf);
+        ((EditText) findViewById(R.id.storeName)).setTypeface(tf);
+        ((EditText) findViewById(R.id.storeAddress)).setTypeface(tf);
+        ((EditText) findViewById(R.id.storeWorkHour)).setTypeface(tf);
+        ((EditText) findViewById(R.id.storeDistributor)).setTypeface(tf);
         ((TextInputLayout) findViewById(R.id.emailInputLay)).setTypeface(tf);
         ((TextInputLayout) findViewById(R.id.passwordInputLay)).setTypeface(tf);
+        ((TextInputLayout) findViewById(R.id.storeNameInputLay)).setTypeface(tf);
+        ((TextInputLayout) findViewById(R.id.storeAddressInputLay)).setTypeface(tf);
+        ((TextInputLayout) findViewById(R.id.storeWorkHourInputLay)).setTypeface(tf);
+        ((TextInputLayout) findViewById(R.id.storeDistributorInputLay)).setTypeface(tf);
 
         Snippets.setFontForActivity(findViewById(R.id.root), tf);
+    }
+
+    private String validateStoreDetail() {
+        if (((TextView) findViewById(R.id.storeName)).getText().length() < 4){
+            return getString(R.string.store_name_validation);
+        } else if(((TextView) findViewById(R.id.storeAddress)).getText().length() < 10){
+            return getString(R.string.store_address_validation);
+        } else if(((TextView) findViewById(R.id.storeWorkHour)).getText().length() < 3){
+            return getString(R.string.store_work_hour_validation);
+        }
+        return TRUE;
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (googleApiClient != null) {
+            googleApiClient.connect();
+        }
+    }
+
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mMapView.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mMapView.onPause();
     }
 
     private void enableNextBtn(boolean enable) {
 
         if (enable) {
-            nextBtnEnable = true;
-            ViewAnimator.animate(nextBtn)
-                    .backgroundColor(getResources().getColor(R.color.colorPrimary))
-                    .textColor(getResources().getColor(R.color.white))
-                    .duration(200)
-                    .start();
+            if (!nextBtnEnable) {
+                nextBtnEnable = true;
+                ViewAnimator.animate(nextBtn)
+                        .backgroundColor(getResources().getColor(R.color.colorPrimary))
+                        .textColor(getResources().getColor(R.color.white))
+                        .duration(200)
+                        .start();
+            }
         } else {
-            nextBtnEnable = false;
-            ViewAnimator.animate(nextBtn)
-                    .backgroundColor(getResources().getColor(R.color.white))
-                    .textColor(getResources().getColor(R.color.gray))
-                    .duration(200)
-                    .start();
+            if (nextBtnEnable) {
+                nextBtnEnable = false;
+                ViewAnimator.animate(nextBtn)
+                        .backgroundColor(getResources().getColor(R.color.white))
+                        .textColor(getResources().getColor(R.color.gray))
+                        .duration(200)
+                        .start();
+            }
         }
     }
 
     private void nextButton() {
 
-        if (!nextBtnEnable){
+        if (!nextBtnEnable) {
             return;
         }
-        switch (statusStep){
+        switch (statusStep) {
 
             case 1:
                 hideEmailShowCity(true);
@@ -164,16 +361,25 @@ public class RegisterActivity extends AppCompatActivity {
 
 
             case 2:
-                hideCityShowBrand();
+                hideCityShowBrand(true);
+                break;
+
+            case 3:
+                hideBrandShowStore(true);
+                break;
+
+            case 4:
+                hideStoreShowLocation(true);
                 break;
 
         }
     }
 
+
     @Override
     public void onBackPressed() {
 
-        switch (statusStep){
+        switch (statusStep) {
             case 1:
                 super.onBackPressed();
                 break;
@@ -181,14 +387,26 @@ public class RegisterActivity extends AppCompatActivity {
             case 2:
                 hideEmailShowCity(false);
                 break;
+
+            case 3:
+                hideCityShowBrand(false);
+                break;
+
+            case 4:
+                hideBrandShowStore(false);
+                break;
+
+            case 5:
+                hideStoreShowLocation(false);
+                break;
         }
     }
 
-    private void hideEmailShowCity(boolean shohOrHide) {
+    private void hideEmailShowCity(boolean showOrHide) {
         InputMethodManager imm =
                 (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(emailLay.getWindowToken(), 0);
-        if (shohOrHide) {
+        if (showOrHide) {
             if (validateEmail().equals(TRUE)) {
                 populateCityList();
                 formNext(emailLay, cityLay);
@@ -212,17 +430,52 @@ public class RegisterActivity extends AppCompatActivity {
         // setting the layout manager of recyclerView
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new CityListAdapter(modelList, this, this);
-        recyclerView.setAdapter(adapter);
+        cityListAdapter = new CityListAdapter(cityModelList, this, this);
+        recyclerView.setAdapter(cityListAdapter);
     }
 
-    private void hideCityShowBrand() {
-        if (validateEmail().equals(TRUE)) {
-            formNext(emailLay, cityLay);
+    private void populateBrandList() {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.brandRecyclerView);
+
+        recyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        // setting the layout manager of recyclerView
+        recyclerView.setLayoutManager(layoutManager);
+
+        brandListAdapter = new BrandListAdapter(brandModelList, this, this);
+        recyclerView.setAdapter(brandListAdapter);
+    }
+
+    private void hideCityShowBrand(boolean showOrHide) {
+        if (showOrHide) {
+            populateBrandList();
+            formNext(cityLay, brandLay);
             enableNextBtn(false);
-            statusStep = 2;
+            statusStep = 3;
         } else {
-            showError(validateEmail());
+            formBack(brandLay, cityLay, 2);
+        }
+    }
+
+    private void hideBrandShowStore(boolean showOrHide) {
+        if (showOrHide) {
+            formNext(brandLay, storeLay);
+            enableNextBtn(false);
+            statusStep = 4;
+        } else {
+            formBack(storeLay, brandLay, 3);
+        }
+    }
+
+    private void hideStoreShowLocation(boolean showOrHide) {
+        if (showOrHide) {
+            formNext(storeLay, locationLay);
+            enableNextBtn(false);
+            statusStep = 5;
+        } else {
+            formBack(locationLay, storeLay, 3);
         }
     }
 
@@ -249,31 +502,32 @@ public class RegisterActivity extends AppCompatActivity {
         return TRUE;
     }
 
-    private void formNext(View hideView, View showView){
+    private void formNext(View hideView, View showView) {
 
-            ViewAnimator.animate(hideView)
-                    .translationX(0, + width)
-                    .scaleY(1f, 0.8f)
-                    .duration(TRANSITION_DURATION)
-                    .alpha(1,0)
-                    .andAnimate(showView)
-                    .translationX(-width, 0)
-                    .alpha(0,1)
-                    .start();
+        ViewAnimator.animate(hideView)
+                .translationX(0, +width)
+                .scaleY(1f, 0.6f)
+                .duration(TRANSITION_DURATION)
+                .alpha(1, 0)
+                .andAnimate(showView)
+                .translationX(-width, 0)
+                .alpha(0, 1)
+                .start();
+        showView.bringToFront();
 
     }
 
-    private void formBack(View hideView, View showView, final int nextStatus){
+    private void formBack(View hideView, View showView, final int nextStatus) {
 
         ViewAnimator.animate(hideView)
-                .translationX(0, - width)
+                .translationX(0, -width)
                 .duration(TRANSITION_DURATION)
-                .alpha(1,0)
+                .alpha(1, 0)
                 .andAnimate(showView)
                 .translationX(+width, 0)
-                .scaleY(0.8f, 1f)
+                .scaleY(0.6f, 1f)
                 .duration(TRANSITION_DURATION)
-                .alpha(0,1)
+                .alpha(0, 1)
                 .onStop(new AnimationListener.Stop() {
                     @Override
                     public void onStop() {
@@ -282,11 +536,151 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 })
                 .start();
+        showView.bringToFront();
 
     }
 
     public void onCityClicked(CityModel cityModel) {
         registerUserModel.setBuAreaCode(cityModel.getId());
         enableNextBtn(true);
+    }
+
+    public void onBrandClicked(BrandModel model) {
+        registerUserModel.setBuBrandId(model.getbId());
+        registerUserModel.setBuBrandName(model.getbName());
+        registerUserModel.setBuBrandCategory(model.getcName());
+        registerUserModel.setBuBrandLogoName(model.getbLogo());
+        enableNextBtn(true);
+    }
+
+    @Override
+    public void onResponse(String response, String tag) {
+
+    }
+
+    @Override
+    public void onError(VolleyError error, String tag) {
+
+    }
+
+    @Override
+    public void onOffline(String tag) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (
+                ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+
+            locationAccess = false;
+
+        } else {
+            locationAccess = true;
+            lastLocation = LocationServices
+                    .FusedLocationApi
+                    .getLastLocation(googleApiClient);
+
+        }
+        if (lastLocation == null) {
+            lastLocation = new Location("");
+            if (getSP(LAST_LAT).equals(FALSE) || getSP(LAST_LONG).equals(FALSE)) {
+                lastLocation.setLatitude(Double.parseDouble(CityModel.findCityById(cityCode).getLat()));
+                lastLocation.setLongitude(Double.parseDouble(CityModel.findCityById(cityCode).getLon()));
+            } else {
+                lastLocation.setLatitude(Double.parseDouble(getSP(LAST_LAT)));
+                lastLocation.setLongitude(Double.parseDouble(getSP(LAST_LONG)));
+            }
+        }
+        setSP(LAST_LAT, String.valueOf(lastLocation.getLatitude()));
+        setSP(LAST_LONG, String.valueOf(lastLocation.getLongitude()));
+
+        initCamera(lastLocation);
+    }
+
+
+    private void initCamera(Location location) {
+        if (!cameraAnimatedBefore) {
+            cameraPosition = CameraPosition.builder()
+                    .target(new LatLng(location.getLatitude(),
+                            location.getLongitude()))
+                    .zoom(13f)
+                    .bearing(0.0f)
+                    .tilt(0.0f)
+                    .build();
+
+            mMap.animateCamera(CameraUpdateFactory
+                    .newCameraPosition(cameraPosition), null);
+
+            cameraAnimatedBefore = true;
+        } else {
+            mMap.moveCamera(CameraUpdateFactory
+                    .newCameraPosition(cameraPosition));
+        }
+
+        mMap.setTrafficEnabled(true);
+        if (locationAccess) {
+            mMap.setMyLocationEnabled(true);
+        }
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+                // Creating a marker
+                MarkerOptions markerOptions = new MarkerOptions();
+
+                // Setting the position for the marker
+                markerOptions.position(latLng);
+
+                // Setting the title for the marker.
+                // This will be displayed on taping the marker
+                markerOptions.title(latLng.latitude + " : " + latLng.longitude);
+
+                // Clears the previously touched position
+                mMap.clear();
+
+                // Animating to the touched position
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                // Placing a marker on the touched position
+                mMap.addMarker(markerOptions);
+            }
+        });
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+
+    }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
     }
 }
