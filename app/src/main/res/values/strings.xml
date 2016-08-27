@@ -80,5 +80,7 @@
     <string name="i_agree">موافقم</string>
     <string name="your_store_registered">فروشگاه شما با موفقیت ثبت گردید</string>
     <string name="show_account">نمایش</string>
+    <string name="discount_management">مدریت حراج</string>
+    <string name="edit_user">ویرایش اطلاعات کاربر</string>
 
 </resources>

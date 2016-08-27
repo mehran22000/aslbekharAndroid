@@ -119,6 +119,7 @@ public class Constants {
     public static String LAST_CITY_CODE = "LAST_CITY_CODE";
     public static String LAST_CITY_ENGLISH_NAME = "LAST_CITY_ENGLISH_NAME";
     public static String RESULT = "RESULT";
+    public static String CREATE_USER_OR_EDIT = "CREATE_USER_OR_EDIT";
 
     // ADVERTISEMENT TYPES:
     public static String ADVERTISE_MAIN = "MAIN";

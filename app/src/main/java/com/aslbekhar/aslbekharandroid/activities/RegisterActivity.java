@@ -114,6 +114,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     private static final int GPS_SETTING_REQUEST_CODE = 9002;
     String cityCode;
 
+    boolean createOrEditUser = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,16 +181,30 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 .addApi(LocationServices.API)
                 .build();
 
-
-        emailLay.setAlpha(1);
-        cityLay.setAlpha(0);
-        brandLay.setAlpha(0);
-        storeLay.setAlpha(0);
-        locationLay.setAlpha(0);
-        storeTelLay.setAlpha(0);
-        eulaLay.setAlpha(0);
-        emailLay.bringToFront();
-        mMapView.setEnabled(false);
+        createOrEditUser = getIntent().getExtras().getBoolean(CREATE_USER_OR_EDIT, true);
+        if (createOrEditUser) {
+            emailLay.setAlpha(1);
+            cityLay.setAlpha(0);
+            brandLay.setAlpha(0);
+            storeLay.setAlpha(0);
+            locationLay.setAlpha(0);
+            storeTelLay.setAlpha(0);
+            eulaLay.setAlpha(0);
+            emailLay.bringToFront();
+            mMapView.setEnabled(false);
+        } else {
+            registerUserModel = JSON.parseObject(getIntent().getExtras().getString(USER_INFO, FALSE), UserModel.class);
+            populateCityList();
+            emailLay.setAlpha(0);
+            cityLay.setAlpha(1);
+            brandLay.setAlpha(0);
+            storeLay.setAlpha(0);
+            locationLay.setAlpha(0);
+            storeTelLay.setAlpha(0);
+            eulaLay.setAlpha(0);
+            cityLay.bringToFront();
+            mMapView.setEnabled(false);
+        }
 
         setupUI(this, findViewById(R.id.root));
     }

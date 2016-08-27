@@ -1,6 +1,7 @@
 package com.aslbekhar.aslbekharandroid.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,8 +17,8 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.activities.RegisterActivity;
 import com.aslbekhar.aslbekharandroid.models.UserModel;
-import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.bumptech.glide.Glide;
@@ -28,12 +29,14 @@ import com.rey.material.widget.ProgressView;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LOGO_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHANGE_PASSWORD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CREATE_USER_OR_EDIT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.IS_LOGGED_IN;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.SUCCESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.UPDATE_USER_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.USER_INFO;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setFontForActivity;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
 
@@ -68,44 +71,36 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
     }
 
     private void showUserInfo(final UserModel model) {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
         TextView textView = (TextView) view.findViewById(R.id.brandName);
         textView.setText(model.getBuBrandName());
-        textView.setTypeface(tf);
 
         textView = (TextView) view.findViewById(R.id.catName);
         textView.setText(model.getBuBrandCategory());
-        textView.setTypeface(tf);
 
         textView = (TextView) view.findViewById(R.id.email);
         textView.setText("ایمیل: " + model.getBuEmail());
-        textView.setTypeface(tf);
 
         textView = (TextView) view.findViewById(R.id.password);
         textView.setText("رمز ورود: •••••••••");
 
         view.findViewById(R.id.logOut).setOnClickListener(this);
         view.findViewById(R.id.changePassword).setOnClickListener(this);
+        view.findViewById(R.id.editUser).setOnClickListener(this);
 
         textView = (TextView) view.findViewById(R.id.city);
         textView.setText("شهر: " + model.getBuCityNameFa());
-        textView.setTypeface(tf);
 
         textView = (TextView) view.findViewById(R.id.address);
         textView.setText("آدرس: " + model.getBuStoreAddress());
-        textView.setTypeface(tf);
 
         textView = (TextView) view.findViewById(R.id.tell);
         textView.setText("تلفن: " + model.getBuTel());
-        textView.setTypeface(tf);
 
         textView = (TextView) view.findViewById(R.id.distributor);
         textView.setText("پخش کننده: " + model.getBuDistributor());
-        textView.setTypeface(tf);
 
         textView = (TextView) view.findViewById(R.id.workHour);
         textView.setText("ساعات کار: " + model.getBuStoreHours());
-        textView.setTypeface(tf);
 
 
         Glide.with(this)
@@ -125,6 +120,9 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                     }
                 })
                 .into((ImageView) view.findViewById(R.id.brandLogo));
+
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
+        setFontForActivity(view.findViewById(R.id.root), tf);
     }
 
     @Override
@@ -161,7 +159,18 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             case R.id.changePassword:
                 showChangePasswordDialog();
                 break;
+
+            case R.id.editUser:
+                openEditUserActivity();
+                break;
         }
+    }
+
+    private void openEditUserActivity() {
+        Intent intent = new Intent(getActivity(), RegisterActivity.class);
+        intent.putExtra(CREATE_USER_OR_EDIT, false);
+        intent.putExtra(USER_INFO, JSON.toJSONString(model));
+        startActivityForResult(intent, 100);
     }
 
     private void logOut() {
@@ -215,7 +224,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
     public void onResponse(String response, String tag) {
         if (tag.equals(CHANGE_PASSWORD)) {
             if (response.toLowerCase().contains(SUCCESS.toLowerCase())) {
-                setSP(Constants.USER_INFO, JSON.toJSONString(model));
+                setSP(USER_INFO, JSON.toJSONString(model));
                 dialog.dismiss();
             } else {
                 Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_LONG).show();

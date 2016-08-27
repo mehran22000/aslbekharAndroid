@@ -37,6 +37,7 @@ import com.rey.material.widget.ProgressView;
 
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CREATE_USER_OR_EDIT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.EMAIL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.IS_LOGGED_IN;
@@ -85,6 +86,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), RegisterActivity.class);
+                intent.putExtra(CREATE_USER_OR_EDIT, true);
                 startActivityForResult(intent, 100);
             }
         });
