@@ -1,5 +1,6 @@
 package com.aslbekhar.aslbekharandroid.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -87,6 +88,10 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         view.findViewById(R.id.changePassword).setOnClickListener(this);
         view.findViewById(R.id.editUser).setOnClickListener(this);
 
+        textView = (TextView) view.findViewById(R.id.storeName);
+        textView.setText("نام فروشگاه: " + model.getBuStoreName());
+
+
         textView = (TextView) view.findViewById(R.id.city);
         textView.setText("شهر: " + model.getBuCityNameFa());
 
@@ -171,6 +176,20 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         intent.putExtra(CREATE_USER_OR_EDIT, false);
         intent.putExtra(USER_INFO, JSON.toJSONString(model));
         startActivityForResult(intent, 100);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK){
+            try {
+                model = JSON.parseObject(data.getExtras().getString(USER_INFO, FALSE), UserModel.class);
+                setSP(USER_INFO, data.getExtras().getString(USER_INFO, FALSE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            showUserInfo(model);
+
+        }
     }
 
     private void logOut() {

@@ -82,5 +82,7 @@
     <string name="show_account">نمایش</string>
     <string name="discount_management">مدریت حراج</string>
     <string name="edit_user">ویرایش اطلاعات کاربر</string>
+    <string name="update_succesful">اطلاعات کاربری شما با موفقیت ویرایش شد.</string>
+    <string name="save">ذخیره</string>
 
 </resources>

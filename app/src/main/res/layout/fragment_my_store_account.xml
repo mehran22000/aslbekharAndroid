@@ -19,10 +19,12 @@
                 android:id="@+id/brandCV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
                 android:foreground="?android:attr/selectableItemBackground"
                 card_view:cardCornerRadius="10dp"
-                card_view:cardElevation="3dp">
+                card_view:cardElevation="2dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -42,9 +44,10 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_margin="8dp"
+                        android:layout_toRightOf="@+id/brandLogo"
+                        android:gravity="center"
                         android:paddingLeft="20dp"
-                        android:gravity="right"
-                        android:layout_toRightOf="@+id/brandLogo" />
+                        android:textSize="@dimen/item_title_ts_medium" />
 
                     <TextView
                         android:id="@+id/catName"
@@ -53,26 +56,24 @@
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@+id/brandName"
                         android:layout_below="@id/brandName"
-                        android:layout_toRightOf="@+id/brandLogo" />
+                        android:layout_toRightOf="@+id/brandLogo"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
 
 
-                    <android.support.v7.widget.AppCompatButton
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/discountManagment"
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:layout_toRightOf="@+id/brandLogo"
-                        android:layout_alignParentBottom="true"
+                        android:layout_alignBottom="@+id/brandLogo"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="5dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_alignParentRight="true"
+                        android:layout_toRightOf="@+id/brandLogo"
                         android:text="@string/discount_management"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/item_title_ts_medium"
+                        android:textSize="@dimen/item_title_ts_smaller_2"
                         app:backgroundTint="@color/colorPrimary" />
 
 
@@ -85,13 +86,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/brandCV"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:padding="5dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:padding="5dp"
                 card_view:cardCornerRadius="10dp"
-                card_view:cardElevation="3dp">
+                card_view:cardElevation="2dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -103,7 +104,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_margin="8dp" />
+                        android:layout_margin="8dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
 
                     <TextView
                         android:id="@+id/password"
@@ -111,42 +113,41 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@+id/email"
-                        android:layout_below="@id/email" />
+                        android:layout_below="@id/email"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
 
-                    <android.support.v7.widget.AppCompatButton
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/changePassword"
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/password"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_toRightOf="@+id/logOut"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_toRightOf="@+id/logOut"
                         android:text="@string/change_password"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/item_title_ts_medium"
+                        android:textSize="@dimen/item_title_ts_smaller_2"
                         app:backgroundTint="@color/colorPrimary" />
 
-                    <android.support.v7.widget.AppCompatButton
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/logOut"
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
                         android:layout_below="@+id/password"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="16dp"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_alignParentLeft="true"
                         android:text="@string/logout"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/item_title_ts_medium"
+                        android:textSize="@dimen/item_title_ts_smaller_2"
                         app:backgroundTint="@color/buttonColorSecondary" />
 
                 </RelativeLayout>
@@ -158,17 +159,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/emailCV"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:padding="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
                 android:foreground="?android:attr/selectableItemBackground"
+                android:padding="5dp"
                 card_view:cardCornerRadius="10dp"
-                card_view:cardElevation="3dp">
+                card_view:cardElevation="2dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:paddingRight="10dp">
+
+                    <TextView
+                        android:id="@+id/storeName"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
 
                     <TextView
                         android:id="@+id/city"
@@ -176,7 +189,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_margin="8dp" />
+                        android:layout_below="@id/storeName"
+                        android:paddingBottom="5dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
 
                     <TextView
                         android:id="@+id/address"
@@ -184,52 +199,54 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@+id/city"
-                        android:layout_marginBottom="5dp"
-                        android:layout_below="@id/city" />
+                        android:layout_below="@id/city"
+                        android:paddingBottom="5dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
 
                     <TextView
                         android:id="@+id/tell"
                         style="@style/AccountInfoTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="8dp"
                         android:layout_alignRight="@+id/city"
-                        android:layout_below="@id/address" />
+                        android:layout_below="@id/address"
+                        android:textSize="@dimen/item_title_ts_smaller_2"
+                        android:paddingBottom="5dp" />
 
                     <TextView
                         android:id="@+id/distributor"
                         style="@style/AccountInfoTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignRight="@+id/city"
                         android:layout_below="@id/tell"
-                        android:layout_alignParentRight="true"
-                        android:layout_margin="8dp" />
+                        android:paddingBottom="5dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
 
                     <TextView
                         android:id="@+id/workHour"
                         style="@style/AccountInfoTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/distributor"
-                        android:paddingBottom="8dp"
-                        android:layout_below="@id/distributor" />
+                        android:layout_alignRight="@+id/city"
+                        android:layout_below="@id/distributor"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
 
-                    <android.support.v7.widget.AppCompatButton
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                    <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:id="@+id/editUser"
                         style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
                         android:layout_below="@+id/workHour"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="16dp"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_alignParentLeft="true"
                         android:text="@string/edit_user"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/item_title_ts_medium"
+                        android:textSize="@dimen/item_title_ts_smaller_2"
                         app:backgroundTint="@color/buttonColorSecondary" />
 
                 </RelativeLayout>

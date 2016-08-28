@@ -33,6 +33,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
     Context context;
     private Fragment fragment;
     private RegisterActivity activity;
+    private String selectedCity;
     View selectedItem;
 
     public CityListAdapter(List<CityModel> modelList,
@@ -42,10 +43,11 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
         this.fragment = fragment;
     }
 
-    public CityListAdapter(List<CityModel> modelList, Context context, RegisterActivity activity) {
+    public CityListAdapter(List<CityModel> modelList, Context context, RegisterActivity activity, String selectedCity) {
         this.modelList = modelList;
         this.context = context;
         this.activity = activity;
+        this.selectedCity = selectedCity;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
     }
 
     @Override
-    public void onBindViewHolder(final GroupViewHolder holder, int position) {
+    public void onBindViewHolder(final GroupViewHolder holder, final int position) {
         final CityModel model = modelList.get(position);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/theme.ttf");
         holder.title.setText(model.getPersianName());
@@ -110,7 +112,15 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
                 .resize(width, 0)
                 .into(holder.image);
 
-        holder.selectedIcon.setVisibility(View.GONE);
+        if (selectedCity != null && selectedCity.equals(model.getEnglishName())) {
+            if (selectedItem != null && !selectedItem.getTag().equals(position)){
+                selectedItem.setVisibility(View.GONE);
+            }
+            holder.selectedIcon.setVisibility(View.VISIBLE);
+            selectedItem = holder.selectedIcon;
+        } else {
+            holder.selectedIcon.setVisibility(View.GONE);
+        }
 
         holder.cv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,11 +128,13 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
                 if (fragment != null) {
                     ((CitiesFragment) fragment).openCatFromAdapter(model);
                 } else {
-                    if (selectedItem != null){
+                    if (selectedItem != null) {
                         selectedItem.setVisibility(View.GONE);
                     }
                     selectedItem = holder.selectedIcon;
                     selectedItem.setVisibility(View.VISIBLE);
+                    selectedItem.setTag(position);
+                    selectedCity = model.getEnglishName();
                     activity.onCityClicked(model);
                 }
             }

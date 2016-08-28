@@ -30,13 +30,13 @@ import java.util.List;
  */
 public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.GroupViewHolder> {
 
-    List<BrandModel> modelList;
-    Context context;
+    private List<BrandModel> modelList;
+    private Context context;
     private Fragment fragment;
     private RegisterActivity activity;
-    View selectedItem;
-    View selectedItemBackground;
-    BrandModel selectedModel;
+    private String selectedBrandId;
+    private View selectedItem;
+    private View selectedItemBackground;
 
     public BrandListAdapter(List<BrandModel> modelList, Context context, Fragment fragment) {
         this.modelList = modelList;
@@ -44,10 +44,11 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
         this.fragment = fragment;
     }
 
-    public BrandListAdapter(List<BrandModel> modelList, Context context, RegisterActivity activity) {
+    public BrandListAdapter(List<BrandModel> modelList, Context context, RegisterActivity activity, String selectedBrandId) {
         this.modelList = modelList;
         this.context = context;
         this.activity = activity;
+        this.selectedBrandId = selectedBrandId;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
     }
 
     @Override
-    public void onBindViewHolder(final GroupViewHolder holder, int position) {
+    public void onBindViewHolder(final GroupViewHolder holder, final int position) {
         final BrandModel model = modelList.get(position);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/theme.ttf");
         holder.title.setText(model.getbName());
@@ -74,14 +75,30 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
             holder.root.setBackgroundColor(activity.getResources().getColor(R.color.white));
         }
 
-        if (selectedModel != null && selectedModel.get_id().equals(model.get_id())){
-            selectedItem = holder.selectedIcon;
-            selectedItemBackground = holder.background;
-            selectedItemBackground.setBackgroundColor(activity.getResources().getColor(R.color.colorAccent));
-            selectedItem.setVisibility(View.VISIBLE);
-        } else {
-            holder.selectedIcon.setVisibility(View.GONE);
-            holder.background.setBackgroundColor(activity.getResources().getColor(R.color.white));
+        if (activity != null) {
+            if (selectedBrandId != null && selectedBrandId.equals(model.getbId())) {
+                if (selectedItem != null && selectedItem.getTag() != null && !selectedItem.getTag().equals(position)){
+                    selectedItem.setVisibility(View.GONE);
+                    ViewAnimator.animate(selectedItemBackground)
+                            .backgroundColor(activity.getResources().getColor(R.color.white),
+                                    activity.getResources().getColor(R.color.colorAccent))
+                            .duration(0).start();
+                }
+                holder.selectedIcon.setVisibility(View.VISIBLE);
+                selectedItem = holder.selectedIcon;
+                selectedItemBackground = holder.background;
+                ViewAnimator.animate(selectedItemBackground)
+                        .backgroundColor(activity.getResources().getColor(R.color.white),
+                                activity.getResources().getColor(R.color.colorAccent))
+                        .duration(0).start();
+                selectedItem.setVisibility(View.VISIBLE);
+            } else {
+                holder.selectedIcon.setVisibility(View.GONE);
+                ViewAnimator.animate(holder.background)
+                        .backgroundColor(activity.getResources().getColor(R.color.colorAccent),
+                                activity.getResources().getColor(R.color.white))
+                        .duration(0).start();
+            }
         }
 
         Picasso.with(context)
@@ -114,9 +131,10 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
                                         activity.getResources().getColor(R.color.white))
                                 .duration(400).start();
                     }
+                    holder.selectedIcon.setTag(position);
                     selectedItem = holder.selectedIcon;
                     selectedItemBackground = holder.background;
-                    selectedModel = model;
+                    selectedBrandId = model.getbId();
                     ViewAnimator.animate(selectedItemBackground)
                             .backgroundColor(activity.getResources().getColor(R.color.white),
                                     activity.getResources().getColor(R.color.colorAccent))
