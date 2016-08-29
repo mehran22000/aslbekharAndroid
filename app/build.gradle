@@ -22,8 +22,8 @@ android {
 //            storePassword 'arsewqd'
 //        }
     }
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
     dexOptions {
         maxProcessCount 2
         javaMaxHeapSize "3g"
@@ -32,7 +32,7 @@ android {
     defaultConfig {
         applicationId "com.ionicframework.aslbekhar192325"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 202
         versionName "2.0.2"
     }
@@ -51,9 +51,10 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:support-v4:24.2.0'
+    compile 'com.android.support:design:24.2.0'
+    compile 'com.android.support:cardview-v7:24.2.0'
     //google analytics
 //    compile 'com.google.android.gms:play-services-analytics:9.0.2'
     // Google Volley for network
