@@ -197,26 +197,71 @@
 
             </RelativeLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="20dp"
+                android:gravity="right"
+                android:text="@string/discount_percent" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/discountPercentageValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/edit_text_back"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/colorPrimary"
+                    android:maxLength="2"
+                    android:text="0"
+                    android:minHeight="30dp"
+                    android:minWidth="25dp"
+                    android:textSize="@dimen/item_title_ts_larger" />
+
+                <TextView
+                    android:id="@+id/discountPercentageTxt"
+                    android:layout_width="15dp"
+                    android:layout_height="30dp"
+                    android:layout_toLeftOf="@+id/discountPercentageValue"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:text="%"
+                    android:textSize="@dimen/item_title_ts_larger" />
+
+
+            </RelativeLayout>
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/saleNoteInputLay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textColorHint="@color/colorPrimary"
+                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                <AutoCompleteTextView
+                    android:id="@+id/saleNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/sale_note"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:textColor="@color/colorPrimaryDark" />
+
+            </android.support.design.widget.TextInputLayout>
+
 
         </LinearLayout>
 
-
-        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/changePassword"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/editTextsLay"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="16dp"
-            android:layout_toRightOf="@+id/back"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/save"
-            android:textColor="@color/white"
-            android:textSize="@dimen/item_title_ts_medium"
-            app:backgroundTint="@color/buttonColorSecondary" />
 
         <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/back"
@@ -234,6 +279,24 @@
             android:textColor="@color/white"
             android:textSize="@dimen/item_title_ts_medium"
             app:backgroundTint="@color/colorPrimary" />
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/save"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/save"
+            android:textColor="@color/white"
+            android:textSize="@dimen/item_title_ts_medium"
+            app:backgroundTint="@color/buttonColorSecondary"
+            android:layout_marginStart="7dp"
+            android:layout_alignBaseline="@+id/back"
+            android:layout_alignBottom="@+id/back"
+            android:layout_toRightOf="@+id/back"
+            android:layout_toEndOf="@+id/back" />
     </RelativeLayout>
 
 

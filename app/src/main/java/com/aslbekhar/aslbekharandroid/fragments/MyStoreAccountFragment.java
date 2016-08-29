@@ -22,6 +22,7 @@ import com.aslbekhar.aslbekharandroid.activities.RegisterActivity;
 import com.aslbekhar.aslbekharandroid.models.UserModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
+import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -128,6 +129,47 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
         setFontForActivity(view.findViewById(R.id.root), tf);
+
+        view.findViewById(R.id.discountManagement).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDiscountManagement();
+            }
+        });
+
+    }
+
+    private void openDiscountManagement() {
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater(null);
+        final View dialogView = inflater.inflate(R.layout.dialog_discount_management, null);
+
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
+        Snippets.setFontForActivity(dialogView, tf);
+
+
+        dialogView.findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFade(dialogView.findViewById(R.id.listOverLay), true, 500);
+                ((ProgressView) dialogView.findViewById(R.id.progressBar)).start();
+//                NetworkRequests.postRequest(UPDATE_USER_URL, MyStoreAccountFragment.this,
+//                        CHANGE_PASSWORD, JSON.toJSONString(model));
+            }
+        });
+
+        dialogView.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialogBuilder.setView(dialogView);
+        dialog = dialogBuilder.create();
+        dialog.show();
     }
 
     @Override

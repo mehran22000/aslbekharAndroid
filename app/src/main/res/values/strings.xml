@@ -84,5 +84,7 @@
     <string name="edit_user">ویرایش اطلاعات کاربر</string>
     <string name="update_succesful">اطلاعات کاربری شما با موفقیت ویرایش شد.</string>
     <string name="save">ذخیره</string>
+    <string name="discount_percent">درصد تخفیف:</string>
+    <string name="sale_note">شرح حراج (اختیاری)</string>
 
 </resources>
