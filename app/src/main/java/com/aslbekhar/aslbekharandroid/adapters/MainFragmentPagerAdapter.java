@@ -54,6 +54,9 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        if (position ==  3){
+            ((HostFragment)tabs.get(3)).fragment.onResume();
+        }
         return tabs.get(position);
     }
 

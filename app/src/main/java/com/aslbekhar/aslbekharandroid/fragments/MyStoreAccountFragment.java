@@ -320,13 +320,15 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 }
             }
         } else {
-            if (!((MainActivity) getActivity()).loginShown) {
-                ((MainActivity) getActivity()).loginShown = true;
-                callBack.openNewContentFragment(new MyStoreLoginFragment(), 3);
-            } else {
+            if (getActivity() != null) {
+                if (!((MainActivity) getActivity()).loginShown) {
+                    ((MainActivity) getActivity()).loginShown = true;
+                    callBack.openNewContentFragment(new MyStoreLoginFragment(), 3);
+                } else {
 
-                ((MainActivity) getActivity()).loginShown = false;
-                getActivity().onBackPressed();
+                    ((MainActivity) getActivity()).loginShown = false;
+                    getActivity().onBackPressed();
+                }
             }
         }
     }

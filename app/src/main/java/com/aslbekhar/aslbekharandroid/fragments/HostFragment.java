@@ -16,7 +16,7 @@ import com.aslbekhar.aslbekharandroid.utilities.BackStackFragment;
  */
 public class HostFragment extends BackStackFragment {
 
-    private Fragment fragment;
+    public Fragment fragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
