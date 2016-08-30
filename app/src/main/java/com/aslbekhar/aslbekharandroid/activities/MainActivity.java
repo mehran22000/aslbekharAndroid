@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     };
     private List<String> tabTitles = null;
     private boolean offlineMode = false;
+    public boolean loginShown = false;
 
     // for keeping record of previous tabs, for clicking on back
     Stack<Integer> tabStack = new Stack<>();

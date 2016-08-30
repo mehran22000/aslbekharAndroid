@@ -153,8 +153,6 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
             LayoutInflater inflater = getLayoutInflater(null);
             final View dialogView = inflater.inflate(R.layout.dialog_login_confirm, null);
-
-
             Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
             ((TextView) dialogView.findViewById(R.id.title)).setText(model.getBuStoreName());
             ((TextView) dialogView.findViewById(R.id.title)).setTypeface(tf);
@@ -215,6 +213,8 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
             dialog.show();
         } else if(modelList != null && modelList.size() > 0 && modelList.get(0).getErr().equals(Constants.PASSWORD_ERROR)){
             Toast.makeText(getActivity(), R.string.invalid_password, Toast.LENGTH_LONG).show();
+        } else {
+
         }
     }
 

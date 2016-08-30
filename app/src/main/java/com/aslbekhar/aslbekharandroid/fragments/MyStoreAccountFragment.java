@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +22,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.activities.MainActivity;
 import com.aslbekhar.aslbekharandroid.activities.RegisterActivity;
 import com.aslbekhar.aslbekharandroid.models.UserModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
@@ -147,11 +152,137 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
         Snippets.setFontForActivity(dialogView, tf);
+        ((TextInputLayout) view.findViewById(R.id.saleNoteInputLay)).setTypeface(tf);
 
+        ((EditText) dialogView.findViewById(R.id.saleDay)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (charSequence.length() == 2 &&  Integer.parseInt(charSequence.toString()) > 0
+                        &&  Integer.parseInt(charSequence.toString()) < 31){
+                    dialogView.findViewById(R.id.saleMonth).requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        ((EditText) dialogView.findViewById(R.id.saleMonth)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (charSequence.length() == 2 &&  Integer.parseInt(charSequence.toString()) > 0
+                        &&  Integer.parseInt(charSequence.toString()) < 13){
+                    dialogView.findViewById(R.id.saleYear).requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        ((EditText) dialogView.findViewById(R.id.saleYear)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (charSequence.length() == 2 &&  Integer.parseInt(charSequence.toString()) > 94
+                        &&  Integer.parseInt(charSequence.toString()) < 99){
+                    dialogView.findViewById(R.id.saleEndDay).requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        ((EditText) dialogView.findViewById(R.id.saleEndDay)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (charSequence.length() == 2 &&  Integer.parseInt(charSequence.toString()) > 0
+                        &&  Integer.parseInt(charSequence.toString()) < 31){
+                    dialogView.findViewById(R.id.saleEndMonth).requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        ((EditText) dialogView.findViewById(R.id.saleEndMonth)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (charSequence.length() == 2 &&  Integer.parseInt(charSequence.toString()) > 0
+                        &&  Integer.parseInt(charSequence.toString()) < 13){
+                    dialogView.findViewById(R.id.saleEndYear).requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        ((EditText) dialogView.findViewById(R.id.saleEndYear)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (charSequence.length() == 2 &&  Integer.parseInt(charSequence.toString()) > 94
+                        &&  Integer.parseInt(charSequence.toString()) < 99){
+
+                    InputMethodManager imm =
+                            (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(dialogView.getWindowToken(), 0);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
 
         dialogView.findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm =
+                        (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(dialogView.getWindowToken(), 0);
                 showFade(dialogView.findViewById(R.id.listOverLay), true, 500);
                 ((ProgressView) dialogView.findViewById(R.id.progressBar)).start();
 //                NetworkRequests.postRequest(UPDATE_USER_URL, MyStoreAccountFragment.this,
@@ -175,14 +306,34 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
     @Override
     public void onResume() {
         super.onResume();
-
-
         if (!getSP(IS_LOGGED_IN).equals(FALSE) && !getSP(USER_INFO).equals(FALSE)) {
             model = JSON.parseObject(getSP(USER_INFO), UserModel.class);
-            showUserInfo(model);
+            if (model != null) {
+                showUserInfo(model);
+            } else {
+                if (!((MainActivity) getActivity()).loginShown) {
+                    ((MainActivity) getActivity()).loginShown = true;
+                    callBack.openNewContentFragment(new MyStoreLoginFragment(), 3);
+                } else {
+                    getActivity().onBackPressed();
+
+                }
+            }
         } else {
-            callBack.openNewContentFragment(new MyStoreLoginFragment(), 3);
+            if (!((MainActivity) getActivity()).loginShown) {
+                ((MainActivity) getActivity()).loginShown = true;
+                callBack.openNewContentFragment(new MyStoreLoginFragment(), 3);
+            } else {
+
+                ((MainActivity) getActivity()).loginShown = false;
+                getActivity().onBackPressed();
+            }
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     @Override

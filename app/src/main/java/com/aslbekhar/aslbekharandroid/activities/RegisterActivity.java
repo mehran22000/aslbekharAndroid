@@ -102,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     boolean nextBtnEnable = false;
     int width;
     int statusStep = 1;
-    UserModel registerUserModel;
+    UserModel registerUserModel = new UserModel();
     CityListAdapter cityListAdapter;
     BrandListAdapter brandListAdapter;
     List<CityModel> cityModelList = getCityModelList();
@@ -944,7 +944,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-        if (registerUserModel.getBuStoreLat() == null || registerUserModel.getBuStoreLat().length() == 0) {
+        if (registerUserModel == null || registerUserModel.getBuStoreLat() == null || registerUserModel.getBuStoreLat().length() == 0) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && (
                     ActivityCompat.checkSelfPermission(this,
                             Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
