@@ -8,8 +8,14 @@
     android:orientation="vertical">
 
     <ScrollView
+        android:id="@+id/profileLay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tabs"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:alpha="0">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -256,6 +262,86 @@
         </RelativeLayout>
 
     </ScrollView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tabs">
+
+
+
+    </ScrollView>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/shadow_dark_from_bottom_thin"
+        android:layout_above="@+id/tabs"/>
+
+    <LinearLayout
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:weightSum="2">
+
+        <RelativeLayout
+            android:id="@+id/salesTabLay"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/salesImg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_above="@+id/salesTxt"
+                android:paddingTop="4dp"
+                android:src="@drawable/icon_sales_1"/>
+
+            <TextView
+                android:id="@+id/salesTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="4dp"
+                android:textColor="@color/tabColor"
+                android:layout_alignParentBottom="true"
+                android:text="@string/sales"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profileTabLay"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/profileImg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_above="@+id/profileTxt"
+                android:paddingTop="4dp"
+                android:src="@drawable/icon_profile"/>
+
+            <TextView
+                android:id="@+id/profileTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="4dp"
+                android:textColor="@color/tabDisabledColor"
+                android:layout_alignParentBottom="true"
+                android:text="@string/profile"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 
 </RelativeLayout>

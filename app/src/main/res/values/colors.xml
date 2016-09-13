@@ -14,6 +14,8 @@
     <color name="colorListOverLay">#b5f2f2f2</color>
     <color name="buttonColorSecondary">#800040</color>
     <color name="textColorSecondary">#800040</color>
+    <color name="tabDisabledColor">#9e9e9e</color>
+    <color name="tabColor">#007bfd</color>
 
     // predefined colors
     <color name="orange">#ff5500</color>

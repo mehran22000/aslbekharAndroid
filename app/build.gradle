@@ -15,12 +15,6 @@ android {
             storePassword 'original4all'
         }
 
-//        debug {
-//            keyAlias 'E-Mahd'
-//            keyPassword 'arsewqd'
-//            storeFile file('C:/Users/Amin/Dropbox/Android/Projects/Key Stores/emahd.jks')
-//            storePassword 'arsewqd'
-//        }
     }
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
@@ -55,8 +49,7 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.0'
     compile 'com.android.support:design:24.2.0'
     compile 'com.android.support:cardview-v7:24.2.0'
-    //google analytics
-//    compile 'com.google.android.gms:play-services-analytics:9.0.2'
+
     // Google Volley for network
     compile 'com.android.volley:volley:1.0.0'
     // Alibaba fastjson Library for json parsing
