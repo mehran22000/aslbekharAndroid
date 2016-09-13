@@ -99,6 +99,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         if (duration == 0) {
             view.findViewById(R.id.loginLay).setVisibility(View.GONE);
             view.findViewById(R.id.myStoreLay).setVisibility(View.VISIBLE);
+
             view.findViewById(R.id.myStoreLay).bringToFront();
         } else {
             changeView(view.findViewById(R.id.loginLay), view.findViewById(R.id.myStoreLay));
@@ -127,13 +128,13 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
     private void changeView(View hideView, final View showView) {
         ViewAnimator.animate(hideView)
-                .alpha(1,0)
+                .alpha(1, 0)
                 .scale(1f, 0.7f)
-                .translationY(0, +300)
+                .translationY(0, +100)
                 .andAnimate(showView)
                 .alpha(0, 1)
                 .scale(0.7f, 1f)
-                .translationY(+300, 0)
+                .translationY(+100, 0)
                 .duration(500)
                 .onStart(new AnimationListener.Start() {
                     @Override
@@ -449,11 +450,11 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
     private void showLoginLay(int duration) {
         if (duration == 0) {
-            view.findViewById(R.id.loginLay).setVisibility(View.GONE);
-            view.findViewById(R.id.myStoreLay).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.myStoreLay).bringToFront();
+            view.findViewById(R.id.myStoreLay).setVisibility(View.GONE);
+            view.findViewById(R.id.loginLay).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.loginLay).bringToFront();
         } else {
-            changeView(view.findViewById(R.id.loginLay), view.findViewById(R.id.myStoreLay));
+            changeView(view.findViewById(R.id.myStoreLay), view.findViewById(R.id.loginLay));
         }
         view.findViewById(R.id.signInBtn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -536,7 +537,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             }
             showMyAccountLay(0);
         } else {
-            if (resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 ((TextView) view.findViewById(R.id.emailEt)).setText(data.getExtras().getString(EMAIL, FALSE));
                 ((TextView) view.findViewById(R.id.password)).setText(data.getExtras().getString(PASSWORD, FALSE));
                 InputMethodManager imm =
@@ -604,88 +605,100 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             } else {
                 Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_LONG).show();
             }
-        } else if (tag.equals("login")){
-            ((ProgressView) view.findViewById(R.id.signInBtnProgress)).stop();
-            List<UserModel> modelList = null;
-            try {
-                modelList = JSON.parseArray(response, UserModel.class);
-            } catch (Exception ignored) {
+        } else if (tag.equals("login")) {
+            onLoginResponse(response);
+        }
+    }
 
-            }
-            if (modelList != null && modelList.size() > 0 && modelList.get(0).getErr().equals("")) {
-                model = modelList.get(0);
-                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-                LayoutInflater inflater = getLayoutInflater(null);
-                final View dialogView = inflater.inflate(R.layout.dialog_login_confirm, null);
-                Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
-                ((TextView) dialogView.findViewById(R.id.title)).setText(model.getBuStoreName());
-                ((TextView) dialogView.findViewById(R.id.title)).setTypeface(tf);
-                if (model.getBuStoreHours() != null && model.getBuStoreHours().length() > 1) {
-                    ((TextView) dialogView.findViewById(R.id.workHour)).setText("ساعات کار: " + model.getBuStoreHours());
-                    ((TextView) dialogView.findViewById(R.id.workHour)).setTypeface(tf);
-                } else {
-                    dialogView.findViewById(R.id.workHour).setVisibility(View.GONE);
-                }
-                if (model.getBuTel() != null && model.getBuTel().length() > 1) {
-                    ((TextView) dialogView.findViewById(R.id.tell)).setText("تلفن: " + Constants.persianNumbers(model.getBuTel()));
-                    ((TextView) dialogView.findViewById(R.id.tell)).setTypeface(tf);
-                } else {
-                    dialogView.findViewById(R.id.tell).setVisibility(View.GONE);
-                }
-                if (model.getBuStoreAddress() != null && model.getBuStoreAddress().length() > 1) {
-                    ((TextView) dialogView.findViewById(R.id.address)).setText("آدرس: " + model.getBuStoreAddress());
-                    ((TextView) dialogView.findViewById(R.id.address)).setTypeface(tf);
-                } else {
-                    dialogView.findViewById(R.id.address).setVisibility(View.GONE);
-                }
+    private void onLoginResponse(String response) {
+        ((ProgressView) view.findViewById(R.id.signInBtnProgress)).stop();
+        List<UserModel> modelList = null;
+        try {
+            modelList = JSON.parseArray(response, UserModel.class);
+        } catch (Exception ignored) {
 
-                Glide.with(this)
-                        .load(Uri.parse("file:///android_asset/logos/" + model.getBuBrandLogoName() + ".png"))
-                        .listener(new RequestListener<Uri, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
-                                Glide.with(MyStoreAccountFragment.this)
-                                        .load(Constants.BRAND_LOGO_URL + model.getBuBrandLogoName() + ".png")
-                                        .into((ImageView) dialogView.findViewById(R.id.brandLogo));
-                                return true;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                return false;
-                            }
-                        })
-                        .into((ImageView) dialogView.findViewById(R.id.brandLogo));
-
-                dialogBuilder.setView(dialogView);
-
-                dialogBuilder.setPositiveButton(R.string.yes_its_me, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                        Snippets.setSP(IS_LOGGED_IN, TRUE);
-                        Snippets.setSP(USER_INFO, JSON.toJSONString(model));
-                        getActivity().onBackPressed();
-                    }
-                });
-                dialogBuilder.setNegativeButton(R.string.no_its_not_me, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                AlertDialog dialog = dialogBuilder.create();
-                dialog.show();
-            } else if(modelList != null && modelList.size() > 0 && modelList.get(0).getErr().equals(Constants.PASSWORD_ERROR)){
-                Toast.makeText(getActivity(), R.string.invalid_password, Toast.LENGTH_LONG).show();
+        }
+        if (modelList != null && modelList.size() > 0 && modelList.get(0).getErr().equals("")) {
+            model = modelList.get(0);
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+            LayoutInflater inflater = getLayoutInflater(null);
+            final View dialogView = inflater.inflate(R.layout.dialog_login_confirm, null);
+            Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
+            ((TextView) dialogView.findViewById(R.id.title)).setText(model.getBuStoreName());
+            ((TextView) dialogView.findViewById(R.id.title)).setTypeface(tf);
+            if (model.getBuStoreHours() != null && model.getBuStoreHours().length() > 1) {
+                ((TextView) dialogView.findViewById(R.id.workHour)).setText("ساعات کار: " + model.getBuStoreHours());
+                ((TextView) dialogView.findViewById(R.id.workHour)).setTypeface(tf);
             } else {
-
+                dialogView.findViewById(R.id.workHour).setVisibility(View.GONE);
             }
+            if (model.getBuTel() != null && model.getBuTel().length() > 1) {
+                ((TextView) dialogView.findViewById(R.id.tell)).setText("تلفن: " + Constants.persianNumbers(model.getBuTel()));
+                ((TextView) dialogView.findViewById(R.id.tell)).setTypeface(tf);
+            } else {
+                dialogView.findViewById(R.id.tell).setVisibility(View.GONE);
+            }
+            if (model.getBuStoreAddress() != null && model.getBuStoreAddress().length() > 1) {
+                ((TextView) dialogView.findViewById(R.id.address)).setText("آدرس: " + model.getBuStoreAddress());
+                ((TextView) dialogView.findViewById(R.id.address)).setTypeface(tf);
+            } else {
+                dialogView.findViewById(R.id.address).setVisibility(View.GONE);
+            }
+
+            Glide.with(this)
+                    .load(Uri.parse("file:///android_asset/logos/" + model.getBuBrandLogoName() + ".png"))
+                    .listener(new RequestListener<Uri, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
+                            Glide.with(MyStoreAccountFragment.this)
+                                    .load(Constants.BRAND_LOGO_URL + model.getBuBrandLogoName() + ".png")
+                                    .into((ImageView) dialogView.findViewById(R.id.brandLogo));
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into((ImageView) dialogView.findViewById(R.id.brandLogo));
+
+            dialogBuilder.setView(dialogView);
+
+            dialogBuilder.setPositiveButton(R.string.yes_its_me, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+
+                    Snippets.setSP(IS_LOGGED_IN, TRUE);
+                    Snippets.setSP(USER_INFO, JSON.toJSONString(model));
+                    showMyAccountLay(400);
+                }
+            });
+            dialogBuilder.setNegativeButton(R.string.no_its_not_me, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            final AlertDialog dialog = dialogBuilder.create();
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface arg0) {
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
+                }
+            });
+
+            dialog.show();
+        } else if (modelList != null && modelList.size() > 0 && modelList.get(0).getErr().equals(Constants.PASSWORD_ERROR)) {
+            Toast.makeText(getActivity(), R.string.invalid_password, Toast.LENGTH_LONG).show();
+        } else {
+
         }
     }
 
     @Override
     public void onError(VolleyError error, String tag) {
-        if (tag.equals("login")){
+        if (tag.equals("login")) {
             ((ProgressView) view.findViewById(R.id.signInBtnProgress)).stop();
             Snackbar snackbar = Snackbar.make(view.findViewById(R.id.root),
                     getString(R.string.connection_error), Snackbar.LENGTH_INDEFINITE)
@@ -701,7 +714,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
     @Override
     public void onOffline(String tag) {
-        if (tag.equals("login")){
+        if (tag.equals("login")) {
             ((ProgressView) view.findViewById(R.id.signInBtnProgress)).stop();
             Snackbar snackbar = Snackbar.make(view.findViewById(R.id.root),
                     getString(R.string.connection_error), Snackbar.LENGTH_INDEFINITE)

@@ -32,8 +32,8 @@ import java.util.List;
  */
 public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscountListAdapter.GroupViewHolder> {
 
-    List<StoreModel> modelList;
-    Context context;
+    private List<StoreModel> modelList;
+    private Context context;
     private ListNearByFragment fragment;
     private String cityCode;
 
