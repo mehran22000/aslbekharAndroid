@@ -65,7 +65,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
     private boolean mResolvingError = false;
     private static int REQUEST_RESOLVE_ERROR = 9003;
     private static final String DIALOG_ERROR = "dialog_error";
-    Dialog dialog;
 
     boolean checkForNewVersionTimer = false;
 

@@ -94,7 +94,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
 
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/theme.ttf");
         ((EditText) view.findViewById(R.id.password)).setTypeface(tf);
-        ((EditText) view.findViewById(R.id.email)).setTypeface(tf);
+        ((EditText) view.findViewById(R.id.emailEt)).setTypeface(tf);
         ((TextInputLayout) view.findViewById(R.id.emailInputLay)).setTypeface(tf);
         ((TextInputLayout) view.findViewById(R.id.passwordInputLay)).setTypeface(tf);
 
@@ -107,7 +107,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 100 && resultCode == Activity.RESULT_OK){
-            ((TextView) view.findViewById(R.id.email)).setText(data.getExtras().getString(EMAIL, FALSE));
+            ((TextView) view.findViewById(R.id.emailEt)).setText(data.getExtras().getString(EMAIL, FALSE));
             ((TextView) view.findViewById(R.id.password)).setText(data.getExtras().getString(PASSWORD, FALSE));
             InputMethodManager imm =
                     (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -119,7 +119,7 @@ public class MyStoreLoginFragment extends android.support.v4.app.Fragment implem
     private void login() {
 
         String postJson = "{\"email\":\"";
-        EditText editText = (EditText) view.findViewById(R.id.email);
+        EditText editText = (EditText) view.findViewById(R.id.emailEt);
         postJson = postJson + editText.getText().toString() + "\",\"password\":\"";
         editText = (EditText) view.findViewById(R.id.password);
         postJson = postJson + editText.getText().toString() + "\"}";

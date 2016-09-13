@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@id/root"
     android:layout_width="match_parent"
@@ -7,341 +8,784 @@
     android:background="@color/silver_light_2"
     android:orientation="vertical">
 
-    <ScrollView
-        android:id="@+id/profileLay"
+
+    <RelativeLayout
+        android:id="@+id/loginLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/tabs"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:alpha="0">
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:visibility="gone">
 
-        <RelativeLayout
+        <ScrollView
+            android:id="@+id/login_form"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
+
 
             <android.support.v7.widget.CardView
-                android:id="@+id/brandCV"
+                android:id="@+id/loginCV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
                 android:layout_marginTop="10dp"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
                 android:foreground="?android:attr/selectableItemBackground"
                 card_view:cardCornerRadius="10dp"
                 card_view:cardElevation="2dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/brandLogo"
-                        android:layout_width="@dimen/item_store_image_h_sale"
-                        android:layout_height="@dimen/item_store_image_h_sale"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true" />
-
-                    <TextView
-                        android:id="@+id/brandName"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_margin="8dp"
-                        android:layout_toRightOf="@+id/brandLogo"
-                        android:gravity="center"
-                        android:paddingLeft="20dp"
-                        android:textSize="@dimen/item_title_ts_medium" />
-
-                    <TextView
-                        android:id="@+id/catName"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/brandName"
-                        android:layout_below="@id/brandName"
-                        android:layout_toRightOf="@+id/brandLogo"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-
-                    <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/discountManagement"
-                        style="@style/Widget.AppCompat.Button.Colored"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/brandLogo"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_toRightOf="@+id/brandLogo"
-                        android:text="@string/discount_management"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/item_title_ts_smaller_2"
-                        app:backgroundTint="@color/colorPrimary" />
-
-
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/emailCV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/brandCV"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginTop="10dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:padding="5dp"
-                card_view:cardCornerRadius="10dp"
-                card_view:cardElevation="2dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/email"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_margin="8dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <TextView
-                        android:id="@+id/password"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/email"
-                        android:layout_below="@id/email"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/changePassword"
-                        style="@style/Widget.AppCompat.Button.Colored"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/password"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_toRightOf="@+id/logOut"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:text="@string/change_password"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/item_title_ts_smaller_2"
-                        app:backgroundTint="@color/colorPrimary" />
-
-                    <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/logOut"
-                        style="@style/Widget.AppCompat.Button.Colored"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_below="@+id/password"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="16dp"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:text="@string/logout"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/item_title_ts_smaller_2"
-                        app:backgroundTint="@color/buttonColorSecondary" />
-
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/addressCV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/emailCV"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:layout_marginTop="10dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:padding="5dp"
-                card_view:cardCornerRadius="10dp"
-                card_view:cardElevation="2dp">
-
-                <RelativeLayout
+                <LinearLayout
+                    android:id="@+id/email_login_form"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingRight="10dp">
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/storeName"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/emailInputLay"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                        android:textColorHint="@color/colorPrimary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <TextView
-                        android:id="@+id/city"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
+                        <AutoCompleteTextView
+                            android:id="@+id/emailEt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_email"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:nextFocusForward="@+id/password"
+                            android:textColor="@color/colorPrimaryDark" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/passwordInputLay"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@id/storeName"
-                        android:paddingBottom="5dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                        android:textColorHint="@color/colorPrimary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <TextView
-                        android:id="@+id/address"
-                        style="@style/AccountInfoTextStyle"
+                        <EditText
+                            android:id="@+id/password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_password"
+                            android:imeActionId="@+id/login"
+                            android:imeActionLabel="@string/action_sign_in_short"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColor="@color/colorPrimaryDark" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/city"
-                        android:layout_below="@id/city"
-                        android:paddingBottom="5dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                        android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tell"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/city"
-                        android:layout_below="@id/address"
-                        android:textSize="@dimen/item_title_ts_smaller_2"
-                        android:paddingBottom="5dp" />
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/signInBtn"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/action_sign_in"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/item_title_ts_medium"
+                            app:backgroundTint="@color/colorPrimary" />
 
-                    <TextView
-                        android:id="@+id/distributor"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/city"
-                        android:layout_below="@id/tell"
-                        android:paddingBottom="5dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                        <com.rey.material.widget.ProgressView
+                            android:id="@+id/signInBtnProgress"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/signInBtn"
+                            android:layout_alignLeft="@+id/signInBtn"
+                            android:layout_alignTop="@+id/signInBtn"
+                            android:layout_margin="9dp"
+                            android:translationZ="2dp"
+                            app:pv_autostart="false"
+                            app:pv_circular="true"
+                            app:pv_progressMode="indeterminate"
+                            app:pv_progressStyle="@style/CircularProgressWhite" />
+                    </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/workHour"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignRight="@+id/city"
-                        android:layout_below="@id/distributor"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/editUser"
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/signUpBtn"
                         style="@style/Widget.AppCompat.Button.Colored"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_below="@+id/workHour"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="16dp"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="15dp"
-                        android:text="@string/edit_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:text="@string/action_sign_up"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/item_title_ts_smaller_2"
+                        android:textSize="@dimen/item_title_ts_medium"
                         app:backgroundTint="@color/buttonColorSecondary" />
 
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/forgotPassword"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/forgot_your_password"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/item_title_ts_medium"
+                        app:backgroundTint="@color/buttonColorSecondary" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+        </ScrollView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/myStoreLay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <ScrollView
+            android:id="@+id/profileLay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tabs"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:alpha="0">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/brandCV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="10dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    card_view:cardCornerRadius="10dp"
+                    card_view:cardElevation="2dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/brandLogo"
+                            android:layout_width="@dimen/item_store_image_h_sale"
+                            android:layout_height="@dimen/item_store_image_h_sale"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true" />
+
+                        <TextView
+                            android:id="@+id/brandName"
+                            style="@style/AccountInfoTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_margin="8dp"
+                            android:layout_toRightOf="@+id/brandLogo"
+                            android:gravity="center"
+                            android:paddingLeft="20dp"
+                            android:textSize="@dimen/item_title_ts_medium" />
+
+                        <TextView
+                            android:id="@+id/catName"
+                            style="@style/AccountInfoTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/brandName"
+                            android:layout_below="@id/brandName"
+                            android:layout_toRightOf="@+id/brandLogo"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <TextView
+                            android:id="@+id/email"
+                            style="@style/AccountInfoTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@+id/catName"
+                            android:layout_margin="8dp"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/changePassword"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/brandLogo"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_toRightOf="@+id/logOut"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:text="@string/change_password"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/item_title_ts_smaller_2"
+                            app:backgroundTint="@color/colorPrimary" />
+
+                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/logOut"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_below="@+id/brandLogo"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="16dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:text="@string/logout"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/item_title_ts_smaller_2"
+                            app:backgroundTint="@color/buttonColorSecondary" />
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/addressCV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/brandCV"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="10dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:padding="5dp"
+                    card_view:cardCornerRadius="10dp"
+                    card_view:cardElevation="2dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="10dp">
+
+                        <TextView
+                            android:id="@+id/storeName"
+                            style="@style/AccountInfoTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="5dp"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <TextView
+                            android:id="@+id/city"
+                            style="@style/AccountInfoTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_below="@id/storeName"
+                            android:paddingBottom="5dp"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <TextView
+                            android:id="@+id/address"
+                            style="@style/AccountInfoTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/city"
+                            android:layout_below="@id/city"
+                            android:paddingBottom="5dp"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <TextView
+                            android:id="@+id/tell"
+                            style="@style/AccountInfoTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/city"
+                            android:layout_below="@id/address"
+                            android:paddingBottom="5dp"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <TextView
+                            android:id="@+id/distributor"
+                            style="@style/AccountInfoTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/city"
+                            android:layout_below="@id/tell"
+                            android:paddingBottom="5dp"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <TextView
+                            android:id="@+id/workHour"
+                            style="@style/AccountInfoTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/city"
+                            android:layout_below="@id/distributor"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/editUser"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_below="@+id/workHour"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="16dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:text="@string/edit_user"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/item_title_ts_smaller_2"
+                            app:backgroundTint="@color/buttonColorSecondary" />
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+            </RelativeLayout>
+
+
+        </ScrollView>
+
+        <ScrollView
+            android:id="@+id/discountLay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tabs"
+            android:alpha="1">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/discountCV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginTop="10dp"
+                card_view:cardCornerRadius="4dp"
+                card_view:cardElevation="2dp"
+                card_view:cardUseCompatPadding="true">
+
+
+                <RelativeLayout
+                    android:id="@+id/changPassLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="40dp"
+                    android:paddingRight="40dp"
+                    android:paddingTop="20dp">
+
+                    <LinearLayout
+                        android:id="@+id/editTextsLay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="5dp"
+                            android:gravity="right"
+                            android:text="@string/sale_start"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/saleDay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:background="@drawable/edit_text_back"
+                                android:gravity="center"
+                                android:inputType="numberDecimal"
+                                android:maxLength="2"
+                                android:minHeight="30dp"
+                                android:minWidth="25dp"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <TextView
+                                android:id="@+id/saleDaySlash"
+                                android:layout_width="15dp"
+                                android:layout_height="30dp"
+                                android:layout_toLeftOf="@+id/saleDay"
+                                android:gravity="center"
+                                android:text="/"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <EditText
+                                android:id="@+id/saleMonth"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:layout_toLeftOf="@+id/saleDaySlash"
+                                android:background="@drawable/edit_text_back"
+                                android:gravity="center"
+                                android:inputType="numberDecimal"
+                                android:maxLength="2"
+                                android:minHeight="30dp"
+                                android:minWidth="25dp"
+                                android:textColor="@color/colorPrimary"
+
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <TextView
+                                android:id="@+id/saleMonthSlash"
+                                android:layout_width="15dp"
+                                android:layout_height="30dp"
+                                android:layout_toLeftOf="@+id/saleMonth"
+                                android:gravity="center"
+                                android:text="/"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <EditText
+                                android:id="@+id/saleYear"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:layout_toLeftOf="@+id/saleMonthSlash"
+                                android:background="@drawable/edit_text_back"
+                                android:gravity="center"
+                                android:inputType="numberDecimal"
+                                android:maxLength="2"
+                                android:minHeight="30dp"
+                                android:minWidth="25dp"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_toLeftOf="@+id/saleYear"
+                                android:gravity="center"
+                                android:text="13"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="20dp"
+                            android:gravity="right"
+                            android:text="@string/sale_end"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/saleEndDay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:background="@drawable/edit_text_back"
+                                android:gravity="center"
+                                android:inputType="numberDecimal"
+                                android:maxLength="2"
+                                android:minHeight="30dp"
+                                android:minWidth="25dp"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <TextView
+                                android:id="@+id/saleEndDaySlash"
+                                android:layout_width="15dp"
+                                android:layout_height="30dp"
+                                android:layout_toLeftOf="@+id/saleEndDay"
+                                android:gravity="center"
+                                android:text="/"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <EditText
+                                android:id="@+id/saleEndMonth"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:layout_toLeftOf="@+id/saleEndDaySlash"
+                                android:background="@drawable/edit_text_back"
+                                android:gravity="center"
+                                android:inputType="numberDecimal"
+                                android:maxLength="2"
+                                android:minHeight="30dp"
+                                android:minWidth="25dp"
+                                android:textColor="@color/colorPrimary"
+
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <TextView
+                                android:id="@+id/saleEndMonthSlash"
+                                android:layout_width="15dp"
+                                android:layout_height="30dp"
+                                android:layout_toLeftOf="@+id/saleEndMonth"
+                                android:gravity="center"
+                                android:text="/"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <EditText
+                                android:id="@+id/saleEndYear"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:layout_toLeftOf="@+id/saleEndMonthSlash"
+                                android:background="@drawable/edit_text_back"
+                                android:gravity="center"
+                                android:inputType="numberDecimal"
+                                android:maxLength="2"
+                                android:minHeight="30dp"
+                                android:minWidth="25dp"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_toLeftOf="@+id/saleEndYear"
+                                android:gravity="center"
+                                android:text="13"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginTop="20dp"
+                            android:gravity="right"
+                            android:text="@string/discount_percent"
+                            android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/discountPercentageValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:background="@drawable/edit_text_back"
+                                android:gravity="center"
+                                android:inputType="numberDecimal"
+                                android:maxLength="2"
+                                android:minHeight="30dp"
+                                android:minWidth="25dp"
+                                android:text="0"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+                            <TextView
+                                android:id="@+id/discountPercentageTxt"
+                                android:layout_width="15dp"
+                                android:layout_height="30dp"
+                                android:layout_toLeftOf="@+id/discountPercentageValue"
+                                android:gravity="center"
+                                android:text="%"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/item_title_ts_larger" />
+
+
+                        </RelativeLayout>
+
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/saleNoteInputLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:textColorHint="@color/colorPrimary"
+                            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                            <AutoCompleteTextView
+                                android:id="@+id/saleNote"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/sale_note"
+                                android:inputType="textEmailAddress"
+                                android:maxLines="1"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/save"
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:paddingLeft="60dp"
+                                android:paddingRight="60dp"
+                                android:text="@string/save"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/item_title_ts_medium"
+                                app:backgroundTint="@color/buttonColorSecondary" />
+
+
+                            <com.rey.material.widget.ProgressView
+                                android:id="@+id/saveProgress"
+                                android:layout_width="40dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBottom="@+id/save"
+                                android:layout_alignLeft="@+id/save"
+                                android:layout_alignTop="@+id/save"
+                                android:layout_margin="9dp"
+                                android:translationZ="2dp"
+                                app:pv_autostart="false"
+                                app:pv_circular="true"
+                                app:pv_progressMode="indeterminate"
+                                app:pv_progressStyle="@style/CircularProgressWhite" />
+                        </RelativeLayout>
+
+
+                    </LinearLayout>
                 </RelativeLayout>
 
             </android.support.v7.widget.CardView>
 
-        </RelativeLayout>
+        </ScrollView>
 
-    </ScrollView>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_above="@+id/tabs"
+            android:background="@drawable/shadow_dark_from_bottom_thin" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/tabs">
+        <LinearLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:weightSum="2">
 
+            <RelativeLayout
+                android:id="@+id/salesTabLay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground">
 
+                <ImageView
+                    android:id="@+id/salesImg0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/salesTxt0"
+                    android:layout_alignParentTop="true"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_sales" />
 
-    </ScrollView>
+                <ImageView
+                    android:id="@+id/salesImg1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/salesTxt0"
+                    android:layout_alignParentTop="true"
+                    android:alpha="0"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_sales_1" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:background="@drawable/shadow_dark_from_bottom_thin"
-        android:layout_above="@+id/tabs"/>
+                <TextView
+                    android:id="@+id/salesTxt0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/sales"
+                    android:textColor="@color/tabDisabledColor" />
 
-    <LinearLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        android:weightSum="2">
+                <TextView
+                    android:id="@+id/salesTxt1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:alpha="0"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/sales"
+                    android:textColor="@color/tabColor" />
 
-        <RelativeLayout
-            android:id="@+id/salesTabLay"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:layout_weight="1">
+            </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/salesImg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_above="@+id/salesTxt"
-                android:paddingTop="4dp"
-                android:src="@drawable/icon_sales_1"/>
+            <RelativeLayout
+                android:id="@+id/profileTabLay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground">
 
-            <TextView
-                android:id="@+id/salesTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dp"
-                android:textColor="@color/tabColor"
-                android:layout_alignParentBottom="true"
-                android:text="@string/sales"/>
+                <ImageView
+                    android:id="@+id/profileImg0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/profileTxt0"
+                    android:layout_alignParentTop="true"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_profile" />
 
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/profileImg1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/profileTxt0"
+                    android:layout_alignParentTop="true"
+                    android:alpha="0"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_profile_1" />
 
-        <RelativeLayout
-            android:id="@+id/profileTabLay"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+                <TextView
+                    android:id="@+id/profileTxt0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/profile"
+                    android:textColor="@color/tabDisabledColor" />
 
-            <ImageView
-                android:id="@+id/profileImg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_above="@+id/profileTxt"
-                android:paddingTop="4dp"
-                android:src="@drawable/icon_profile"/>
+                <TextView
+                    android:id="@+id/profileTxt1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:alpha="0"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/profile"
+                    android:textColor="@color/tabColor" />
 
-            <TextView
-                android:id="@+id/profileTxt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="4dp"
-                android:textColor="@color/tabDisabledColor"
-                android:layout_alignParentBottom="true"
-                android:text="@string/profile"/>
+            </RelativeLayout>
 
-        </RelativeLayout>
-
-    </LinearLayout>
-
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
