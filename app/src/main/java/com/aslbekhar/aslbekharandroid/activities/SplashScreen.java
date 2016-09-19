@@ -1,7 +1,6 @@
 package com.aslbekhar.aslbekharandroid.activities;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -29,7 +27,6 @@ import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
 import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.rey.material.widget.ProgressView;
@@ -310,17 +307,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         continueToCheckForData(false);
     }
 
-    /* Creates a dialog for an error message */
-    private void showErrorDialog(int errorCode) {
-        // Create a fragment for the error dialog
-        ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
-        // Pass the error that should be displayed
-        Bundle args = new Bundle();
-        args.putInt(DIALOG_ERROR, errorCode);
-        dialogFragment.setArguments(args);
-        dialogFragment.show(getSupportFragmentManager(), "errordialog");
-    }
-
     /* Called from ErrorDialogFragment when the dialog is dismissed. */
     public void onDialogDismissed() {
         mResolvingError = false;
@@ -345,25 +331,6 @@ public class SplashScreen extends AppCompatActivity implements GoogleApiClient.C
         if (tag.equals(CHECK_VERSION) && checkForNewVersionTimer) {
             checkForNewVersionTimer = false;
             checkForPermission();
-        }
-    }
-
-    /* A fragment to display an error dialog */
-    public static class ErrorDialogFragment extends DialogFragment {
-        public ErrorDialogFragment() {
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Get the error code and retrieve the appropriate dialog
-            int errorCode = this.getArguments().getInt(DIALOG_ERROR);
-            return GoogleApiAvailability.getInstance().getErrorDialog(
-                    this.getActivity(), errorCode, SplashScreen.REQUEST_RESOLVE_ERROR);
-        }
-
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            ((SplashScreen) getActivity()).onDialogDismissed();
         }
     }
 

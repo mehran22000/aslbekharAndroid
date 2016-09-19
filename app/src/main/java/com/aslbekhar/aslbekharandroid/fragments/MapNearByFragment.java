@@ -57,7 +57,6 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.rey.material.widget.Slider;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -643,16 +642,22 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
             mMap.setMyLocationEnabled(true);
         }
         mMap.getUiSettings().setZoomControlsEnabled(true);
-    }
-
-    private void getPermission() {
-        // TODO: Consider calling
-        //    ActivityCompat#requestPermissions
-        // here to request the missing permissions, and then overriding
-        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-        //                                          int[] grantResults)
-        // to handle the case where the user grants the permission. See the documentation
-        // for ActivityCompat#requestPermissions for more details.
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (type == Constants.SINGLE_STORE) {
+                    checkForAdvertisement(model);
+                } else {
+                    for (StoreModel storeModel : storeModelList) {
+                        if (storeModel.get_id().equals(marker.getSnippet())) {
+                            checkForAdvertisement(storeModel);
+                            break;
+                        }
+                    }
+                }
+                return true;
+            }
+        });
     }
 
     @Override

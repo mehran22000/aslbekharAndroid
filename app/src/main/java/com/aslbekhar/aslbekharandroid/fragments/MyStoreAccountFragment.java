@@ -114,13 +114,17 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         view.findViewById(R.id.salesTabLay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchToDiscountLay(400);
+                if (!discountLayOrProfileLay) {
+                    switchToDiscountLay(400);
+                }
             }
         });
         view.findViewById(R.id.profileTabLay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchToProfileLay(400);
+                if (discountLayOrProfileLay) {
+                    switchToProfileLay(400);
+                }
             }
         });
 
