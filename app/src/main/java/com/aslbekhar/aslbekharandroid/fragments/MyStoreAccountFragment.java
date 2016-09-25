@@ -2,7 +2,6 @@ package com.aslbekhar.aslbekharandroid.fragments;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -49,6 +48,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.IS_LOGGED_IN;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGIN_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.PASSWORD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.RECOVER_PASSWORD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.SUCCESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.UPDATE_USER_URL;
@@ -165,6 +165,12 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         view.findViewById(R.id.logOut).setOnClickListener(this);
         view.findViewById(R.id.changePassword).setOnClickListener(this);
         view.findViewById(R.id.editUser).setOnClickListener(this);
+        view.findViewById(R.id.forgotPassword).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openEditUserActivity();
+            }
+        });
 
         textView = (TextView) view.findViewById(R.id.storeName);
         textView.setText("نام فروشگاه: " + model.getBuStoreName());
@@ -520,7 +526,40 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             case R.id.editUser:
                 openEditUserActivity();
                 break;
+
+            case R.id.forgotPassword:
+                openForgotPasswordDialog();
+                break;
         }
+    }
+
+    private void openForgotPasswordDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater(null);
+        final View dialogView = inflater.inflate(R.layout.dialog_forgot_password, null);
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
+        setFontForActivity(dialogView, tf);
+        final EditText email = (EditText) dialogView.findViewById(R.id.email);
+        email.setTypeface(tf);
+        dialogView.findViewById(R.id.recoverPassword).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (email.getText().toString().contains("@")
+                        && email.getText().length() > 5) {
+                    showFade(dialogView.findViewById(R.id.listOverLay), true, 500);
+                    ((ProgressView) dialogView.findViewById(R.id.progressBar)).start();
+                    NetworkRequests.getRequest(RECOVER_PASSWORD + email.getText().toString()
+                            , MyStoreAccountFragment.this, RECOVER_PASSWORD);
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.incorrectEmail), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+        dialogBuilder.setView(dialogView);
+        dialog = dialogBuilder.create();
+        dialog.show();
     }
 
     private void openEditUserActivity() {
@@ -608,9 +647,21 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 dialog.dismiss();
             } else {
                 Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_LONG).show();
+                dialog.dismiss();
             }
         } else if (tag.equals("login")) {
             onLoginResponse(response);
+        } else if (tag.equals(RECOVER_PASSWORD)) {
+            if (response.toLowerCase().contains(SUCCESS.toLowerCase())) {
+                Toast.makeText(getContext(), R.string.password_sucssesfuly_sent, Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            } else if (response.toLowerCase().contains("invalid_email".toLowerCase())){
+                Toast.makeText(getContext(), R.string.invalid_email, Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            } else {
+                Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
         }
     }
 
@@ -624,79 +675,15 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         }
         if (modelList != null && modelList.size() > 0 && modelList.get(0).getErr().equals("")) {
             model = modelList.get(0);
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-            LayoutInflater inflater = getLayoutInflater(null);
-            final View dialogView = inflater.inflate(R.layout.dialog_login_confirm, null);
-            Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
-            ((TextView) dialogView.findViewById(R.id.title)).setText(model.getBuStoreName());
-            ((TextView) dialogView.findViewById(R.id.title)).setTypeface(tf);
-            if (model.getBuStoreHours() != null && model.getBuStoreHours().length() > 1) {
-                ((TextView) dialogView.findViewById(R.id.workHour)).setText("ساعات کار: " + model.getBuStoreHours());
-                ((TextView) dialogView.findViewById(R.id.workHour)).setTypeface(tf);
-            } else {
-                dialogView.findViewById(R.id.workHour).setVisibility(View.GONE);
-            }
-            if (model.getBuTel() != null && model.getBuTel().length() > 1) {
-                ((TextView) dialogView.findViewById(R.id.tell)).setText("تلفن: " + Constants.persianNumbers(model.getBuTel()));
-                ((TextView) dialogView.findViewById(R.id.tell)).setTypeface(tf);
-            } else {
-                dialogView.findViewById(R.id.tell).setVisibility(View.GONE);
-            }
-            if (model.getBuStoreAddress() != null && model.getBuStoreAddress().length() > 1) {
-                ((TextView) dialogView.findViewById(R.id.address)).setText("آدرس: " + model.getBuStoreAddress());
-                ((TextView) dialogView.findViewById(R.id.address)).setTypeface(tf);
-            } else {
-                dialogView.findViewById(R.id.address).setVisibility(View.GONE);
-            }
 
-            Glide.with(this)
-                    .load(Uri.parse("file:///android_asset/logos/" + model.getBuBrandLogoName() + ".png"))
-                    .listener(new RequestListener<Uri, GlideDrawable>() {
-                        @Override
-                        public boolean onException(Exception e, Uri uriModel, Target<GlideDrawable> target, boolean isFirstResource) {
-                            Glide.with(MyStoreAccountFragment.this)
-                                    .load(Constants.BRAND_LOGO_URL + model.getBuBrandLogoName() + ".png")
-                                    .into((ImageView) dialogView.findViewById(R.id.brandLogo));
-                            return true;
-                        }
+            Snippets.setSP(IS_LOGGED_IN, TRUE);
+            Snippets.setSP(USER_INFO, JSON.toJSONString(model));
+            showMyAccountLay(400);
 
-                        @Override
-                        public boolean onResourceReady(GlideDrawable resource, Uri model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
-                        }
-                    })
-                    .into((ImageView) dialogView.findViewById(R.id.brandLogo));
-
-            dialogBuilder.setView(dialogView);
-
-            dialogBuilder.setPositiveButton(R.string.yes_its_me, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-
-                    Snippets.setSP(IS_LOGGED_IN, TRUE);
-                    Snippets.setSP(USER_INFO, JSON.toJSONString(model));
-                    showMyAccountLay(400);
-                }
-            });
-            dialogBuilder.setNegativeButton(R.string.no_its_not_me, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-            final AlertDialog dialog = dialogBuilder.create();
-            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface arg0) {
-                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorPrimary));
-                }
-            });
-
-            dialog.show();
         } else if (modelList != null && modelList.size() > 0 && modelList.get(0).getErr().equals(Constants.PASSWORD_ERROR)) {
             Toast.makeText(getActivity(), R.string.invalid_password, Toast.LENGTH_LONG).show();
         } else {
-
+            Toast.makeText(getActivity(), R.string.connection_error, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -713,6 +700,9 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                         }
                     }).setActionTextColor(Color.YELLOW);
             snackbar.show();
+        } else if (tag.equals(CHANGE_PASSWORD) || tag.equals(RECOVER_PASSWORD)) {
+            Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_LONG).show();
+            dialog.dismiss();
         }
     }
 
@@ -729,6 +719,9 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                         }
                     }).setActionTextColor(Color.YELLOW);
             snackbar.show();
+        } else if (tag.equals(CHANGE_PASSWORD) || tag.equals(RECOVER_PASSWORD)) {
+            Toast.makeText(getContext(), R.string.connection_error, Toast.LENGTH_LONG).show();
+            dialog.dismiss();
         }
     }
 }

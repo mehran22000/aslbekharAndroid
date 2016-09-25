@@ -56,6 +56,10 @@ public class Constants {
     public static String UPDATE_USER_URL =
             WEB_SERVER + "services/v1/dev/users/business/updateuser";
 
+    // WS13
+    public static String RECOVER_PASSWORD =
+            WEB_SERVER + "services/v1/dev/users/business/forgetpassword/";
+
     // WS16
     public static String REGISTER_USER =
             WEB_SERVER + "services/v1/dev/users/business/adduser";
