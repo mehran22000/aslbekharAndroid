@@ -10,228 +10,148 @@
 
 
     <RelativeLayout
-        android:id="@+id/myStoreLay"
+        android:id="@+id/loginLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:visibility="gone">
 
         <ScrollView
-            android:id="@+id/profileLay"
+            android:id="@+id/login_form"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/tabs"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:alpha="0">
+            android:layout_height="match_parent">
 
 
-            <RelativeLayout
+            <android.support.v7.widget.CardView
+                android:id="@+id/loginCV"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                card_view:cardCornerRadius="10dp"
+                card_view:cardElevation="2dp"
+                card_view:cardUseCompatPadding="true">
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/brandCV"
+                <LinearLayout
+                    android:id="@+id/email_login_form"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="10dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    card_view:cardCornerRadius="10dp"
-                    card_view:cardElevation="2dp">
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/activity_vertical_margin"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                    android:paddingTop="@dimen/activity_vertical_margin">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/brandLogo"
-                            android:layout_width="@dimen/item_store_image_h_sale"
-                            android:layout_height="@dimen/item_store_image_h_sale"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentTop="true" />
-
-                        <TextView
-                            android:id="@+id/brandName"
-                            style="@style/AccountInfoTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_margin="8dp"
-                            android:layout_toRightOf="@+id/brandLogo"
-                            android:gravity="center"
-                            android:paddingLeft="20dp"
-                            android:textSize="@dimen/item_title_ts_medium" />
-
-                        <TextView
-                            android:id="@+id/catName"
-                            style="@style/AccountInfoTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/brandName"
-                            android:layout_below="@id/brandName"
-                            android:layout_toRightOf="@+id/brandLogo"
-                            android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                        <TextView
-                            android:id="@+id/email"
-                            style="@style/AccountInfoTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_below="@+id/catName"
-                            android:layout_margin="8dp"
-                            android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/changePassword"
-                            style="@style/Widget.AppCompat.Button.Colored"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/brandLogo"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_toRightOf="@+id/logOut"
-                            android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
-                            android:text="@string/change_password"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/item_title_ts_smaller_2"
-                            app:backgroundTint="@color/colorPrimary" />
-
-                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/logOut"
-                            style="@style/Widget.AppCompat.Button.Colored"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_below="@+id/brandLogo"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="16dp"
-                            android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
-                            android:text="@string/logout"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/item_title_ts_smaller_2"
-                            app:backgroundTint="@color/buttonColorSecondary" />
-
-                    </RelativeLayout>
-
-                </android.support.v7.widget.CardView>
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/addressCV"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/brandCV"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
-                    android:layout_marginTop="10dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:padding="5dp"
-                    card_view:cardCornerRadius="10dp"
-                    card_view:cardElevation="2dp">
-
-                    <RelativeLayout
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/emailInputLay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingRight="10dp">
+                        android:textColorHint="@color/colorPrimary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <TextView
-                            android:id="@+id/storeName"
-                            style="@style/AccountInfoTextStyle"
-                            android:layout_width="wrap_content"
+                        <AutoCompleteTextView
+                            android:id="@+id/emailEt"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginTop="5dp"
-                            android:textSize="@dimen/item_title_ts_smaller_2" />
+                            android:hint="@string/prompt_email"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:nextFocusForward="@+id/password"
+                            android:textColor="@color/colorPrimaryDark" />
 
-                        <TextView
-                            android:id="@+id/city"
-                            style="@style/AccountInfoTextStyle"
-                            android:layout_width="wrap_content"
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/passwordInputLay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/colorPrimary"
+                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                        <EditText
+                            android:id="@+id/password"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_below="@id/storeName"
-                            android:paddingBottom="5dp"
-                            android:textSize="@dimen/item_title_ts_smaller_2" />
+                            android:hint="@string/prompt_password"
+                            android:imeActionId="@+id/login"
+                            android:imeActionLabel="@string/action_sign_in_short"
+                            android:imeOptions="actionUnspecified"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColor="@color/colorPrimaryDark" />
 
-                        <TextView
-                            android:id="@+id/address"
-                            style="@style/AccountInfoTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/city"
-                            android:layout_below="@id/city"
-                            android:paddingBottom="5dp"
-                            android:textSize="@dimen/item_title_ts_smaller_2" />
+                    </android.support.design.widget.TextInputLayout>
 
-                        <TextView
-                            android:id="@+id/tell"
-                            style="@style/AccountInfoTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/city"
-                            android:layout_below="@id/address"
-                            android:paddingBottom="5dp"
-                            android:textSize="@dimen/item_title_ts_smaller_2" />
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/distributor"
-                            style="@style/AccountInfoTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/city"
-                            android:layout_below="@id/tell"
-                            android:paddingBottom="5dp"
-                            android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                        <TextView
-                            android:id="@+id/workHour"
-                            style="@style/AccountInfoTextStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/city"
-                            android:layout_below="@id/distributor"
-                            android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/editUser"
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/signInBtn"
                             style="@style/Widget.AppCompat.Button.Colored"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_below="@+id/workHour"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
                             android:layout_marginTop="16dp"
-                            android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
-                            android:text="@string/edit_user"
+                            android:text="@string/action_sign_in"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/item_title_ts_smaller_2"
-                            app:backgroundTint="@color/buttonColorSecondary" />
+                            android:textSize="@dimen/item_title_ts_medium"
+                            app:backgroundTint="@color/colorPrimary" />
 
+                        <com.rey.material.widget.ProgressView
+                            android:id="@+id/signInBtnProgress"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/signInBtn"
+                            android:layout_alignLeft="@+id/signInBtn"
+                            android:layout_alignTop="@+id/signInBtn"
+                            android:layout_margin="9dp"
+                            android:translationZ="2dp"
+                            app:pv_autostart="false"
+                            app:pv_circular="true"
+                            app:pv_progressMode="indeterminate"
+                            app:pv_progressStyle="@style/CircularProgressWhite" />
                     </RelativeLayout>
 
-                </android.support.v7.widget.CardView>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/signUpBtn"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:text="@string/action_sign_up"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/item_title_ts_medium"
+                        app:backgroundTint="@color/buttonColorSecondary" />
 
-            </RelativeLayout>
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/forgotPassword"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/forgot_your_password"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/item_title_ts_smaller"
+                        app:backgroundTint="@color/buttonColorSecondary" />
 
+                </LinearLayout>
 
+            </android.support.v7.widget.CardView>
         </ScrollView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/myStoreLay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <ScrollView
             android:id="@+id/discountLay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/tabs"
-            android:alpha="1">
+            android:alpha="0">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/discountCV"
@@ -543,6 +463,19 @@
 
         </ScrollView>
 
+        <ScrollView
+            android:id="@+id/profileLay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tabs"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:alpha="1">
+
+
+        </ScrollView>
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -658,136 +591,385 @@
         </LinearLayout>
     </RelativeLayout>
 
-
-
     <RelativeLayout
-        android:id="@+id/loginLay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:visibility="visible">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/loginLay"
+        android:layout_toEndOf="@+id/loginLay"
+        android:layout_marginBottom="83dp">
 
-        <ScrollView
-            android:id="@+id/login_form"
+        <android.support.v7.widget.CardView
+            android:id="@+id/brandCV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="10dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            card_view:cardCornerRadius="10dp"
+            card_view:cardElevation="2dp">
 
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/loginCV"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:foreground="?android:attr/selectableItemBackground"
-                card_view:cardCornerRadius="10dp"
-                card_view:cardElevation="2dp"
-                card_view:cardUseCompatPadding="true">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:id="@+id/email_login_form"
+                <ImageView
+                    android:id="@+id/brandLogo"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true" />
+
+                <RelativeLayout
+                    android:id="@+id/emailLay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/activity_vertical_margin"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingRight="@dimen/activity_horizontal_margin"
-                    android:paddingTop="@dimen/activity_vertical_margin"
-                    android:orientation="vertical">
+                    android:layout_alignRight="@+id/cityLay"
+                    android:layout_below="@+id/catNameLay"
+                    android:layout_toRightOf="@+id/logOut"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingBottom="10dp">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/emailInputLay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColorHint="@color/colorPrimary"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/emailEt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/prompt_email"
-                            android:inputType="textEmailAddress"
-                            android:maxLines="1"
-                            android:nextFocusForward="@+id/password"
-                            android:textColor="@color/colorPrimaryDark" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/passwordInputLay"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColorHint="@color/colorPrimary"
-                        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                        <EditText
-                            android:id="@+id/password"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/prompt_password"
-                            android:imeActionId="@+id/login"
-                            android:imeActionLabel="@string/action_sign_in_short"
-                            android:imeOptions="actionUnspecified"
-                            android:inputType="textPassword"
-                            android:maxLines="1"
-                            android:textColor="@color/colorPrimaryDark" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                    <RelativeLayout
+                    <TextView
+                        android:id="@+id/emailTitle"
+                        style="@style/AccountInfoTextStyle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <android.support.v7.widget.AppCompatButton
-                            android:id="@+id/signInBtn"
-                            style="@style/Widget.AppCompat.Button.Colored"
-                            android:layout_width="match_parent"
-                            android:layout_height="55dp"
-                            android:layout_marginTop="16dp"
-                            android:text="@string/action_sign_in"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/item_title_ts_medium"
-                            app:backgroundTint="@color/colorPrimary" />
-
-                        <com.rey.material.widget.ProgressView
-                            android:id="@+id/signInBtnProgress"
-                            android:layout_width="40dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignBottom="@+id/signInBtn"
-                            android:layout_alignLeft="@+id/signInBtn"
-                            android:layout_alignTop="@+id/signInBtn"
-                            android:layout_margin="9dp"
-                            android:translationZ="2dp"
-                            app:pv_autostart="false"
-                            app:pv_circular="true"
-                            app:pv_progressMode="indeterminate"
-                            app:pv_progressStyle="@style/CircularProgressWhite" />
-                    </RelativeLayout>
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/signUpBtn"
-                        style="@style/Widget.AppCompat.Button.Colored"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:text="@string/action_sign_up"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/item_title_ts_medium"
-                        app:backgroundTint="@color/buttonColorSecondary" />
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/forgotPassword"
-                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/forgot_your_password"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="@dimen/item_title_ts_smaller"
-                        app:backgroundTint="@color/buttonColorSecondary" />
+                        android:layout_alignParentRight="true"
+                        android:padding="6dp"
+                        android:text="ایمیل:"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/emailEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/emailTitle"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:padding="6dp"
+                        android:text=""
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                </RelativeLayout>
 
-            </android.support.v7.widget.CardView>
-        </ScrollView>
+                <RelativeLayout
+                    android:id="@+id/passwordLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/cityLay"
+                    android:layout_below="@+id/emailLay"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/passwordTitle"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="6dp"
+                        android:text="رمز:"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                    <TextView
+                        android:id="@+id/passwordEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/passwordTitle"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:padding="6dp"
+                        android:text="••••••"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/logOut"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/catNameLay"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="@string/logout"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/item_title_ts_smaller_2"
+                    app:backgroundTint="@color/buttonColorSecondary" />
+
+                <RelativeLayout
+                    android:id="@+id/storeNameLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/cityLay"
+                    android:layout_below="@+id/passwordLay"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/storeName"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="6dp"
+                        android:text="نام فروشگاه:"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                    <EditText
+                        android:id="@+id/storeNameEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/storeName"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/acount_edittext_back"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:padding="6dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/cityLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/storeNameLay"
+                    android:layout_marginRight="10dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/city"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="6dp"
+                        android:text="شهر:"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                    <TextView
+                        android:id="@+id/cityEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/city"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:padding="6dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/addressLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/cityLay"
+                    android:layout_below="@id/cityLay"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/address"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="6dp"
+                        android:text="آدرس:"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                    <EditText
+                        android:id="@+id/addressEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/address"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/acount_edittext_back"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:padding="6dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/tellLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/cityLay"
+                    android:layout_below="@id/addressLay"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/tell"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="6dp"
+                        android:text="تلفن:"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                    <TextView
+                        android:id="@+id/tellEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/tell"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:padding="6dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/distributorLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/cityLay"
+                    android:layout_below="@id/tellLay"
+                    android:paddingBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/distributor"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="6dp"
+                        android:text="پخش کننده:"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                    <EditText
+                        android:id="@+id/distributorEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/distributor"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/acount_edittext_back"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:padding="6dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/workHourLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignRight="@+id/cityLay"
+                    android:layout_below="@id/distributorLay">
+
+                    <TextView
+                        android:id="@+id/workHour"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="6dp"
+                        android:text="ساعات کار:"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                    <EditText
+                        android:id="@+id/workHourEdit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/workHour"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/acount_edittext_back"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:padding="6dp"
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/editUser"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/workHourLay"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="16dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="@string/edit_user"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/item_title_ts_smaller_2"
+                    app:backgroundTint="@color/buttonColorSecondary" />
+
+                <RelativeLayout
+                    android:id="@+id/catNameLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:paddingBottom="10dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/brandLogo"
+                    android:layout_toEndOf="@+id/brandLogo">
+
+                    <TextView
+                        android:id="@+id/brandName"
+                        style="@style/AccountInfoTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:padding="6dp"
+                        android:text="ecco"
+                        android:textSize="@dimen/item_title_ts_medium" />
+
+                    <TextView
+                        android:id="@+id/catName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/brandName"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:padding="6dp"
+                        android:text=" "
+                        android:textSize="@dimen/item_title_ts_smaller_2" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
 
     </RelativeLayout>
 

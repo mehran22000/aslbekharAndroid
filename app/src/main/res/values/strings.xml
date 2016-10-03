@@ -43,7 +43,7 @@
     <string name="try_again">دوباره تلاش کن</string>
     <string name="change_password">رمز را عوض کن</string>
     <string name="old_password">رمز قبلی</string>
-    <string name="logout">خروج از حساب کاربری</string>
+    <string name="logout">خروج</string>
     <string name="confirmPassword">تکرار رمز عبور جدید</string>
     <string name="new_password">رمز عبور جدید</string>
     <string name="back">بازگشت</string>

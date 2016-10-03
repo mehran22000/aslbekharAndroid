@@ -91,6 +91,12 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
         setFontForActivity(view.findViewById(R.id.root), tf);
         decideToShowLoginOrMyAccount();
+        view.findViewById(R.id.forgotPassword).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openForgotPasswordDialog();
+            }
+        });
         return view;
     }
 
@@ -163,14 +169,8 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
 
         view.findViewById(R.id.logOut).setOnClickListener(this);
-        view.findViewById(R.id.changePassword).setOnClickListener(this);
+        view.findViewById(R.id.passwordLay).setOnClickListener(this);
         view.findViewById(R.id.editUser).setOnClickListener(this);
-        view.findViewById(R.id.forgotPassword).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openEditUserActivity();
-            }
-        });
 
         textView = (TextView) view.findViewById(R.id.storeName);
         textView.setText("نام فروشگاه: " + model.getBuStoreName());
@@ -519,16 +519,12 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 logOut();
                 break;
 
-            case R.id.changePassword:
+            case R.id.passwordLay:
                 showChangePasswordDialog();
                 break;
 
             case R.id.editUser:
                 openEditUserActivity();
-                break;
-
-            case R.id.forgotPassword:
-                openForgotPasswordDialog();
                 break;
         }
     }
@@ -553,6 +549,12 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.incorrectEmail), Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+        dialogView.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
