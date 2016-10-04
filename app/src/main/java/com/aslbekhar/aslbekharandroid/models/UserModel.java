@@ -18,12 +18,12 @@ public class UserModel extends ResponseModel{
     String buStoreId;
     String buStoreName;
     String buStoreAddress;
-    String buStoreHours;
-    String buDistributor;
+    String buStoreHours = "";
+    String buDistributor = "";
     String buStoreLat;
     String buStoreLon;
     String buAreaCode;
-    String buTel;
+    String buTel = "";
     String buBrandLogoName;
 //    String dStartDate;
 //    String dEndDate;

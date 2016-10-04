@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ScrollView
             android:id="@+id/login_form"
@@ -74,8 +74,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/prompt_password"
-                            android:imeActionId="@+id/login"
-                            android:imeActionLabel="@string/action_sign_in_short"
                             android:imeOptions="actionUnspecified"
                             android:inputType="textPassword"
                             android:maxLines="1"
@@ -144,7 +142,7 @@
         android:id="@+id/myStoreLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ScrollView
             android:id="@+id/discountLay"
@@ -471,8 +469,408 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:alpha="1">
+            android:alpha="0">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="83dp"
+                android:layout_toEndOf="@+id/loginLay"
+                android:layout_toRightOf="@+id/loginLay">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/brandCV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="10dp"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    card_view:cardCornerRadius="10dp"
+                    card_view:cardElevation="2dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/brandLogo"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentTop="true" />
+
+
+                        <RelativeLayout
+                            android:id="@+id/catNameLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/brandLogo"
+                            android:layout_toRightOf="@+id/brandLogo"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/brandName"
+                                style="@style/AccountInfoTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:padding="6dp"
+                                android:text="ecco"
+                                android:textSize="@dimen/item_title_ts_medium" />
+
+                            <TextView
+                                android:id="@+id/catName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/brandName"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="6dp"
+                                android:text=" "
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/emailLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/cityLay"
+                            android:layout_below="@+id/catNameLay"
+                            android:layout_toRightOf="@+id/logOut"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/emailTitle"
+                                style="@style/AccountInfoTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:padding="6dp"
+                                android:text="ایمیل:"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                            <TextView
+                                android:id="@+id/emailEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/emailTitle"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="6dp"
+                                android:text=""
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/passwordLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/cityLay"
+                            android:layout_below="@+id/emailLay"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/passwordTitle"
+                                style="@style/AccountInfoTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:padding="6dp"
+                                android:text="رمز:"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                            <TextView
+                                android:id="@+id/passwordEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/passwordTitle"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="6dp"
+                                android:text="••••••"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        </RelativeLayout>
+
+                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/logOut"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_below="@+id/catNameLay"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="5dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:text="@string/logout"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/item_title_ts_smaller_2"
+                            app:backgroundTint="@color/buttonColorSecondary" />
+
+                        <RelativeLayout
+                            android:id="@+id/storeNameLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/cityLay"
+                            android:layout_below="@+id/passwordLay"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/storeName"
+                                style="@style/AccountInfoTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:padding="6dp"
+                                android:text="نام فروشگاه:"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                            <EditText
+                                android:id="@+id/storeNameEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/storeName"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:background="@drawable/account_edittext_back"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="6dp"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/cityLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/storeNameLay"
+                            android:layout_marginRight="10dp"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/city"
+                                style="@style/AccountInfoTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:padding="6dp"
+                                android:text="شهر:"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                            <TextView
+                                android:id="@+id/cityEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/city"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="6dp"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/addressLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/cityLay"
+                            android:layout_below="@id/cityLay"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/address"
+                                style="@style/AccountInfoTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:padding="6dp"
+                                android:text="آدرس:"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                            <EditText
+                                android:id="@+id/addressEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/address"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:background="@drawable/account_edittext_back"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="6dp"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/tellLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/cityLay"
+                            android:layout_below="@id/addressLay"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/tell"
+                                style="@style/AccountInfoTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:padding="6dp"
+                                android:text="تلفن:"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                            <TextView
+                                android:id="@+id/tellEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/tell"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="6dp"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/distributorLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/cityLay"
+                            android:layout_below="@id/tellLay"
+                            android:paddingBottom="10dp">
+
+                            <TextView
+                                android:id="@+id/distributor"
+                                style="@style/AccountInfoTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:padding="6dp"
+                                android:text="پخش کننده:"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                            <EditText
+                                android:id="@+id/distributorEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/distributor"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="4dp"
+                                android:background="@drawable/account_edittext_back"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="6dp"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/workHourLay"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignRight="@+id/cityLay"
+                            android:layout_below="@id/distributorLay">
+
+                            <TextView
+                                android:id="@+id/workHour"
+                                style="@style/AccountInfoTextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:padding="6dp"
+                                android:text="ساعات کار:"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+
+                            <EditText
+                                android:id="@+id/workHourEdit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_below="@+id/workHour"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="8dp"
+                                android:background="@drawable/account_edittext_back"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:padding="6dp"
+                                android:textSize="@dimen/item_title_ts_smaller_2" />
+                        </RelativeLayout>
+
+                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/editUser"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_below="@+id/workHourLay"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="16dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:text="@string/edit_user"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/item_title_ts_smaller_2"
+                            app:backgroundTint="@color/buttonColorSecondary" />
+
+                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/saveUserEdit"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@+id/editUser"
+                            android:layout_below="@+id/workHourLay"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="16dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:text="@string/save"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/item_title_ts_smaller_2"
+                            app:backgroundTint="@color/buttonColorSecondary" />
+
+                    </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
+
+            </RelativeLayout>
 
         </ScrollView>
 
@@ -589,387 +987,6 @@
             </RelativeLayout>
 
         </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/loginLay"
-        android:layout_toEndOf="@+id/loginLay"
-        android:layout_marginBottom="83dp">
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/brandCV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginTop="10dp"
-            android:foreground="?android:attr/selectableItemBackground"
-            card_view:cardCornerRadius="10dp"
-            card_view:cardElevation="2dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/brandLogo"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true" />
-
-                <RelativeLayout
-                    android:id="@+id/emailLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/cityLay"
-                    android:layout_below="@+id/catNameLay"
-                    android:layout_toRightOf="@+id/logOut"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:id="@+id/emailTitle"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:padding="6dp"
-                        android:text="ایمیل:"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <TextView
-                        android:id="@+id/emailEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/emailTitle"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:gravity="right"
-                        android:maxLines="1"
-                        android:padding="6dp"
-                        android:text=""
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/passwordLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/cityLay"
-                    android:layout_below="@+id/emailLay"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:id="@+id/passwordTitle"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:padding="6dp"
-                        android:text="رمز:"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <TextView
-                        android:id="@+id/passwordEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/passwordTitle"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:gravity="right"
-                        android:maxLines="1"
-                        android:padding="6dp"
-                        android:text="••••••"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                </RelativeLayout>
-
-                <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/logOut"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/catNameLay"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:text="@string/logout"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/item_title_ts_smaller_2"
-                    app:backgroundTint="@color/buttonColorSecondary" />
-
-                <RelativeLayout
-                    android:id="@+id/storeNameLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/cityLay"
-                    android:layout_below="@+id/passwordLay"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:id="@+id/storeName"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:padding="6dp"
-                        android:text="نام فروشگاه:"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <EditText
-                        android:id="@+id/storeNameEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/storeName"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@drawable/acount_edittext_back"
-                        android:gravity="right"
-                        android:maxLines="1"
-                        android:padding="6dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/cityLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/storeNameLay"
-                    android:layout_marginRight="10dp"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:id="@+id/city"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:padding="6dp"
-                        android:text="شهر:"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <TextView
-                        android:id="@+id/cityEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/city"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:gravity="right"
-                        android:maxLines="1"
-                        android:padding="6dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/addressLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/cityLay"
-                    android:layout_below="@id/cityLay"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:id="@+id/address"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:padding="6dp"
-                        android:text="آدرس:"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <EditText
-                        android:id="@+id/addressEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/address"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@drawable/acount_edittext_back"
-                        android:gravity="right"
-                        android:maxLines="1"
-                        android:padding="6dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/tellLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/cityLay"
-                    android:layout_below="@id/addressLay"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:id="@+id/tell"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:padding="6dp"
-                        android:text="تلفن:"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <TextView
-                        android:id="@+id/tellEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/tell"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:gravity="right"
-                        android:maxLines="1"
-                        android:padding="6dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/distributorLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/cityLay"
-                    android:layout_below="@id/tellLay"
-                    android:paddingBottom="10dp">
-
-                    <TextView
-                        android:id="@+id/distributor"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:padding="6dp"
-                        android:text="پخش کننده:"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <EditText
-                        android:id="@+id/distributorEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/distributor"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@drawable/acount_edittext_back"
-                        android:gravity="right"
-                        android:maxLines="1"
-                        android:padding="6dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/workHourLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignRight="@+id/cityLay"
-                    android:layout_below="@id/distributorLay">
-
-                    <TextView
-                        android:id="@+id/workHour"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:padding="6dp"
-                        android:text="ساعات کار:"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                    <EditText
-                        android:id="@+id/workHourEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/workHour"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:background="@drawable/acount_edittext_back"
-                        android:gravity="right"
-                        android:maxLines="1"
-                        android:padding="6dp"
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-                </RelativeLayout>
-
-                <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/editUser"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/workHourLay"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="16dp"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:text="@string/edit_user"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/item_title_ts_smaller_2"
-                    app:backgroundTint="@color/buttonColorSecondary" />
-
-                <RelativeLayout
-                    android:id="@+id/catNameLay"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:paddingBottom="10dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_toRightOf="@+id/brandLogo"
-                    android:layout_toEndOf="@+id/brandLogo">
-
-                    <TextView
-                        android:id="@+id/brandName"
-                        style="@style/AccountInfoTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:padding="6dp"
-                        android:text="ecco"
-                        android:textSize="@dimen/item_title_ts_medium" />
-
-                    <TextView
-                        android:id="@+id/catName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/brandName"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:gravity="right"
-                        android:maxLines="1"
-                        android:padding="6dp"
-                        android:text=" "
-                        android:textSize="@dimen/item_title_ts_smaller_2" />
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
 
     </RelativeLayout>
 

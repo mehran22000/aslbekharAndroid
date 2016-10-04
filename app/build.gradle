@@ -27,8 +27,8 @@ android {
         applicationId "com.ionicframework.aslbekhar192325"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 202
-        versionName "2.0.2"
+        versionCode 203
+        versionName "2.1.0"
     }
     buildTypes {
         release {

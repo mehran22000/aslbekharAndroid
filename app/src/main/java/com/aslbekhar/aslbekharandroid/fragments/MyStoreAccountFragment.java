@@ -57,6 +57,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getDisplayWidth;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setFontForActivity;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setupUI;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
 
 /**
@@ -164,32 +165,32 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         textView = (TextView) view.findViewById(R.id.catName);
         textView.setText(model.getBuBrandCategory());
 
-        textView = (TextView) view.findViewById(R.id.email);
-        textView.setText("ایمیل: " + model.getBuEmail());
+        textView = (TextView) view.findViewById(R.id.emailEdit);
+        textView.setText(model.getBuEmail());
 
 
         view.findViewById(R.id.logOut).setOnClickListener(this);
         view.findViewById(R.id.passwordLay).setOnClickListener(this);
         view.findViewById(R.id.editUser).setOnClickListener(this);
 
-        textView = (TextView) view.findViewById(R.id.storeName);
-        textView.setText("نام فروشگاه: " + model.getBuStoreName());
+        textView = (TextView) view.findViewById(R.id.storeNameEdit);
+        textView.setText(model.getBuStoreName());
 
 
-        textView = (TextView) view.findViewById(R.id.city);
-        textView.setText("شهر: " + model.getBuCityNameFa());
+        textView = (TextView) view.findViewById(R.id.cityEdit);
+        textView.setText(model.getBuCityNameFa());
 
-        textView = (TextView) view.findViewById(R.id.address);
-        textView.setText("آدرس: " + model.getBuStoreAddress());
+        textView = (TextView) view.findViewById(R.id.addressEdit);
+        textView.setText(model.getBuStoreAddress());
 
-        textView = (TextView) view.findViewById(R.id.tell);
-        textView.setText("تلفن: " + model.getBuTel());
+        textView = (TextView) view.findViewById(R.id.tellEdit);
+        textView.setText(model.getBuTel());
 
-        textView = (TextView) view.findViewById(R.id.distributor);
-        textView.setText("پخش کننده: " + model.getBuDistributor());
+        textView = (TextView) view.findViewById(R.id.distributorEdit);
+        textView.setText(model.getBuDistributor());
 
-        textView = (TextView) view.findViewById(R.id.workHour);
-        textView.setText("ساعات کار: " + model.getBuStoreHours());
+        textView = (TextView) view.findViewById(R.id.workHourEdit);
+        textView.setText(model.getBuStoreHours());
 
 
         Glide.with(this)
@@ -209,7 +210,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                     }
                 })
                 .into((ImageView) view.findViewById(R.id.brandLogo));
-
+        setupUI(getActivity(), view.findViewById(R.id.profileLay));
         switchTab(view.findViewById(R.id.discountLay), view.findViewById(R.id.profileLay), duration, false);
     }
 
@@ -631,6 +632,13 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 model.setBuPassword(newPassword.getText().toString());
                 NetworkRequests.postRequest(UPDATE_USER_URL, MyStoreAccountFragment.this,
                         CHANGE_PASSWORD, JSON.toJSONString(model));
+            }
+        });
+
+        dialogView.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
