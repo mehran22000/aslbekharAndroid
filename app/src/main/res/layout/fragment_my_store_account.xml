@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ScrollView
             android:id="@+id/login_form"
@@ -475,7 +475,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_marginBottom="83dp"
+                android:layout_marginBottom="113dp"
                 android:layout_toEndOf="@+id/loginLay"
                 android:layout_toRightOf="@+id/loginLay">
 
@@ -533,19 +533,24 @@
                                 android:layout_marginRight="8dp"
                                 android:gravity="right"
                                 android:maxLines="1"
-                                android:padding="6dp"
+                                android:padding="2dp"
                                 android:text=" "
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
 
                         </RelativeLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/brandLogo"
+                            android:background="@color/gray_light_2" />
 
                         <RelativeLayout
                             android:id="@+id/emailLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignRight="@+id/cityLay"
-                            android:layout_below="@+id/catNameLay"
-                            android:layout_toRightOf="@+id/logOut"
+                            android:layout_below="@+id/brandLogo"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:paddingBottom="10dp">
 
@@ -574,6 +579,12 @@
                                 android:text=""
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
                         </RelativeLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/emailLay"
+                            android:background="@color/gray_light_2" />
 
                         <RelativeLayout
                             android:id="@+id/passwordLay"
@@ -611,22 +622,11 @@
 
                         </RelativeLayout>
 
-                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/logOut"
-                            style="@style/Widget.AppCompat.Button.Colored"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_below="@+id/catNameLay"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="5dp"
-                            android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
-                            android:text="@string/logout"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/item_title_ts_smaller_2"
-                            app:backgroundTint="@color/buttonColorSecondary" />
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/passwordLay"
+                            android:background="@color/gray_light_2" />
 
                         <RelativeLayout
                             android:id="@+id/storeNameLay"
@@ -663,6 +663,12 @@
 
                         </RelativeLayout>
 
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/storeNameLay"
+                            android:background="@color/gray_light_2" />
+
                         <RelativeLayout
                             android:id="@+id/cityLay"
                             android:layout_width="match_parent"
@@ -696,6 +702,12 @@
                                 android:padding="6dp"
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
                         </RelativeLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/cityLay"
+                            android:background="@color/gray_light_2" />
 
                         <RelativeLayout
                             android:id="@+id/addressLay"
@@ -731,6 +743,12 @@
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
                         </RelativeLayout>
 
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/addressLay"
+                            android:background="@color/gray_light_2" />
+
                         <RelativeLayout
                             android:id="@+id/tellLay"
                             android:layout_width="match_parent"
@@ -764,6 +782,12 @@
                                 android:padding="6dp"
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
                         </RelativeLayout>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/tellLay"
+                            android:background="@color/gray_light_2" />
 
                         <RelativeLayout
                             android:id="@+id/distributorLay"
@@ -799,6 +823,12 @@
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
                         </RelativeLayout>
 
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_below="@id/distributorLay"
+                            android:background="@color/gray_light_2" />
+
                         <RelativeLayout
                             android:id="@+id/workHourLay"
                             android:layout_width="match_parent"
@@ -833,35 +863,47 @@
                         </RelativeLayout>
 
                         <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/editUser"
-                            style="@style/Widget.AppCompat.Button.Colored"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_below="@+id/workHourLay"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="16dp"
-                            android:paddingLeft="15dp"
-                            android:paddingRight="15dp"
-                            android:text="@string/edit_user"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/item_title_ts_smaller_2"
-                            app:backgroundTint="@color/buttonColorSecondary" />
-
-                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
                             android:id="@+id/saveUserEdit"
                             style="@style/Widget.AppCompat.Button.Colored"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/editUser"
                             android:layout_below="@+id/workHourLay"
-                            android:layout_marginBottom="5dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
                             android:layout_marginTop="16dp"
                             android:paddingLeft="15dp"
                             android:paddingRight="15dp"
                             android:text="@string/save"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/item_title_ts_smaller_2"
+                            app:backgroundTint="@color/colorPrimary" />
+
+                        <com.rey.material.widget.ProgressView
+                            android:id="@+id/saveUserEditProgress"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/saveUserEdit"
+                            android:layout_alignLeft="@+id/saveUserEdit"
+                            android:layout_alignTop="@+id/saveUserEdit"
+                            android:layout_margin="9dp"
+                            android:translationZ="2dp"
+                            app:pv_autostart="false"
+                            app:pv_circular="true"
+                            app:pv_progressMode="indeterminate"
+                            app:pv_progressStyle="@style/CircularProgressWhite" />
+
+                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/logOut"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/saveUserEdit"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:text="@string/logout"
                             android:textColor="@color/white"
                             android:textSize="@dimen/item_title_ts_smaller_2"
                             app:backgroundTint="@color/buttonColorSecondary" />
@@ -989,5 +1031,6 @@
         </LinearLayout>
 
     </RelativeLayout>
+
 
 </RelativeLayout>

@@ -95,5 +95,6 @@
     <string name="enter_your_email_for_password_reset">فرستادن رمز عبور به ایمل</string>
     <string name="password_sucssesfuly_sent">رمز عبور شما با موفقیت ارسال شد</string>
     <string name="invalid_email">ایمیل درست نبوده است</string>
+    <string name="edited_sucssecfully">ویرایش با موفقیت ثبت شد</string>
 
 </resources>

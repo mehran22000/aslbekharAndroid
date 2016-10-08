@@ -170,8 +170,8 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
 
         view.findViewById(R.id.logOut).setOnClickListener(this);
+        view.findViewById(R.id.saveUserEdit).setOnClickListener(this);
         view.findViewById(R.id.passwordLay).setOnClickListener(this);
-        view.findViewById(R.id.editUser).setOnClickListener(this);
 
         textView = (TextView) view.findViewById(R.id.storeNameEdit);
         textView.setText(model.getBuStoreName());
@@ -524,10 +524,70 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 showChangePasswordDialog();
                 break;
 
-            case R.id.editUser:
-                openEditUserActivity();
+            case R.id.saveUserEdit:
+                saveUserChanges();
                 break;
         }
+    }
+
+    private void saveUserChanges() {
+        EditText et = (EditText) view.findViewById(R.id.storeNameEdit);
+        if (et.getText().length() > 2) {
+            model.setBuStoreName(et.getText().toString());
+        } else {
+            fieldRequired(et);
+            return;
+        }
+        et = (EditText) view.findViewById(R.id.addressEdit);
+        if (et.getText().length() > 2) {
+            model.setBuStoreAddress(et.getText().toString());
+        } else {
+            fieldRequired(et);
+            return;
+        }
+        et = (EditText) view.findViewById(R.id.workHourEdit);
+        if (et.getText().length() > 2) {
+            model.setBuStoreHours(et.getText().toString());
+        } else {
+            fieldRequired(et);
+            return;
+        }
+        et = (EditText) view.findViewById(R.id.distributorEdit);
+        if (et.getText().length() > 2) {
+            model.setBuStoreName(et.getText().toString());
+        }
+        saveEdit();
+    }
+
+    private void saveEdit() {
+        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).start();
+        NetworkRequests.postRequest(UPDATE_USER_URL, new Interfaces.NetworkListeners() {
+            @Override
+            public void onResponse(String response, String tag) {
+                ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                if (response.toLowerCase().contains("success")) {
+                    Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
+                } else {
+                    Snackbar.make(view.findViewById(R.id.root), R.string.connection_error, Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error, String tag) {
+
+                Snackbar.make(view.findViewById(R.id.root), R.string.connection_error, Snackbar.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onOffline(String tag) {
+                Snackbar.make(view.findViewById(R.id.root), R.string.you_are_offline, Snackbar.LENGTH_LONG).show();
+
+            }
+        }, UPDATE_USER_URL, JSON.toJSONString(model));
+    }
+
+    private void fieldRequired(EditText editText) {
+        NetworkRequests.postRequest(UPDATE_USER_URL, this, UPDATE_USER_URL, JSON.toJSONString(model));
     }
 
     private void openForgotPasswordDialog() {
@@ -665,7 +725,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             if (response.toLowerCase().contains(SUCCESS.toLowerCase())) {
                 Toast.makeText(getContext(), R.string.password_sucssesfuly_sent, Toast.LENGTH_LONG).show();
                 dialog.dismiss();
-            } else if (response.toLowerCase().contains("invalid_email".toLowerCase())){
+            } else if (response.toLowerCase().contains("invalid_email".toLowerCase())) {
                 Toast.makeText(getContext(), R.string.invalid_email, Toast.LENGTH_LONG).show();
                 dialog.dismiss();
             } else {
