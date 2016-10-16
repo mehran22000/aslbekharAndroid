@@ -25,7 +25,9 @@ import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.activities.RegisterActivity;
+import com.aslbekhar.aslbekharandroid.models.SaveDiscountModel;
 import com.aslbekhar.aslbekharandroid.models.UserModel;
+import com.aslbekhar.aslbekharandroid.utilities.CalendarTool;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
@@ -40,6 +42,7 @@ import com.rey.material.widget.ProgressView;
 
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADD_DISCOUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LOGO_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHANGE_PASSWORD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CREATE_USER_OR_EDIT;
@@ -48,6 +51,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.IS_LOGGED_IN;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGIN_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.PASSWORD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.POSITION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.RECOVER_PASSWORD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.SUCCESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
@@ -172,6 +176,9 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         view.findViewById(R.id.logOut).setOnClickListener(this);
         view.findViewById(R.id.saveUserEdit).setOnClickListener(this);
         view.findViewById(R.id.passwordLay).setOnClickListener(this);
+        view.findViewById(R.id.catNameLay).setOnClickListener(this);
+        view.findViewById(R.id.cityLay).setOnClickListener(this);
+        view.findViewById(R.id.tellLay).setOnClickListener(this);
 
         textView = (TextView) view.findViewById(R.id.storeNameEdit);
         textView.setText(model.getBuStoreName());
@@ -358,6 +365,49 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         ((ProgressView) view.findViewById(R.id.saveProgress)).start();
+
+        CalendarTool startDate = new CalendarTool();
+        startDate.setIranianDate(Integer.parseInt("13" + ((TextView) view.findViewById(R.id.saleYear)).getText().toString()),
+                Integer.parseInt(((TextView) view.findViewById(R.id.saleMonth)).getText().toString()),
+                Integer.parseInt(((TextView) view.findViewById(R.id.saleDay)).getText().toString()));
+
+        CalendarTool endDateDate = new CalendarTool();
+        endDateDate.setIranianDate(Integer.parseInt("13" + ((TextView) view.findViewById(R.id.saleEndYear)).getText().toString()),
+                Integer.parseInt(((TextView) view.findViewById(R.id.saleEndMonth)).getText().toString()),
+                Integer.parseInt(((TextView) view.findViewById(R.id.saleEndDay)).getText().toString()));
+
+
+        SaveDiscountModel saveDiscountModel = new SaveDiscountModel(model.getBuId(), model.getBuStoreId(),
+                startDate.getGregorianDate(), endDateDate.getGregorianDate(), startDate.getIranianDate(),
+                endDateDate.getIranianDate(),
+                ((TextView) view.findViewById(R.id.discountPercentageValue)).getText().toString(),
+                ((TextView) view.findViewById(R.id.saleNote)).getText().toString());
+
+        NetworkRequests.postRequest(ADD_DISCOUNT, new Interfaces.NetworkListeners() {
+            @Override
+            public void onResponse(String response, String tag) {
+                ((ProgressView) view.findViewById(R.id.saveProgress)).stop();
+                if (response.toLowerCase().contains("success")) {
+                    Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
+                } else {
+                    Snackbar.make(view.findViewById(R.id.root), getString(R.string.connection_error), Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error, String tag) {
+                ((ProgressView) view.findViewById(R.id.saveProgress)).stop();
+                Snackbar.make(view.findViewById(R.id.root), getString(R.string.connection_error), Snackbar.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onOffline(String tag) {
+                ((ProgressView) view.findViewById(R.id.saveProgress)).stop();
+                Snackbar.make(view.findViewById(R.id.root), getString(R.string.you_are_offline), Snackbar.LENGTH_LONG).show();
+
+            }
+        }, ADD_DISCOUNT, JSON.toJSONString(saveDiscountModel));
     }
 
     private void switchTab(View hideView, View showView, int duration,
@@ -527,6 +577,18 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             case R.id.saveUserEdit:
                 saveUserChanges();
                 break;
+
+            case R.id.catNameLay:
+                openEditUserActivity(3);
+                break;
+
+            case R.id.cityLay:
+                openEditUserActivity(2);
+                break;
+
+            case R.id.tellLay:
+                openEditUserActivity(6);
+                break;
         }
     }
 
@@ -581,7 +643,6 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             @Override
             public void onOffline(String tag) {
                 Snackbar.make(view.findViewById(R.id.root), R.string.you_are_offline, Snackbar.LENGTH_LONG).show();
-
             }
         }, UPDATE_USER_URL, JSON.toJSONString(model));
     }
@@ -625,10 +686,11 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         dialog.show();
     }
 
-    private void openEditUserActivity() {
+    private void openEditUserActivity(int step) {
         Intent intent = new Intent(getActivity(), RegisterActivity.class);
         intent.putExtra(CREATE_USER_OR_EDIT, false);
         intent.putExtra(USER_INFO, JSON.toJSONString(model));
+        intent.putExtra(POSITION, step);
         startActivityForResult(intent, 100);
     }
 

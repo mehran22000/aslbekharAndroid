@@ -51,6 +51,9 @@ public class Constants {
     // WS8
     public static String LOGIN_URL =
             WEB_SERVER + "services/v1/dev/users/business/login";
+    // WS8
+    public static String ADD_DISCOUNT =
+            WEB_SERVER + "services/v1/dev/stores/adddiscount";
 
     // WS11
     public static String UPDATE_USER_URL =
@@ -99,6 +102,7 @@ public class Constants {
     public static String TRUE = "TRUE";
     public static String YES = "YES";
     public static String NO = "NO";
+    public static String POSITION = "POSITION";
     public static String LAST_LAT = "LAST_LAT";
     public static String LAST_LONG = "LAST_LONG";
     public static String IS_LOGGED_IN = "IS_LOGGED_IN";

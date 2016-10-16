@@ -134,7 +134,7 @@ public class NetworkRequests {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                listener.onError(error, tag);
             }
         }) {
             public String getBodyContentType() {

@@ -68,6 +68,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LAT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.LAST_LONG;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.PASSWORD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.POSITION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTER_USER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.RESULT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRANSITION_DURATION;
@@ -197,21 +198,71 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             emailLay.bringToFront();
             mMapView.setEnabled(false);
         } else {
-            registerUserModel = JSON.parseObject(getIntent().getExtras().getString(USER_INFO, FALSE), UserModel.class);
-            populateCityList();
-            emailLay.setAlpha(0);
-            cityLay.setAlpha(1);
-            brandLay.setAlpha(0);
-            storeLay.setAlpha(0);
-            locationLay.setAlpha(0);
-            storeTelLay.setAlpha(0);
-            eulaLay.setAlpha(0);
-            cityLay.bringToFront();
-            mMapView.setEnabled(false);
-            statusStep = 2;
+            showEditMode();
         }
 
         setupUI(this, findViewById(R.id.root));
+    }
+
+    private void showEditMode() {
+        registerUserModel = JSON.parseObject(getIntent().getExtras().getString(USER_INFO, FALSE), UserModel.class);
+        statusStep = getIntent().getExtras().getInt(POSITION, 2);
+        ((TextView) findViewById(R.id.next)).setText(getString(R.string.save));
+        switch (statusStep) {
+            case 2:
+                populateCityList();
+                emailLay.setAlpha(0);
+                cityLay.setAlpha(1);
+                brandLay.setAlpha(0);
+                storeLay.setAlpha(0);
+                locationLay.setAlpha(0);
+                storeTelLay.setAlpha(0);
+                eulaLay.setAlpha(0);
+                cityLay.bringToFront();
+                mMapView.setEnabled(false);
+                break;
+
+            case 3:
+                populateBrandList();
+                emailLay.setAlpha(0);
+                cityLay.setAlpha(0);
+                brandLay.setAlpha(1);
+                storeLay.setAlpha(0);
+                locationLay.setAlpha(0);
+                storeTelLay.setAlpha(0);
+                eulaLay.setAlpha(0);
+                brandLay.bringToFront();
+                mMapView.setEnabled(false);
+                break;
+
+            case 4:
+                populateStoreDetail();
+                emailLay.setAlpha(0);
+                cityLay.setAlpha(0);
+                brandLay.setAlpha(0);
+                storeLay.setAlpha(1);
+                locationLay.setAlpha(0);
+                storeTelLay.setAlpha(0);
+                eulaLay.setAlpha(0);
+                storeLay.bringToFront();
+                mMapView.setEnabled(false);
+                break;
+
+            case 6:
+                populateStoreTel();
+                emailLay.setAlpha(0);
+                cityLay.setAlpha(0);
+                brandLay.setAlpha(0);
+                storeLay.setAlpha(1);
+                locationLay.setAlpha(0);
+                storeTelLay.setAlpha(0);
+                eulaLay.setAlpha(0);
+                storeLay.bringToFront();
+                mMapView.setEnabled(false);
+                break;
+
+
+        }
     }
 
     private void initEditTexts() {
@@ -551,6 +602,16 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         if (!nextBtnEnable) {
             return;
         }
+
+        if (!createOrEditUser) {
+            if (statusStep == 4) {
+                hideStoreShowLocation(true);
+            } else {
+                registerUser();
+            }
+            return;
+        }
+
         switch (statusStep) {
 
             case 1:
@@ -602,8 +663,12 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
     @Override
     public void onBackPressed() {
-        Intent returnIntent;
 
+        if (!createOrEditUser){
+            finish();
+        }
+
+        Intent returnIntent;
         switch (statusStep) {
             case 1:
                 returnIntent = new Intent();
@@ -613,14 +678,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 break;
 
             case 2:
-                if (createOrEditUser) {
-                    hideEmailShowCity(false);
-                } else {
-                    returnIntent = new Intent();
-                    returnIntent.putExtra(RESULT, FALSE);
-                    setResult(Activity.RESULT_CANCELED, returnIntent);
-                    finish();
-                }
+                hideEmailShowCity(false);
                 break;
 
             case 3:
@@ -910,17 +968,44 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
         ((ProgressView) findViewById(R.id.registerProgress)).stop();
         if (response.toLowerCase().contains("success")) {
-            statusStep = 8;
             ((TextView) findViewById(R.id.successTxt)).setText(R.string.update_succesful);
             if (createOrEditUser) {
+                statusStep = 8;
                 formNext(eulaLay, successLay);
             } else {
-                formNext(storeTelLay, successLay);
+                switch (statusStep){
+                    case 2:
+                        formNext(cityLay, successLay);
+                        break;
+
+                    case 3:
+                        formNext(brandLay, successLay);
+                        break;
+
+                    case 4:
+                        formNext(storeLay, successLay);
+                        break;
+
+                    case 6:
+                        formNext(storeTelLay, successLay);
+                        break;
+
+                }
             }
             findViewById(R.id.successBtn).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onBackPressed();
+                    if (createOrEditUser) {
+                        onBackPressed();
+                    } else {
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra(RESULT, TRUE);
+                        returnIntent.putExtra(EMAIL, registerUserModel.getBuEmail());
+                        returnIntent.putExtra(PASSWORD, registerUserModel.getBuPassword());
+                        returnIntent.putExtra(USER_INFO, JSON.toJSONString(registerUserModel));
+                        setResult(Activity.RESULT_OK, returnIntent);
+                        finish();
+                    }
                 }
             });
             ViewAnimator.animate(findViewById(R.id.bottomLay)).duration(700).translationY(0, 300).alpha(1, 0).start();
