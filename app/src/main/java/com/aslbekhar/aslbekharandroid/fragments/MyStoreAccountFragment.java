@@ -179,6 +179,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         view.findViewById(R.id.catNameLay).setOnClickListener(this);
         view.findViewById(R.id.cityLay).setOnClickListener(this);
         view.findViewById(R.id.tellLay).setOnClickListener(this);
+        view.findViewById(R.id.addressLay).setOnClickListener(this);
 
         textView = (TextView) view.findViewById(R.id.storeNameEdit);
         textView.setText(model.getBuStoreName());
@@ -538,8 +539,8 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
 
         Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/theme.ttf");
-        ((EditText) view.findViewById(R.id.password)).setTypeface(tf);
-        ((EditText) view.findViewById(R.id.emailEt)).setTypeface(tf);
+        ((TextView) view.findViewById(R.id.password)).setTypeface(tf);
+        ((TextView) view.findViewById(R.id.emailEt)).setTypeface(tf);
         ((TextInputLayout) view.findViewById(R.id.emailInputLay)).setTypeface(tf);
         ((TextInputLayout) view.findViewById(R.id.passwordInputLay)).setTypeface(tf);
     }
@@ -564,7 +565,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
     public void onClick(View v) {
         InputMethodManager imm =
                 (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(view.findViewById(R.id.distributorEdit).getWindowToken(), 0);
         switch (v.getId()) {
             case R.id.logOut:
                 logOut();
@@ -589,6 +590,10 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             case R.id.tellLay:
                 openEditUserActivity(6);
                 break;
+
+            case R.id.addressLay:
+                openEditUserActivity(4);
+                break;
         }
     }
 
@@ -596,13 +601,6 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         EditText et = (EditText) view.findViewById(R.id.storeNameEdit);
         if (et.getText().length() > 2) {
             model.setBuStoreName(et.getText().toString());
-        } else {
-            fieldRequired(et);
-            return;
-        }
-        et = (EditText) view.findViewById(R.id.addressEdit);
-        if (et.getText().length() > 2) {
-            model.setBuStoreAddress(et.getText().toString());
         } else {
             fieldRequired(et);
             return;

@@ -29,6 +29,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
@@ -58,6 +59,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.rey.material.widget.ProgressView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CREATE_USER_OR_EDIT;
@@ -108,6 +110,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     BrandListAdapter brandListAdapter;
     List<CityModel> cityModelList = getCityModelList();
     List<BrandModel> brandModelList = getBrandModelList();
+    List<BrandModel> brandModelListToShow = new ArrayList<>();
+    TextWatcher brandSearchTextWatcher;
     GoogleApiClient googleApiClient;
     GoogleMap mMap;
     MapView mMapView;
@@ -207,7 +211,9 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     private void showEditMode() {
         registerUserModel = JSON.parseObject(getIntent().getExtras().getString(USER_INFO, FALSE), UserModel.class);
         statusStep = getIntent().getExtras().getInt(POSITION, 2);
-        ((TextView) findViewById(R.id.next)).setText(getString(R.string.save));
+        if (statusStep != 4) {
+            ((TextView) findViewById(R.id.next)).setText(getString(R.string.save));
+        }
         switch (statusStep) {
             case 2:
                 populateCityList();
@@ -253,14 +259,13 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 emailLay.setAlpha(0);
                 cityLay.setAlpha(0);
                 brandLay.setAlpha(0);
-                storeLay.setAlpha(1);
+                storeLay.setAlpha(0);
                 locationLay.setAlpha(0);
-                storeTelLay.setAlpha(0);
+                storeTelLay.setAlpha(1);
                 eulaLay.setAlpha(0);
-                storeLay.bringToFront();
+                storeTelLay.bringToFront();
                 mMapView.setEnabled(false);
                 break;
-
 
         }
     }
@@ -605,6 +610,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
 
         if (!createOrEditUser) {
             if (statusStep == 4) {
+                ((TextView) findViewById(R.id.next)).setText(getString(R.string.save));
                 hideStoreShowLocation(true);
             } else {
                 registerUser();
@@ -664,8 +670,9 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     @Override
     public void onBackPressed() {
 
-        if (!createOrEditUser){
+        if (!createOrEditUser && statusStep != 5){
             finish();
+            return;
         }
 
         Intent returnIntent;
@@ -744,6 +751,50 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             } else {
                 enableNextBtn(true);
             }
+            final EditText searchText = (EditText) findViewById(R.id.searchEditText);
+            try {
+                searchText.removeTextChangedListener(brandSearchTextWatcher);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            brandSearchTextWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable searchPhrase) {
+                    performSearch(searchPhrase.toString());
+                    if (searchPhrase.length() > 0) {
+                        ((ImageView) findViewById(R.id.searchClear)).setImageResource(R.drawable.search_clear);
+                        findViewById(R.id.searchClear).setTag(R.drawable.search_clear);
+                    } else {
+                        ((ImageView) findViewById(R.id.searchClear)).setImageResource(R.drawable.search);
+                        findViewById(R.id.searchClear).setTag(R.drawable.search);
+                    }
+                }
+            };
+            searchText.addTextChangedListener(brandSearchTextWatcher);
+            findViewById(R.id.searchClear).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int tag = 0;
+                    try {
+                        tag = (int) v.getTag();
+                    } catch (Exception ignored) {
+                    }
+                    if (tag == R.drawable.search_clear) {
+                        performSearch("");
+                        searchText.setText("");
+                    }
+                }
+            });
             statusStep = 3;
         } else {
             formBack(brandLay, cityLay, 2);
@@ -867,9 +918,27 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             // setting the layout manager of recyclerView
             recyclerView.setLayoutManager(layoutManager);
 
-            brandListAdapter = new BrandListAdapter(brandModelList, this, this, registerUserModel.getBuBrandId());
+            brandModelListToShow.clear();
+            brandModelListToShow.addAll(brandModelList);
+            brandListAdapter = new BrandListAdapter(brandModelListToShow, this, this, registerUserModel.getBuBrandId());
             recyclerView.setAdapter(brandListAdapter);
         }
+    }
+
+
+
+    private void performSearch(String search) {
+        brandModelListToShow.clear();
+        if (!search.equals("")) {
+            for (BrandModel model : brandModelList) {
+                if (model.getbName().toLowerCase().contains(search.toLowerCase())) {
+                    brandModelListToShow.add(model);
+                }
+            }
+        } else {
+            brandModelListToShow.addAll(brandModelList);
+        }
+        brandListAdapter.notifyDataSetChanged();
     }
 
     private void populateStoreDetail() {
@@ -982,8 +1051,8 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                         formNext(brandLay, successLay);
                         break;
 
-                    case 4:
-                        formNext(storeLay, successLay);
+                    case 5:
+                        formNext(locationLay, successLay);
                         break;
 
                     case 6:

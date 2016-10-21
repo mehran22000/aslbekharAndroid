@@ -506,6 +506,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
+                            android:layout_alignBottom="@+id/brandLogo"
                             android:layout_toEndOf="@+id/brandLogo"
                             android:layout_toRightOf="@+id/brandLogo"
                             android:foreground="?android:attr/selectableItemBackground"
@@ -548,7 +549,7 @@
                             android:id="@+id/emailLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/cityLay"
+                            android:paddingRight="10dp"
                             android:layout_below="@+id/brandLogo"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:paddingBottom="10dp">
@@ -589,7 +590,7 @@
                             android:id="@+id/passwordLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/cityLay"
+                            android:paddingRight="10dp"
                             android:layout_below="@+id/emailLay"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:paddingBottom="10dp">
@@ -631,7 +632,7 @@
                             android:id="@+id/storeNameLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/cityLay"
+                            android:paddingRight="10dp"
                             android:layout_below="@+id/passwordLay"
                             android:paddingBottom="10dp">
 
@@ -673,7 +674,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/storeNameLay"
-                            android:layout_marginRight="10dp"
+                            android:paddingRight="10dp"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:paddingBottom="10dp">
 
@@ -712,7 +713,8 @@
                             android:id="@+id/addressLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/cityLay"
+                            android:paddingRight="10dp"
+                            android:foreground="?android:attr/selectableItemBackground"
                             android:layout_below="@id/cityLay"
                             android:paddingBottom="10dp">
 
@@ -725,21 +727,20 @@
                                 android:padding="6dp"
                                 android:text="آدرس:"
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
-
-                            <EditText
+                            <TextView
                                 android:id="@+id/addressEdit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentRight="true"
                                 android:layout_below="@+id/address"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginRight="8dp"
-                                android:background="@drawable/account_edittext_back"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
                                 android:gravity="right"
                                 android:maxLines="1"
                                 android:padding="6dp"
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
+
                         </RelativeLayout>
 
                         <ImageView
@@ -752,7 +753,7 @@
                             android:id="@+id/tellLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/cityLay"
+                            android:paddingRight="10dp"
                             android:layout_below="@id/addressLay"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:paddingBottom="10dp">
@@ -792,7 +793,7 @@
                             android:id="@+id/distributorLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/cityLay"
+                            android:paddingRight="10dp"
                             android:layout_below="@id/tellLay"
                             android:paddingBottom="10dp">
 
@@ -832,7 +833,7 @@
                             android:id="@+id/workHourLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignRight="@+id/cityLay"
+                            android:paddingRight="10dp"
                             android:layout_below="@id/distributorLay">
 
                             <TextView

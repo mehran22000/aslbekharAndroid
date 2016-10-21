@@ -287,7 +287,7 @@
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="2dp"
         card_view:cardUseCompatPadding="true"
-        android:alpha="0">
+        android:alpha="1">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -305,19 +305,48 @@
                 android:textSize="@dimen/item_title_ts_larger"
                 android:textColor="@color/black"/>
 
+            <EditText
+                android:id="@+id/searchEditText"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_below="@+id/brandLayTitle"
+                android:background="@color/white"
+                android:hint="@string/search"
+                android:paddingLeft="10dp"
+                android:paddingRight="40dp" />
+
+            <ImageView
+                android:id="@+id/searchClear"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/searchEditText"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/searchEditText"
+                android:padding="6dp"
+                android:src="@drawable/search"
+                android:tag="0"
+                android:visibility="visible" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/brandRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/searchEditText"
+                android:layout_marginTop="1dp"
+                android:visibility="visible" />
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimary"
                 android:layout_below="@+id/brandLayTitle"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/brandRecyclerView"
+
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/brandLayTitle"
-                android:layout_marginTop="1dp"
-                android:visibility="visible" />
+                android:layout_height="3dp"
+                android:layout_below="@+id/searchEditText"
+                android:src="@drawable/shadow_from_top" />
 
         </RelativeLayout>
 
@@ -536,8 +565,10 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/successLay"
-        android:layout_width="280dp"
+        android:layout_width="match_parent"
         android:layout_height="230dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:layout_centerInParent="true"
         card_view:cardCornerRadius="6dp"
         card_view:cardElevation="2dp"
