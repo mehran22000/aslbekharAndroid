@@ -378,7 +378,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 Integer.parseInt(((TextView) view.findViewById(R.id.saleEndDay)).getText().toString()));
 
 
-        SaveDiscountModel saveDiscountModel = new SaveDiscountModel(model.getBuId(), model.getBuStoreId(),
+        SaveDiscountModel saveDiscountModel = new SaveDiscountModel(model.getBuBrandId(), model.getBuStoreId(),
                 startDate.getGregorianDate(), endDateDate.getGregorianDate(), startDate.getIranianDate(),
                 endDateDate.getIranianDate(),
                 ((TextView) view.findViewById(R.id.discountPercentageValue)).getText().toString(),
