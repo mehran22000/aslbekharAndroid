@@ -98,5 +98,6 @@
     <string name="edited_sucssecfully">ویرایش با موفقیت ثبت شد</string>
     <string name="discount_saved">حراچ شما با موفقیت ثبت شد</string>
     <string name="prompt_password_min">رمز عبور (حداقل شش کاراکتر)</string>
+    <string name="invaid_email">این ایمیل ثبت نشده است</string>
 
 </resources>

@@ -45,7 +45,11 @@ import java.util.List;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADD_DISCOUNT;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LOGO_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHANGE_PASSWORD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_STORE_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CREATE_USER_OR_EDIT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEFAULT_CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.EMAIL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.IS_LOGGED_IN;
@@ -53,6 +57,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGIN_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.PASSWORD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.POSITION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.RECOVER_PASSWORD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.SUCCESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.UPDATE_USER_URL;
@@ -624,10 +629,32 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         NetworkRequests.postRequest(UPDATE_USER_URL, new Interfaces.NetworkListeners() {
             @Override
             public void onResponse(String response, String tag) {
-                ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+
                 if (response.toLowerCase().contains("success")) {
-                    Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
+                    NetworkRequests.getRequest(CITY_STORE_URL + getArguments().getString(CITY_CODE, DEFAULT_CITY_CODE), new Interfaces.NetworkListeners() {
+                        @Override
+                        public void onResponse(String response, String tag) {
+                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                            if (response.startsWith("[") && response.endsWith("]")) {
+                                Snippets.setSP(model.getBuAreaCode() + STORE_LIST, response);
+                            }
+                            Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onError(VolleyError error, String tag) {
+                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                            Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onOffline(String tag) {
+                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                            Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
+                        }
+                    }, DOWNLOAD);
                 } else {
+                    ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
                     Snackbar.make(view.findViewById(R.id.root), R.string.connection_error, Snackbar.LENGTH_LONG).show();
                 }
             }
@@ -812,6 +839,8 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
         } else if (modelList != null && modelList.size() > 0 && modelList.get(0).getErr().equals(Constants.PASSWORD_ERROR)) {
             Toast.makeText(getActivity(), R.string.invalid_password, Toast.LENGTH_LONG).show();
+        } else if (modelList != null && modelList.size() > 0 && modelList.get(0).getErr().equals(Constants.EMAIL_ERROR)) {
+            Toast.makeText(getActivity(), R.string.invaid_email, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(getActivity(), R.string.connection_error, Toast.LENGTH_LONG).show();
         }

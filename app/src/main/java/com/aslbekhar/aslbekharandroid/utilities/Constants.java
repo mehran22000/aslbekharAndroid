@@ -92,6 +92,7 @@ public class Constants {
     public static String DOWNLOAD = "DOWNLOAD";
     public static String BRAND_VERIFICATION_DOWNLOAD = "BRAND_VERIFICATION_DOWNLOAD";
     public static String PASSWORD_ERROR = "err_invalid_password";
+    public static String EMAIL_ERROR = "err_invalid_email";
     public static String SUCCESS = "success";
 
 
