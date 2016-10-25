@@ -192,7 +192,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         textView.setText(model.getBuStoreAddress());
 
         textView = (TextView) view.findViewById(R.id.tellEdit);
-        textView.setText(model.getBuTel());
+        textView.setText(model.getBuAreaCode() + " - " + model.getBuTel());
 
         textView = (TextView) view.findViewById(R.id.distributorEdit);
         textView.setText(model.getBuDistributor());

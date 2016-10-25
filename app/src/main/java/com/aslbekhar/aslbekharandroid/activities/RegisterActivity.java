@@ -252,6 +252,9 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
                 eulaLay.setAlpha(0);
                 storeLay.bringToFront();
                 mMapView.setEnabled(false);
+                findViewById(R.id.storeNameInputLay).setVisibility(View.GONE);
+                findViewById(R.id.storeWorkHourInputLay).setVisibility(View.GONE);
+                findViewById(R.id.storeDistributorInputLay).setVisibility(View.GONE);
                 break;
 
             case 6:

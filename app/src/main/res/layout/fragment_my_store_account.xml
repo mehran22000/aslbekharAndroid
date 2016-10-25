@@ -518,7 +518,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:padding="6dp"
+                                android:paddingLeft="6dp"
+                                android:paddingRight="6dp"
+                                android:paddingTop="6dp"
                                 android:text="ecco"
                                 android:textSize="@dimen/item_title_ts_medium" />
 

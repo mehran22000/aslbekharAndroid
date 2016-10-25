@@ -52,6 +52,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.SEND_ANALYTICS_
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.SUCCESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
+import static com.aslbekhar.aslbekharandroid.utilities.Snippets.hideKeyboard;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 
 public class MainActivity extends AppCompatActivity implements Interfaces.MainActivityInterface,
@@ -151,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
                     tabStack.remove(0);
                 }
                 currentTab = position;
+                hideKeyboard(MainActivity.this);
             }
 
             @Override
