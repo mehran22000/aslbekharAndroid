@@ -43,6 +43,7 @@ import com.aslbekhar.aslbekharandroid.models.UserModel;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
+import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.google.android.gms.common.ConnectionResult;
@@ -62,7 +63,12 @@ import com.rey.material.widget.ProgressView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_DOWNLOAD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_URL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_STORE_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CREATE_USER_OR_EDIT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.EMAIL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.GPS_ON_OR_OFF;
@@ -73,6 +79,7 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.PASSWORD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.POSITION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.REGISTER_USER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.RESULT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_LIST;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRANSITION_DURATION;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.TRUE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.UPDATE_USER_URL;
@@ -1038,52 +1045,99 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
     @Override
     public void onResponse(String response, String tag) {
 
-        ((ProgressView) findViewById(R.id.registerProgress)).stop();
         if (response.toLowerCase().contains("success")) {
-            ((TextView) findViewById(R.id.successTxt)).setText(R.string.update_succesful);
-            if (createOrEditUser) {
-                statusStep = 8;
-                formNext(eulaLay, successLay);
-            } else {
-                switch (statusStep){
-                    case 2:
-                        formNext(cityLay, successLay);
-                        break;
-
-                    case 3:
-                        formNext(brandLay, successLay);
-                        break;
-
-                    case 5:
-                        formNext(locationLay, successLay);
-                        break;
-
-                    case 6:
-                        formNext(storeTelLay, successLay);
-                        break;
-
-                }
-            }
-            findViewById(R.id.successBtn).setOnClickListener(new View.OnClickListener() {
+            NetworkRequests.getRequest(CITY_STORE_URL + registerUserModel.getBuAreaCode(), new Interfaces.NetworkListeners() {
                 @Override
-                public void onClick(View v) {
-                    if (createOrEditUser) {
-                        onBackPressed();
-                    } else {
-                        Intent returnIntent = new Intent();
-                        returnIntent.putExtra(RESULT, TRUE);
-                        returnIntent.putExtra(EMAIL, registerUserModel.getBuEmail());
-                        returnIntent.putExtra(PASSWORD, registerUserModel.getBuPassword());
-                        returnIntent.putExtra(USER_INFO, JSON.toJSONString(registerUserModel));
-                        setResult(Activity.RESULT_OK, returnIntent);
-                        finish();
+                public void onResponse(String response, String tag) {
+                    if (response.startsWith("[") && response.endsWith("]")) {
+                        Snippets.setSP(registerUserModel.getBuAreaCode() + STORE_LIST, response);
+                        NetworkRequests.getRequest(BRAND_LIST_URL, new Interfaces.NetworkListeners() {
+                            @Override
+                            public void onResponse(String response, String tag) {
+                                if (response.startsWith("[") && response.endsWith("]")) {
+                                    Snippets.setSP(BRAND_LIST, response);
+                                    StaticData.setBrandModelList(null);
+                                }
+                                ((ProgressView) findViewById(R.id.registerProgress)).stop();
+                                createOrEditSuccessful();
+                            }
+
+                            @Override
+                            public void onError(VolleyError error, String tag) {
+
+                                createOrEditSuccessful();
+                            }
+
+                            @Override
+                            public void onOffline(String tag) {
+
+                                createOrEditSuccessful();
+                            }
+                        }, BRAND_LIST_DOWNLOAD);
                     }
                 }
-            });
-            ViewAnimator.animate(findViewById(R.id.bottomLay)).duration(700).translationY(0, 300).alpha(1, 0).start();
+
+                @Override
+                public void onError(VolleyError error, String tag) {
+                    ((ProgressView) findViewById(R.id.registerProgress)).stop();
+                    createOrEditSuccessful();
+                }
+
+                @Override
+                public void onOffline(String tag) {
+                    ((ProgressView) findViewById(R.id.registerProgress)).stop();
+                    createOrEditSuccessful();
+                }
+            }, DOWNLOAD);
         } else {
+            ((ProgressView) findViewById(R.id.registerProgress)).stop();
             Snackbar.make(findViewById(R.id.root), R.string.connection_error, Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    private void createOrEditSuccessful() {
+        ((ProgressView) findViewById(R.id.registerProgress)).stop();
+        ((TextView) findViewById(R.id.successTxt)).setText(R.string.update_succesful);
+        if (createOrEditUser) {
+            statusStep = 8;
+            formNext(eulaLay, successLay);
+        } else {
+            switch (statusStep){
+                case 2:
+                    formNext(cityLay, successLay);
+                    break;
+
+                case 3:
+                    formNext(brandLay, successLay);
+                    break;
+
+                case 5:
+                    formNext(locationLay, successLay);
+                    break;
+
+                case 6:
+                    formNext(storeTelLay, successLay);
+                    break;
+
+            }
+        }
+        findViewById(R.id.successBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (createOrEditUser) {
+                    onBackPressed();
+                } else {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(RESULT, TRUE);
+                    returnIntent.putExtra(EMAIL, registerUserModel.getBuEmail());
+                    returnIntent.putExtra(PASSWORD, registerUserModel.getBuPassword());
+                    returnIntent.putExtra(USER_INFO, JSON.toJSONString(registerUserModel));
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+            }
+        });
+        ViewAnimator.animate(findViewById(R.id.bottomLay)).duration(700).translationY(0, 300).alpha(1, 0).start();
     }
 
     @Override

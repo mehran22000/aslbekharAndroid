@@ -32,6 +32,7 @@ import com.aslbekhar.aslbekharandroid.utilities.Constants;
 import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.aslbekhar.aslbekharandroid.utilities.NetworkRequests;
 import com.aslbekhar.aslbekharandroid.utilities.Snippets;
+import com.aslbekhar.aslbekharandroid.utilities.StaticData;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
@@ -43,6 +44,9 @@ import com.rey.material.widget.ProgressView;
 import java.util.List;
 
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADD_DISCOUNT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_DOWNLOAD;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LOGO_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHANGE_PASSWORD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
@@ -634,11 +638,31 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                     NetworkRequests.getRequest(CITY_STORE_URL + getArguments().getString(CITY_CODE, DEFAULT_CITY_CODE), new Interfaces.NetworkListeners() {
                         @Override
                         public void onResponse(String response, String tag) {
-                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
                             if (response.startsWith("[") && response.endsWith("]")) {
                                 Snippets.setSP(model.getBuAreaCode() + STORE_LIST, response);
+                                NetworkRequests.getRequest(BRAND_LIST_URL, new Interfaces.NetworkListeners() {
+                                    @Override
+                                    public void onResponse(String response, String tag) {
+                                        if (response.startsWith("[") && response.endsWith("]")) {
+                                            Snippets.setSP(BRAND_LIST, response);
+                                            StaticData.setBrandModelList(null);
+                                        }
+                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                                    }
+
+                                    @Override
+                                    public void onError(VolleyError error, String tag) {
+                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                                        Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
+                                    }
+
+                                    @Override
+                                    public void onOffline(String tag) {
+                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                                        Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
+                                    }
+                                }, BRAND_LIST_DOWNLOAD);
                             }
-                            Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
                         }
 
                         @Override
