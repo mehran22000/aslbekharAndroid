@@ -3,9 +3,12 @@ package com.aslbekhar.aslbekharandroid.activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -17,7 +20,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     Stack<Integer> tabStack = new Stack<>();
     int currentTab = 0;
     private boolean exitOnBackPress;
-    Toast toast;
+    Snackbar snackbar;
     Dialog dialog;
 
     @Override
@@ -92,6 +94,11 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
                 onBackPressed();
             }
         });
+
+        // making the app RTL (right to left)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
 
         setTitle(R.string.app_name_persian);
 
@@ -173,21 +180,13 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
                     tabStack.pop();
                 }
             } else {
-                if (exitOnBackPress) {
-                    toast.cancel();
-                    finish();
-                }
-                else {
-                    toast = Toast.makeText(this, R.string.confirm_exit, Toast.LENGTH_SHORT);
-                    toast.show();
-                    exitOnBackPress = true;
-                    new android.os.Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            exitOnBackPress = false;
-                        }
-                    }, 2000);
-                }
+                snackbar = Snackbar.make(findViewById(R.id.root), R.string.confirm_exit, Snackbar.LENGTH_LONG);
+                snackbar.setAction("خروج", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                }).setActionTextColor(Color.YELLOW).show();
             }
         }
     }

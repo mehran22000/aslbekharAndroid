@@ -380,6 +380,14 @@ public class StoreListFragment extends Fragment implements Interfaces.NetworkLis
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null){
+            callBack = (Interfaces.MainActivityInterface) getActivity();
+        }
+    }
+
+    @Override
     public void onResponse(final String response, String tag) {
         if (tag.equals(BRAND_VERIFICATION_DOWNLOAD)) {
             List<BrandVerificationModel> brandVerificationModelList = null;

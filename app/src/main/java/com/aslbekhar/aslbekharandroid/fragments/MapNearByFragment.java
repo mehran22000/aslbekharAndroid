@@ -465,6 +465,9 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        if (getActivity() != null){
+            callBack = (Interfaces.MainActivityInterface) getActivity();
+        }
         if (mMap != null && storeModelList != null && storeModelList.size() > 0 && type == LIST_OF_STORES) {
             showStoresOnMap(null, false);
         }

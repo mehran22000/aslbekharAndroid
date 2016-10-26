@@ -49,10 +49,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_DOWN
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LIST_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LOGO_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHANGE_PASSWORD;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_STORE_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CREATE_USER_OR_EDIT;
-import static com.aslbekhar.aslbekharandroid.utilities.Constants.DEFAULT_CITY_CODE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.EMAIL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
@@ -635,7 +633,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             public void onResponse(String response, String tag) {
 
                 if (response.toLowerCase().contains("success")) {
-                    NetworkRequests.getRequest(CITY_STORE_URL + getArguments().getString(CITY_CODE, DEFAULT_CITY_CODE), new Interfaces.NetworkListeners() {
+                    NetworkRequests.getRequest(CITY_STORE_URL + model.getBuAreaCode(), new Interfaces.NetworkListeners() {
                         @Override
                         public void onResponse(String response, String tag) {
                             if (response.startsWith("[") && response.endsWith("]")) {
@@ -648,6 +646,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                                             StaticData.setBrandModelList(null);
                                         }
                                         ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                                        Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
                                     }
 
                                     @Override

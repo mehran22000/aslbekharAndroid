@@ -1,5 +1,6 @@
 package com.aslbekhar.aslbekharandroid.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.aslbekhar.aslbekharandroid.R;
+import com.aslbekhar.aslbekharandroid.activities.MainActivity;
 import com.aslbekhar.aslbekharandroid.utilities.BackStackFragment;
 
 /**
@@ -30,10 +32,18 @@ public class HostFragment extends BackStackFragment {
     }
 
     public void replaceFragment(Fragment fragment, boolean addToBackstack) {
-        if (addToBackstack) {
-            getChildFragmentManager().beginTransaction().replace(R.id.hosted_fragment, fragment).addToBackStack(null).commit();
-        } else {
-            getChildFragmentManager().beginTransaction().replace(R.id.hosted_fragment, fragment).commit();
+        try {
+            if (addToBackstack) {
+                getChildFragmentManager().beginTransaction().replace(R.id.hosted_fragment, fragment).addToBackStack(null).commit();
+            } else {
+                getChildFragmentManager().beginTransaction().replace(R.id.hosted_fragment, fragment).commit();
+            }
+        } catch (Exception e) {
+            if (getActivity() != null) {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
         }
     }
 

@@ -526,6 +526,9 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     @Override
     public void onResume() {
         super.onResume();
+        if (getActivity() != null){
+            callBack = (Interfaces.MainActivityInterface) getActivity();
+        }
         if (!isDownloading) {
             listOverLay.setVisibility(View.GONE);
         }

@@ -507,7 +507,6 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
                             android:layout_alignBottom="@+id/brandLogo"
-                            android:layout_toEndOf="@+id/brandLogo"
                             android:layout_toRightOf="@+id/brandLogo"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:paddingBottom="10dp">
@@ -528,7 +527,6 @@
                                 android:id="@+id/catName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
                                 android:layout_alignParentRight="true"
                                 android:layout_below="@+id/brandName"
                                 android:layout_marginLeft="8dp"
@@ -933,55 +931,6 @@
             android:weightSum="2">
 
             <RelativeLayout
-                android:id="@+id/salesTabLay"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:foreground="?android:attr/selectableItemBackground">
-
-                <ImageView
-                    android:id="@+id/salesImg0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/salesTxt0"
-                    android:layout_alignParentTop="true"
-                    android:paddingTop="4dp"
-                    android:src="@drawable/icon_sales" />
-
-                <ImageView
-                    android:id="@+id/salesImg1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/salesTxt0"
-                    android:layout_alignParentTop="true"
-                    android:alpha="0"
-                    android:paddingTop="4dp"
-                    android:src="@drawable/icon_sales_1" />
-
-                <TextView
-                    android:id="@+id/salesTxt0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/sales"
-                    android:textColor="@color/tabDisabledColor" />
-
-                <TextView
-                    android:id="@+id/salesTxt1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:alpha="0"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/sales"
-                    android:textColor="@color/tabColor" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/profileTabLay"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -1026,6 +975,55 @@
                     android:gravity="center"
                     android:padding="4dp"
                     android:text="@string/profile"
+                    android:textColor="@color/tabColor" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/salesTabLay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/salesImg0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/salesTxt0"
+                    android:layout_alignParentTop="true"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_sales" />
+
+                <ImageView
+                    android:id="@+id/salesImg1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/salesTxt0"
+                    android:layout_alignParentTop="true"
+                    android:alpha="0"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_sales_1" />
+
+                <TextView
+                    android:id="@+id/salesTxt0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/sales"
+                    android:textColor="@color/tabDisabledColor" />
+
+                <TextView
+                    android:id="@+id/salesTxt1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:alpha="0"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/sales"
                     android:textColor="@color/tabColor" />
 
             </RelativeLayout>

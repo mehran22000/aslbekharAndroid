@@ -137,6 +137,11 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registeration);
 
+        // making the app RTL (right to left)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
+
         emailLay = findViewById(R.id.emailLay);
         cityLay = findViewById(R.id.cityLay);
         brandLay = findViewById(R.id.brandLay);
@@ -672,7 +677,13 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         if (createOrEditUser) {
             NetworkRequests.postRequest(REGISTER_USER, this, REGISTER_USER, JSON.toJSONString(registerUserModel));
         } else {
-            NetworkRequests.postRequest(UPDATE_USER_URL, this, UPDATE_USER_URL, JSON.toJSONString(registerUserModel));
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra(RESULT, TRUE);
+            returnIntent.putExtra(EMAIL, registerUserModel.getBuEmail());
+            returnIntent.putExtra(PASSWORD, registerUserModel.getBuPassword());
+            returnIntent.putExtra(USER_INFO, JSON.toJSONString(registerUserModel));
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();
         }
     }
 

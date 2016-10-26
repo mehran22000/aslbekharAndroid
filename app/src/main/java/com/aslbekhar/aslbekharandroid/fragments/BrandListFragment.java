@@ -337,6 +337,14 @@ public class BrandListFragment extends Fragment implements Interfaces.NetworkLis
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (getActivity() != null){
+            callBack = (Interfaces.MainActivityInterface) getActivity();
+        }
+    }
+
+    @Override
     public void onResponse(String response, String tag) {
         if (tag.equals(BRAND_LIST_DOWNLOAD)) {
             if (response.startsWith("[") && response.endsWith("]")) {

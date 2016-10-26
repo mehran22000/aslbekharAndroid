@@ -351,6 +351,9 @@ public class CatListFragment extends Fragment implements Interfaces.NetworkListe
     public void onResume() {
         super.onResume();
         fragmentAlive = true;
+        if (getActivity() != null){
+            callBack = (Interfaces.MainActivityInterface) getActivity();
+        }
     }
 
     @Override
