@@ -396,7 +396,50 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             public void onResponse(String response, String tag) {
                 ((ProgressView) view.findViewById(R.id.saveProgress)).stop();
                 if (response.toLowerCase().contains("success")) {
-                    Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
+
+                    NetworkRequests.getRequest(CITY_STORE_URL + model.getBuAreaCode(), new Interfaces.NetworkListeners() {
+                        @Override
+                        public void onResponse(String response, String tag) {
+                            if (response.startsWith("[") && response.endsWith("]")) {
+                                Snippets.setSP(model.getBuAreaCode() + STORE_LIST, response);
+                                NetworkRequests.getRequest(BRAND_LIST_URL, new Interfaces.NetworkListeners() {
+                                    @Override
+                                    public void onResponse(String response, String tag) {
+                                        if (response.startsWith("[") && response.endsWith("]")) {
+                                            Snippets.setSP(BRAND_LIST, response);
+                                            StaticData.setBrandModelList(null);
+                                        }
+                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                                        Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
+                                    }
+
+                                    @Override
+                                    public void onError(VolleyError error, String tag) {
+                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                                        Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
+                                    }
+
+                                    @Override
+                                    public void onOffline(String tag) {
+                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                                        Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
+                                    }
+                                }, BRAND_LIST_DOWNLOAD);
+                            }
+                        }
+
+                        @Override
+                        public void onError(VolleyError error, String tag) {
+                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                            Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onOffline(String tag) {
+                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
+                            Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
+                        }
+                    }, DOWNLOAD);
                 } else {
                     Snackbar.make(view.findViewById(R.id.root), getString(R.string.connection_error), Snackbar.LENGTH_LONG).show();
                 }

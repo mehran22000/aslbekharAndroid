@@ -287,7 +287,7 @@
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="2dp"
         card_view:cardUseCompatPadding="true"
-        android:alpha="1">
+        android:alpha="0">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -476,12 +476,13 @@
                 android:orientation="horizontal">
 
                 <EditText
-                    android:id="@+id/telCode"
-                    android:layout_width="40dp"
+                    android:id="@+id/telValue"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:nextFocusForward="@+id/telValue"
+                    android:layout_marginLeft="10dp"
+                    android:nextFocusForward="@+id/telCode"
                     android:textColor="@color/colorPrimaryDark"
+                    android:maxLines="1"
                     android:inputType="numberDecimal"/>
 
                 <TextView
@@ -495,14 +496,14 @@
                     />
 
                 <EditText
-                    android:id="@+id/telValue"
-                    android:layout_width="100dp"
+                    android:id="@+id/telCode"
+                    android:layout_width="40dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:nextFocusForward="@+id/telCode"
-                    android:textColor="@color/colorPrimaryDark"
                     android:maxLines="1"
+                    android:nextFocusForward="@+id/telValue"
+                    android:textColor="@color/colorPrimaryDark"
                     android:inputType="numberDecimal"/>
+
 
             </LinearLayout>
 

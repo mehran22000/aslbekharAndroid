@@ -65,10 +65,10 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     private ViewPager viewPager;
     MainFragmentPagerAdapter mainFragmentPagerAdapter;
     private int[] tabIcons = {
-            R.drawable.tab_explore,
-            R.drawable.tab_map_icon,
+            R.drawable.tab_mystore_icon,
             R.drawable.tab_sale_icon,
-            R.drawable.tab_mystore_icon
+            R.drawable.tab_map_icon,
+            R.drawable.tab_explore
     };
     private List<String> tabTitles = null;
     private boolean offlineMode = false;
