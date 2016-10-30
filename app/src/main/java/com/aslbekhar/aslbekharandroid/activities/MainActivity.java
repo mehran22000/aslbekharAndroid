@@ -112,9 +112,6 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
 
         if (!getSP(DEVICE_ID).equals(FALSE)) {
             String cityName = getSP(LAST_CITY_ENGLISH_NAME).toLowerCase();
-//            if (cityName.equals(FALSE)) {
-//                cityName = "tehran";
-//            }
             String postJson = "{\"device\":\""
                     + getSP(DEVICE_ID) + "\",\"city\":\""
                     + cityName
@@ -131,10 +128,10 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabTitles = new ArrayList<String>() {{
-            add(getResources().getString(R.string.tabExplore));
-            add(getResources().getString(R.string.tabMap));
-            add(getResources().getString(R.string.tabSale));
             add(getResources().getString(R.string.tabMyStore));
+            add(getResources().getString(R.string.tabSale));
+            add(getResources().getString(R.string.tabMap));
+            add(getResources().getString(R.string.tabExplore));
         }};
         mainFragmentPagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager(), tabTitles);
         viewPager.setOffscreenPageLimit(3);
