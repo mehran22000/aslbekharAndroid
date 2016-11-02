@@ -3,6 +3,7 @@ package com.aslbekhar.aslbekharandroid.adapters;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -144,6 +145,10 @@ public class BrandListAdapter extends RecyclerView.Adapter<BrandListAdapter.Grou
                 }
             }
         });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            holder.cv.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
 
     }
 

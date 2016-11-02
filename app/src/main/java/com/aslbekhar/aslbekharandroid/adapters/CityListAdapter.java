@@ -3,6 +3,7 @@ package com.aslbekhar.aslbekharandroid.adapters;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
@@ -139,6 +140,10 @@ public class CityListAdapter extends RecyclerView.Adapter<CityListAdapter.GroupV
                 }
             }
         });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            holder.cv.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
 
 
     }

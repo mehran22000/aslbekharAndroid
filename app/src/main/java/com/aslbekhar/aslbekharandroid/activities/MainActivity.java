@@ -65,10 +65,10 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     private ViewPager viewPager;
     MainFragmentPagerAdapter mainFragmentPagerAdapter;
     private int[] tabIcons = {
-            R.drawable.tab_mystore_icon,
-            R.drawable.tab_sale_icon,
+            R.drawable.tab_explore,
             R.drawable.tab_map_icon,
-            R.drawable.tab_explore
+            R.drawable.tab_sale_icon,
+            R.drawable.tab_mystore_icon
     };
     private List<String> tabTitles = null;
     private boolean offlineMode = false;
@@ -126,12 +126,19 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
 
     private void setupViewPagerAndTabs() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
+        // making the app RTL (right to left)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            viewPager.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
         tabLayout = (TabLayout) findViewById(R.id.tabs);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            tabLayout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
         tabTitles = new ArrayList<String>() {{
-            add(getResources().getString(R.string.tabMyStore));
-            add(getResources().getString(R.string.tabSale));
-            add(getResources().getString(R.string.tabMap));
             add(getResources().getString(R.string.tabExplore));
+            add(getResources().getString(R.string.tabMap));
+            add(getResources().getString(R.string.tabSale));
+            add(getResources().getString(R.string.tabMyStore));
         }};
         mainFragmentPagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager(), tabTitles);
         viewPager.setOffscreenPageLimit(3);

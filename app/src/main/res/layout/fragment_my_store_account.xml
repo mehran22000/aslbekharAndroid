@@ -931,55 +931,6 @@
             android:weightSum="2">
 
             <RelativeLayout
-                android:id="@+id/profileTabLay"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:foreground="?android:attr/selectableItemBackground">
-
-                <ImageView
-                    android:id="@+id/profileImg0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/profileTxt0"
-                    android:layout_alignParentTop="true"
-                    android:paddingTop="4dp"
-                    android:src="@drawable/icon_profile" />
-
-                <ImageView
-                    android:id="@+id/profileImg1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/profileTxt0"
-                    android:layout_alignParentTop="true"
-                    android:alpha="0"
-                    android:paddingTop="4dp"
-                    android:src="@drawable/icon_profile_1" />
-
-                <TextView
-                    android:id="@+id/profileTxt0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/profile"
-                    android:textColor="@color/tabDisabledColor" />
-
-                <TextView
-                    android:id="@+id/profileTxt1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:alpha="0"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/profile"
-                    android:textColor="@color/tabColor" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/salesTabLay"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -1024,6 +975,55 @@
                     android:gravity="center"
                     android:padding="4dp"
                     android:text="@string/sales"
+                    android:textColor="@color/tabColor" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profileTabLay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/profileImg0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/profileTxt0"
+                    android:layout_alignParentTop="true"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_profile" />
+
+                <ImageView
+                    android:id="@+id/profileImg1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/profileTxt0"
+                    android:layout_alignParentTop="true"
+                    android:alpha="0"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_profile_1" />
+
+                <TextView
+                    android:id="@+id/profileTxt0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/profile"
+                    android:textColor="@color/tabDisabledColor" />
+
+                <TextView
+                    android:id="@+id/profileTxt1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:alpha="0"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/profile"
                     android:textColor="@color/tabColor" />
 
             </RelativeLayout>

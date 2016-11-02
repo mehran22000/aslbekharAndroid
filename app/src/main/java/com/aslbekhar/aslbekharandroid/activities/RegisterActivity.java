@@ -137,11 +137,6 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registeration);
 
-        // making the app RTL (right to left)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        }
-
         emailLay = findViewById(R.id.emailLay);
         cityLay = findViewById(R.id.cityLay);
         brandLay = findViewById(R.id.brandLay);

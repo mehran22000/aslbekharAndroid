@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -124,6 +125,9 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
                 fragment.openStoreFromAdapter(model);
             }
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            holder.cv.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
 
     }
 

@@ -2,6 +2,7 @@ package com.aslbekhar.aslbekharandroid.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -101,6 +102,9 @@ public class BrandVerificationAdapter extends RecyclerView.Adapter<BrandVerifica
                 alertDialog.show();
             }
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            holder.cv.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+        }
 
     }
 
