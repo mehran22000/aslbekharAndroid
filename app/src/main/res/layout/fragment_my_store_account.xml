@@ -142,7 +142,7 @@
         android:id="@+id/myStoreLay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ScrollView
             android:id="@+id/discountLay"
@@ -469,7 +469,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:alpha="0">
+            android:alpha="1">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -595,12 +595,21 @@
                             android:foreground="?android:attr/selectableItemBackground"
                             android:paddingBottom="10dp">
 
+                            <ImageView
+                                android:id="@+id/passwordArrow"
+                                android:layout_width="30dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/passwordTitle"
+                                android:layout_alignBottom="@+id/passwordEdit"
+                                android:layout_alignParentRight="true"
+                                android:src="@drawable/icon_profile_edit_arrow"/>
+
                             <TextView
                                 android:id="@+id/passwordTitle"
                                 style="@style/AccountInfoTextStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_toLeftOf="@id/passwordArrow"
                                 android:padding="6dp"
                                 android:text="رمز:"
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
@@ -610,7 +619,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
-                                android:layout_alignParentRight="true"
+                                android:layout_toLeftOf="@id/passwordArrow"
                                 android:layout_below="@+id/passwordTitle"
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginRight="4dp"
@@ -677,13 +686,22 @@
                             android:paddingRight="10dp"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:paddingBottom="10dp">
+                            <ImageView
+                                android:id="@+id/cityArrow"
+                                android:layout_width="30dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/city"
+                                android:layout_alignBottom="@+id/cityEdit"
+                                android:layout_alignParentRight="true"
+                                android:src="@drawable/icon_profile_edit_arrow"/>
+
 
                             <TextView
                                 android:id="@+id/city"
                                 style="@style/AccountInfoTextStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_toLeftOf="@+id/cityArrow"
                                 android:padding="6dp"
                                 android:text="شهر:"
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
@@ -693,7 +711,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
-                                android:layout_alignParentRight="true"
+                                android:layout_toLeftOf="@+id/cityArrow"
                                 android:layout_below="@+id/city"
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginRight="4dp"
@@ -718,12 +736,21 @@
                             android:layout_below="@id/cityLay"
                             android:paddingBottom="10dp">
 
+                            <ImageView
+                                android:id="@+id/addressArrow"
+                                android:layout_width="30dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/address"
+                                android:layout_alignBottom="@+id/addressEdit"
+                                android:layout_alignParentRight="true"
+                                android:src="@drawable/icon_profile_edit_arrow"/>
+
                             <TextView
                                 android:id="@+id/address"
                                 style="@style/AccountInfoTextStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_toLeftOf="@+id/addressArrow"
                                 android:padding="6dp"
                                 android:text="آدرس:"
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
@@ -732,7 +759,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
-                                android:layout_alignParentRight="true"
+                                android:layout_toLeftOf="@+id/addressArrow"
                                 android:layout_below="@+id/address"
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginRight="4dp"
@@ -758,12 +785,21 @@
                             android:foreground="?android:attr/selectableItemBackground"
                             android:paddingBottom="10dp">
 
+                            <ImageView
+                                android:id="@+id/tellArrow"
+                                android:layout_width="30dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignTop="@+id/tell"
+                                android:layout_alignBottom="@+id/tellEdit"
+                                android:layout_alignParentRight="true"
+                                android:src="@drawable/icon_profile_edit_arrow"/>
+
                             <TextView
                                 android:id="@+id/tell"
                                 style="@style/AccountInfoTextStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
+                                android:layout_toLeftOf="@+id/tellArrow"
                                 android:padding="6dp"
                                 android:text="تلفن:"
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
@@ -773,7 +809,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
-                                android:layout_alignParentRight="true"
+                                android:layout_toLeftOf="@+id/tellArrow"
                                 android:layout_below="@+id/tell"
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginRight="4dp"
