@@ -782,20 +782,12 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         intent.putExtra(CREATE_USER_OR_EDIT, false);
         intent.putExtra(USER_INFO, JSON.toJSONString(model));
         intent.putExtra(POSITION, step);
-        startActivityForResult(intent, 100);
+        startActivityForResult(intent, step);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
-            try {
-                model = JSON.parseObject(data.getExtras().getString(USER_INFO, FALSE), UserModel.class);
-                setSP(USER_INFO, data.getExtras().getString(USER_INFO, FALSE));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            showMyAccountLay(0);
-        } else {
+        if (requestCode == 101 && resultCode == Activity.RESULT_OK) {
             if (resultCode == Activity.RESULT_OK) {
                 ((TextView) view.findViewById(R.id.emailEt)).setText(data.getExtras().getString(EMAIL, FALSE));
                 ((TextView) view.findViewById(R.id.password)).setText(data.getExtras().getString(PASSWORD, FALSE));
@@ -804,6 +796,49 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 login();
             }
+        } else {
+            if (requestCode == 2){
+                NetworkRequests.getRequest(CITY_STORE_URL + model.getBuAreaCode(), new Interfaces.NetworkListeners() {
+                    @Override
+                    public void onResponse(String response, String tag) {
+                        if (response.startsWith("[") && response.endsWith("]")) {
+                            Snippets.setSP(model.getBuAreaCode() + STORE_LIST, response);
+                            NetworkRequests.getRequest(BRAND_LIST_URL, new Interfaces.NetworkListeners() {
+                                @Override
+                                public void onResponse(String response, String tag) {
+                                    if (response.startsWith("[") && response.endsWith("]")) {
+                                        Snippets.setSP(BRAND_LIST, response);
+                                        StaticData.setBrandModelList(null);
+                                    }
+                                }
+
+                                @Override
+                                public void onError(VolleyError error, String tag) {
+                                }
+
+                                @Override
+                                public void onOffline(String tag) {
+                                }
+                            }, BRAND_LIST_DOWNLOAD);
+                        }
+                    }
+
+                    @Override
+                    public void onError(VolleyError error, String tag) {
+                    }
+
+                    @Override
+                    public void onOffline(String tag) {
+                    }
+                }, DOWNLOAD);
+            }
+            try {
+                model = JSON.parseObject(data.getExtras().getString(USER_INFO, FALSE), UserModel.class);
+                setSP(USER_INFO, data.getExtras().getString(USER_INFO, FALSE));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            showMyAccountLay(0);
         }
     }
 
