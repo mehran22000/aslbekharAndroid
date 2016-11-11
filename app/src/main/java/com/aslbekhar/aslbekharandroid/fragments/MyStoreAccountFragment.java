@@ -81,6 +81,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
     View view;
     Interfaces.MainActivityInterface callBack;
     UserModel model;
+    String prevAreaCode = "";
     AlertDialog dialog;
     int width;
     boolean discountLayOrProfileLay = true;
@@ -369,6 +370,9 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
     }
 
     private void saveDiscount() {
+
+        fixMonthsAndDaysNumbers();
+
         InputMethodManager imm =
                 (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -459,6 +463,14 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
             }
         }, ADD_DISCOUNT, JSON.toJSONString(saveDiscountModel));
+    }
+
+    private void fixMonthsAndDaysNumbers() {
+        TextView tv;
+        tv = (TextView) view.findViewById(R.id.saleDay);
+        if (Integer.parseInt(tv.getText().toString()) < 10) {
+            tv.setText("0" + tv.getText());
+        }
     }
 
     private void switchTab(View hideView, View showView, int duration,
@@ -634,6 +646,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 break;
 
             case R.id.cityLay:
+                prevAreaCode = model.getBuAreaCode();
                 openEditUserActivity(2);
                 break;
 
@@ -676,6 +689,47 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             public void onResponse(String response, String tag) {
 
                 if (response.toLowerCase().contains("success")) {
+                    if (!prevAreaCode.equals(model.getBuAreaCode())) {
+                        NetworkRequests.getRequest(CITY_STORE_URL + prevAreaCode, new Interfaces.NetworkListeners() {
+                            @Override
+                            public void onResponse(String response, String tag) {
+                                if (response.startsWith("[") && response.endsWith("]")) {
+                                    Snippets.setSP(prevAreaCode + STORE_LIST, response);
+                                    NetworkRequests.getRequest(BRAND_LIST_URL, new Interfaces.NetworkListeners() {
+                                        @Override
+                                        public void onResponse(String response, String tag) {
+                                            if (response.startsWith("[") && response.endsWith("]")) {
+                                                Snippets.setSP(BRAND_LIST, response);
+                                                StaticData.setBrandModelList(null);
+                                            }
+                                            prevAreaCode = model.getBuAreaCode();
+                                        }
+
+                                        @Override
+                                        public void onError(VolleyError error, String tag) {
+                                            prevAreaCode = model.getBuAreaCode();
+                                        }
+
+                                        @Override
+                                        public void onOffline(String tag) {
+                                            prevAreaCode = model.getBuAreaCode();
+                                        }
+                                    }, BRAND_LIST_DOWNLOAD);
+                                }
+                            }
+
+                            @Override
+                            public void onError(VolleyError error, String tag) {
+                                prevAreaCode = model.getBuAreaCode();
+                            }
+
+                            @Override
+                            public void onOffline(String tag) {
+                                prevAreaCode = model.getBuAreaCode();
+                            }
+                        }, DOWNLOAD);
+                    }
+
                     NetworkRequests.getRequest(CITY_STORE_URL + model.getBuAreaCode(), new Interfaces.NetworkListeners() {
                         @Override
                         public void onResponse(String response, String tag) {
@@ -797,41 +851,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 login();
             }
         } else {
-            if (requestCode == 2){
-                NetworkRequests.getRequest(CITY_STORE_URL + model.getBuAreaCode(), new Interfaces.NetworkListeners() {
-                    @Override
-                    public void onResponse(String response, String tag) {
-                        if (response.startsWith("[") && response.endsWith("]")) {
-                            Snippets.setSP(model.getBuAreaCode() + STORE_LIST, response);
-                            NetworkRequests.getRequest(BRAND_LIST_URL, new Interfaces.NetworkListeners() {
-                                @Override
-                                public void onResponse(String response, String tag) {
-                                    if (response.startsWith("[") && response.endsWith("]")) {
-                                        Snippets.setSP(BRAND_LIST, response);
-                                        StaticData.setBrandModelList(null);
-                                    }
-                                }
 
-                                @Override
-                                public void onError(VolleyError error, String tag) {
-                                }
-
-                                @Override
-                                public void onOffline(String tag) {
-                                }
-                            }, BRAND_LIST_DOWNLOAD);
-                        }
-                    }
-
-                    @Override
-                    public void onError(VolleyError error, String tag) {
-                    }
-
-                    @Override
-                    public void onOffline(String tag) {
-                    }
-                }, DOWNLOAD);
-            }
             try {
                 model = JSON.parseObject(data.getExtras().getString(USER_INFO, FALSE), UserModel.class);
                 setSP(USER_INFO, data.getExtras().getString(USER_INFO, FALSE));
