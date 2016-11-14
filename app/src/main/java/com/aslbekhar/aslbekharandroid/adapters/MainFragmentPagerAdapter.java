@@ -39,7 +39,6 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private void initializeTabs() {
         tabs.add(HostFragment.newInstance(new CitiesFragment()));
-        tabs.add(HostFragment.newInstance(new ListNearByFragment()));
         if (getSP(PLAY_SERVICES_ON_OR_OFF).equals(TRUE)) {
             tabs.add(HostFragment.newInstance(new MapNearByFragment()));
         } else {
@@ -49,6 +48,7 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
             fragment.setArguments(bundle);
             tabs.add(fragment);
         }
+        tabs.add(HostFragment.newInstance(new ListNearByFragment()));
         tabs.add(HostFragment.newInstance(new MyStoreAccountFragment()));
     }
 

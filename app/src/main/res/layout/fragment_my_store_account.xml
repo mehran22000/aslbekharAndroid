@@ -505,8 +505,8 @@
                             android:id="@+id/catNameLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
                             android:layout_alignBottom="@+id/brandLogo"
+                            android:layout_alignParentTop="true"
                             android:layout_toRightOf="@+id/brandLogo"
                             android:foreground="?android:attr/selectableItemBackground"
                             android:paddingBottom="10dp">
@@ -549,10 +549,10 @@
                             android:id="@+id/emailLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingRight="10dp"
                             android:layout_below="@+id/brandLogo"
                             android:foreground="?android:attr/selectableItemBackground"
-                            android:paddingBottom="10dp">
+                            android:paddingBottom="10dp"
+                            android:paddingRight="10dp">
 
                             <TextView
                                 android:id="@+id/emailTitle"
@@ -590,19 +590,19 @@
                             android:id="@+id/passwordLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingRight="10dp"
                             android:layout_below="@+id/emailLay"
                             android:foreground="?android:attr/selectableItemBackground"
-                            android:paddingBottom="10dp">
+                            android:paddingBottom="10dp"
+                            android:paddingRight="10dp">
 
                             <ImageView
                                 android:id="@+id/passwordArrow"
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
-                                android:layout_alignTop="@+id/passwordTitle"
                                 android:layout_alignBottom="@+id/passwordEdit"
                                 android:layout_alignParentRight="true"
-                                android:src="@drawable/icon_profile_edit_arrow"/>
+                                android:layout_alignTop="@+id/passwordTitle"
+                                android:src="@drawable/icon_profile_edit_arrow" />
 
                             <TextView
                                 android:id="@+id/passwordTitle"
@@ -619,10 +619,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
-                                android:layout_toLeftOf="@id/passwordArrow"
                                 android:layout_below="@+id/passwordTitle"
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginRight="4dp"
+                                android:layout_toLeftOf="@id/passwordArrow"
                                 android:gravity="right"
                                 android:maxLines="1"
                                 android:padding="6dp"
@@ -641,9 +641,9 @@
                             android:id="@+id/storeNameLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingRight="10dp"
                             android:layout_below="@+id/passwordLay"
-                            android:paddingBottom="10dp">
+                            android:paddingBottom="10dp"
+                            android:paddingRight="10dp">
 
                             <TextView
                                 android:id="@+id/storeName"
@@ -683,17 +683,18 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/storeNameLay"
-                            android:paddingRight="10dp"
                             android:foreground="?android:attr/selectableItemBackground"
-                            android:paddingBottom="10dp">
+                            android:paddingBottom="10dp"
+                            android:paddingRight="10dp">
+
                             <ImageView
                                 android:id="@+id/cityArrow"
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
-                                android:layout_alignTop="@+id/city"
                                 android:layout_alignBottom="@+id/cityEdit"
                                 android:layout_alignParentRight="true"
-                                android:src="@drawable/icon_profile_edit_arrow"/>
+                                android:layout_alignTop="@+id/city"
+                                android:src="@drawable/icon_profile_edit_arrow" />
 
 
                             <TextView
@@ -711,10 +712,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
-                                android:layout_toLeftOf="@+id/cityArrow"
                                 android:layout_below="@+id/city"
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginRight="4dp"
+                                android:layout_toLeftOf="@+id/cityArrow"
                                 android:gravity="right"
                                 android:maxLines="1"
                                 android:padding="6dp"
@@ -731,19 +732,19 @@
                             android:id="@+id/addressLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingRight="10dp"
-                            android:foreground="?android:attr/selectableItemBackground"
                             android:layout_below="@id/cityLay"
-                            android:paddingBottom="10dp">
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="10dp"
+                            android:paddingRight="10dp">
 
                             <ImageView
                                 android:id="@+id/addressArrow"
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
-                                android:layout_alignTop="@+id/address"
                                 android:layout_alignBottom="@+id/addressEdit"
                                 android:layout_alignParentRight="true"
-                                android:src="@drawable/icon_profile_edit_arrow"/>
+                                android:layout_alignTop="@+id/address"
+                                android:src="@drawable/icon_profile_edit_arrow" />
 
                             <TextView
                                 android:id="@+id/address"
@@ -754,15 +755,16 @@
                                 android:padding="6dp"
                                 android:text="آدرس:"
                                 android:textSize="@dimen/item_title_ts_smaller_2" />
+
                             <TextView
                                 android:id="@+id/addressEdit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
-                                android:layout_toLeftOf="@+id/addressArrow"
                                 android:layout_below="@+id/address"
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginRight="4dp"
+                                android:layout_toLeftOf="@+id/addressArrow"
                                 android:gravity="right"
                                 android:maxLines="1"
                                 android:padding="6dp"
@@ -780,19 +782,19 @@
                             android:id="@+id/tellLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingRight="10dp"
                             android:layout_below="@id/addressLay"
                             android:foreground="?android:attr/selectableItemBackground"
-                            android:paddingBottom="10dp">
+                            android:paddingBottom="10dp"
+                            android:paddingRight="10dp">
 
                             <ImageView
                                 android:id="@+id/tellArrow"
                                 android:layout_width="30dp"
                                 android:layout_height="wrap_content"
-                                android:layout_alignTop="@+id/tell"
                                 android:layout_alignBottom="@+id/tellEdit"
                                 android:layout_alignParentRight="true"
-                                android:src="@drawable/icon_profile_edit_arrow"/>
+                                android:layout_alignTop="@+id/tell"
+                                android:src="@drawable/icon_profile_edit_arrow" />
 
                             <TextView
                                 android:id="@+id/tell"
@@ -809,10 +811,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
-                                android:layout_toLeftOf="@+id/tellArrow"
                                 android:layout_below="@+id/tell"
                                 android:layout_marginLeft="4dp"
                                 android:layout_marginRight="4dp"
+                                android:layout_toLeftOf="@+id/tellArrow"
                                 android:gravity="right"
                                 android:maxLines="1"
                                 android:padding="6dp"
@@ -829,9 +831,9 @@
                             android:id="@+id/distributorLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingRight="10dp"
                             android:layout_below="@id/tellLay"
-                            android:paddingBottom="10dp">
+                            android:paddingBottom="10dp"
+                            android:paddingRight="10dp">
 
                             <TextView
                                 android:id="@+id/distributor"
@@ -869,8 +871,8 @@
                             android:id="@+id/workHourLay"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingRight="10dp"
-                            android:layout_below="@id/distributorLay">
+                            android:layout_below="@id/distributorLay"
+                            android:paddingRight="10dp">
 
                             <TextView
                                 android:id="@+id/workHour"

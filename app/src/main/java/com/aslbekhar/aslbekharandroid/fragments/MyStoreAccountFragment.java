@@ -236,6 +236,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/theme.ttf");
         ((TextInputLayout) view.findViewById(R.id.saleNoteInputLay)).setTypeface(tf);
 
+        view.findViewById(R.id.saleDay).requestFocus();
         ((EditText) view.findViewById(R.id.saleDay)).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -348,6 +349,26 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 if (charSequence.length() == 2 && Integer.parseInt(charSequence.toString()) > 94
                         && Integer.parseInt(charSequence.toString()) < 99) {
 
+                    view.findViewById(R.id.discountPercentageValue).requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+        ((EditText) view.findViewById(R.id.discountPercentageValue)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (charSequence.length() == 2) {
+
+                    view.findViewById(R.id.saleNote).requestFocus();
                     InputMethodManager imm =
                             (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -388,10 +409,54 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 Integer.parseInt(((TextView) view.findViewById(R.id.saleEndMonth)).getText().toString()),
                 Integer.parseInt(((TextView) view.findViewById(R.id.saleEndDay)).getText().toString()));
 
+        StringBuilder iranianStart = new StringBuilder(String.valueOf(startDate.getIranianYear()));
+        if (startDate.getIranianMonth() < 10) {
+            iranianStart.append("/0").append(startDate.getIranianMonth());
+        } else {
+            iranianStart.append("/").append(startDate.getIranianMonth());
+        }
+        if (startDate.getIranianDay() < 10) {
+            iranianStart.append("/0").append(startDate.getIranianMonth());
+        } else {
+            iranianStart.append("/").append(startDate.getIranianMonth());
+        }
+        StringBuilder iranianEnd = new StringBuilder(String.valueOf(endDateDate.getIranianYear()));
+        if (endDateDate.getIranianMonth() < 10) {
+            iranianEnd.append("/0").append(endDateDate.getIranianMonth());
+        } else {
+            iranianEnd.append("/").append(endDateDate.getIranianMonth());
+        }
+        if (endDateDate.getIranianDay() < 10) {
+            iranianEnd.append("/0").append(endDateDate.getIranianMonth());
+        } else {
+            iranianEnd.append("/").append(endDateDate.getIranianMonth());
+        }
+        StringBuilder englishStartDate = new StringBuilder(String.valueOf(startDate.getGregorianYear()));
+        if (startDate.getGregorianMonth() < 10) {
+            englishStartDate.append("/0").append(startDate.getGregorianMonth());
+        } else {
+            englishStartDate.append("/").append(startDate.getGregorianMonth());
+        }
+        if (startDate.getGregorianDay() < 10) {
+            englishStartDate.append("/0").append(startDate.getGregorianDay());
+        } else {
+            englishStartDate.append("/").append(startDate.getGregorianDay());
+        }
+        StringBuilder englishEndDate = new StringBuilder(String.valueOf(endDateDate.getIranianYear()));
+        if (endDateDate.getGregorianMonth() < 10) {
+            englishEndDate.append("/0").append(endDateDate.getGregorianMonth());
+        } else {
+            englishEndDate.append("/").append(endDateDate.getGregorianMonth());
+        }
+        if (endDateDate.getGregorianDay() < 10) {
+            englishEndDate.append("/0").append(endDateDate.getGregorianDay());
+        } else {
+            englishEndDate.append("/").append(endDateDate.getGregorianDay());
+        }
 
         SaveDiscountModel saveDiscountModel = new SaveDiscountModel(model.getBuBrandId(), model.getBuStoreId(),
-                startDate.getGregorianDate(), endDateDate.getGregorianDate(), startDate.getIranianDate(),
-                endDateDate.getIranianDate(),
+                englishStartDate.toString(), englishEndDate.toString(), iranianStart.toString(),
+                iranianEnd.toString(),
                 ((TextView) view.findViewById(R.id.discountPercentageValue)).getText().toString(),
                 ((TextView) view.findViewById(R.id.saleNote)).getText().toString());
 
@@ -468,6 +533,18 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
     private void fixMonthsAndDaysNumbers() {
         TextView tv;
         tv = (TextView) view.findViewById(R.id.saleDay);
+        if (Integer.parseInt(tv.getText().toString()) < 10) {
+            tv.setText("0" + tv.getText());
+        }
+        tv = (TextView) view.findViewById(R.id.saleEndDay);
+        if (Integer.parseInt(tv.getText().toString()) < 10) {
+            tv.setText("0" + tv.getText());
+        }
+        tv = (TextView) view.findViewById(R.id.saleMonth);
+        if (Integer.parseInt(tv.getText().toString()) < 10) {
+            tv.setText("0" + tv.getText());
+        }
+        tv = (TextView) view.findViewById(R.id.saleEndMonth);
         if (Integer.parseInt(tv.getText().toString()) < 10) {
             tv.setText("0" + tv.getText());
         }
