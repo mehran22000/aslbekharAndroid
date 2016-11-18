@@ -422,6 +422,7 @@ public class RegisterActivity extends AppCompatActivity implements GoogleApiClie
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (validateStoreTel().equals(TRUE)) {
+                    registerUserModel.setBuTel(((EditText) findViewById(R.id.telValue)).getText().toString());
                     enableNextBtn(true);
                 } else {
                     enableNextBtn(false);

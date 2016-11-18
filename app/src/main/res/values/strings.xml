@@ -99,5 +99,8 @@
     <string name="discount_saved">حراچ شما با موفقیت ثبت شد</string>
     <string name="prompt_password_min">رمز عبور (حداقل شش کاراکتر)</string>
     <string name="invaid_email">این ایمیل ثبت نشده است</string>
+    <string name="discount_deleted">حراچ شما پاک شد</string>
+    <string name="delete_user">پاک کردن حساب کاربری</string>
+    <string name="user_deleted">حساب کاربری پاک شد</string>
 
 </resources>

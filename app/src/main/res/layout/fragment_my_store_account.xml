@@ -429,13 +429,13 @@
                                 style="@style/Widget.AppCompat.Button.Colored"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="left"
-                                android:paddingLeft="60dp"
-                                android:paddingRight="60dp"
+                                android:layout_alignParentRight="true"
+                                android:paddingLeft="50dp"
+                                android:paddingRight="50dp"
                                 android:text="@string/save"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/item_title_ts_medium"
-                                app:backgroundTint="@color/buttonColorSecondary" />
+                                app:backgroundTint="@color/colorPrimary" />
 
 
                             <com.rey.material.widget.ProgressView
@@ -451,6 +451,36 @@
                                 app:pv_circular="true"
                                 app:pv_progressMode="indeterminate"
                                 app:pv_progressStyle="@style/CircularProgressWhite" />
+
+                            <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/deleteDiscount"
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_toLeftOf="@+id/save"
+                                android:layout_alignParentLeft="true"
+                                android:text="لغو"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/item_title_ts_medium"
+                                app:backgroundTint="@color/buttonColorSecondary" />
+
+
+                            <com.rey.material.widget.ProgressView
+                                android:id="@+id/deleteDiscountProgress"
+                                android:layout_width="40dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignBottom="@+id/deleteDiscount"
+                                android:layout_alignLeft="@+id/deleteDiscount"
+                                android:layout_alignTop="@+id/deleteDiscount"
+                                android:layout_margin="9dp"
+                                android:translationZ="2dp"
+                                app:pv_autostart="false"
+                                app:pv_circular="true"
+                                app:pv_progressMode="indeterminate"
+                                app:pv_progressStyle="@style/CircularProgressWhite" />
+
+
                         </RelativeLayout>
 
 
@@ -461,15 +491,129 @@
 
         </ScrollView>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_above="@+id/tabs"
+            android:background="@drawable/shadow_dark_from_bottom_thin"
+            android:id="@+id/imageView" />
+
+        <LinearLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            android:weightSum="2">
+
+            <RelativeLayout
+                android:id="@+id/salesTabLay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/salesImg0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/salesTxt0"
+                    android:layout_alignParentTop="true"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_sales" />
+
+                <ImageView
+                    android:id="@+id/salesImg1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/salesTxt0"
+                    android:layout_alignParentTop="true"
+                    android:alpha="0"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_sales_1" />
+
+                <TextView
+                    android:id="@+id/salesTxt0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/sales"
+                    android:textColor="@color/tabDisabledColor" />
+
+                <TextView
+                    android:id="@+id/salesTxt1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:alpha="0"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/sales"
+                    android:textColor="@color/tabColor" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/profileTabLay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/profileImg0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/profileTxt0"
+                    android:layout_alignParentTop="true"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_profile" />
+
+                <ImageView
+                    android:id="@+id/profileImg1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/profileTxt0"
+                    android:layout_alignParentTop="true"
+                    android:alpha="0"
+                    android:paddingTop="4dp"
+                    android:src="@drawable/icon_profile_1" />
+
+                <TextView
+                    android:id="@+id/profileTxt0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/profile"
+                    android:textColor="@color/tabDisabledColor" />
+
+                <TextView
+                    android:id="@+id/profileTxt1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:alpha="0"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/profile"
+                    android:textColor="@color/tabColor" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
         <ScrollView
             android:id="@+id/profileLay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/tabs"
+            android:alpha="1"
+            android:layout_above="@+id/imageView"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:alpha="1">
+            android:layout_alignParentStart="true">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -931,11 +1075,40 @@
                             app:pv_progressStyle="@style/CircularProgressWhite" />
 
                         <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/logOut"
+                            android:id="@+id/deleteUser"
                             style="@style/Widget.AppCompat.Button.Colored"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/saveUserEdit"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:text="@string/delete_user"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/item_title_ts_smaller_2"
+                            app:backgroundTint="@color/buttonColorSecondary" />
+
+                        <com.rey.material.widget.ProgressView
+                            android:id="@+id/deleteUserProgress"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@+id/deleteUser"
+                            android:layout_alignLeft="@+id/deleteUser"
+                            android:layout_alignTop="@+id/deleteUser"
+                            android:layout_margin="9dp"
+                            android:translationZ="2dp"
+                            app:pv_autostart="false"
+                            app:pv_circular="true"
+                            app:pv_progressMode="indeterminate"
+                            app:pv_progressStyle="@style/CircularProgressWhite" />
+
+                        <android.support.v7.widget.AppCompatButton xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/logOut"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/deleteUser"
                             android:layout_marginBottom="5dp"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
@@ -953,120 +1126,6 @@
             </RelativeLayout>
 
         </ScrollView>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_above="@+id/tabs"
-            android:background="@drawable/shadow_dark_from_bottom_thin" />
-
-        <LinearLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white"
-            android:weightSum="2">
-
-            <RelativeLayout
-                android:id="@+id/salesTabLay"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:foreground="?android:attr/selectableItemBackground">
-
-                <ImageView
-                    android:id="@+id/salesImg0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/salesTxt0"
-                    android:layout_alignParentTop="true"
-                    android:paddingTop="4dp"
-                    android:src="@drawable/icon_sales" />
-
-                <ImageView
-                    android:id="@+id/salesImg1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/salesTxt0"
-                    android:layout_alignParentTop="true"
-                    android:alpha="0"
-                    android:paddingTop="4dp"
-                    android:src="@drawable/icon_sales_1" />
-
-                <TextView
-                    android:id="@+id/salesTxt0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/sales"
-                    android:textColor="@color/tabDisabledColor" />
-
-                <TextView
-                    android:id="@+id/salesTxt1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:alpha="0"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/sales"
-                    android:textColor="@color/tabColor" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/profileTabLay"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:foreground="?android:attr/selectableItemBackground">
-
-                <ImageView
-                    android:id="@+id/profileImg0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/profileTxt0"
-                    android:layout_alignParentTop="true"
-                    android:paddingTop="4dp"
-                    android:src="@drawable/icon_profile" />
-
-                <ImageView
-                    android:id="@+id/profileImg1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/profileTxt0"
-                    android:layout_alignParentTop="true"
-                    android:alpha="0"
-                    android:paddingTop="4dp"
-                    android:src="@drawable/icon_profile_1" />
-
-                <TextView
-                    android:id="@+id/profileTxt0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/profile"
-                    android:textColor="@color/tabDisabledColor" />
-
-                <TextView
-                    android:id="@+id/profileTxt1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:alpha="0"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/profile"
-                    android:textColor="@color/tabColor" />
-
-            </RelativeLayout>
-
-        </LinearLayout>
 
     </RelativeLayout>
 

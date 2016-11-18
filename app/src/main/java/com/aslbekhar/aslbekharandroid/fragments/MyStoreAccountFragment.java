@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.activities.RegisterActivity;
@@ -51,6 +52,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_LOGO_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CHANGE_PASSWORD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_STORE_URL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CREATE_USER_OR_EDIT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DELETE_DISCOUNT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DELETE_USER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.DOWNLOAD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.EMAIL;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.FALSE;
@@ -182,6 +185,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
 
         view.findViewById(R.id.logOut).setOnClickListener(this);
+        view.findViewById(R.id.deleteUser).setOnClickListener(this);
         view.findViewById(R.id.saveUserEdit).setOnClickListener(this);
         view.findViewById(R.id.passwordLay).setOnClickListener(this);
         view.findViewById(R.id.catNameLay).setOnClickListener(this);
@@ -386,8 +390,50 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 saveDiscount();
             }
         });
+        view.findViewById(R.id.deleteDiscount).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteDiscount();
+            }
+        });
 
         switchTab(view.findViewById(R.id.profileLay), view.findViewById(R.id.discountLay), duration, true);
+    }
+
+    private void deleteDiscount() {
+
+        ((ProgressView) view.findViewById(R.id.deleteDiscountProgress)).start();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("bId", model.getBuBrandId());
+        jsonObject.put("sId", model.getBuStoreId());
+
+        NetworkRequests.postRequest(DELETE_DISCOUNT, new Interfaces.NetworkListeners() {
+            @Override
+            public void onResponse(String response, String tag) {
+
+                if (response.toLowerCase().contains("success")) {
+                    updateCityStores(model.getBuAreaCode(), view.findViewById(R.id.root),
+                            ((ProgressView) view.findViewById(R.id.deleteDiscountProgress)),
+                            getString(R.string.discount_deleted));
+                } else {
+                    Snackbar.make(view.findViewById(R.id.root), getString(R.string.connection_error), Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error, String tag) {
+                ((ProgressView) view.findViewById(R.id.deleteDiscountProgress)).stop();
+                Snackbar.make(view.findViewById(R.id.root), getString(R.string.connection_error), Snackbar.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onOffline(String tag) {
+                ((ProgressView) view.findViewById(R.id.deleteDiscountProgress)).stop();
+                Snackbar.make(view.findViewById(R.id.root), getString(R.string.you_are_offline), Snackbar.LENGTH_LONG).show();
+
+            }
+        }, "", jsonObject.toJSONString());
     }
 
     private void saveDiscount() {
@@ -416,9 +462,9 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             iranianStart.append("/").append(startDate.getIranianMonth());
         }
         if (startDate.getIranianDay() < 10) {
-            iranianStart.append("/0").append(startDate.getIranianMonth());
+            iranianStart.append("/0").append(startDate.getIranianDay());
         } else {
-            iranianStart.append("/").append(startDate.getIranianMonth());
+            iranianStart.append("/").append(startDate.getIranianDay());
         }
         StringBuilder iranianEnd = new StringBuilder(String.valueOf(endDateDate.getIranianYear()));
         if (endDateDate.getIranianMonth() < 10) {
@@ -427,9 +473,9 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             iranianEnd.append("/").append(endDateDate.getIranianMonth());
         }
         if (endDateDate.getIranianDay() < 10) {
-            iranianEnd.append("/0").append(endDateDate.getIranianMonth());
+            iranianEnd.append("/0").append(endDateDate.getIranianDay());
         } else {
-            iranianEnd.append("/").append(endDateDate.getIranianMonth());
+            iranianEnd.append("/").append(endDateDate.getIranianDay());
         }
         StringBuilder englishStartDate = new StringBuilder(String.valueOf(startDate.getGregorianYear()));
         if (startDate.getGregorianMonth() < 10) {
@@ -460,57 +506,16 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 ((TextView) view.findViewById(R.id.discountPercentageValue)).getText().toString(),
                 ((TextView) view.findViewById(R.id.saleNote)).getText().toString());
 
+        ((ProgressView) view.findViewById(R.id.saveProgress)).start();
         NetworkRequests.postRequest(ADD_DISCOUNT, new Interfaces.NetworkListeners() {
             @Override
             public void onResponse(String response, String tag) {
-                ((ProgressView) view.findViewById(R.id.saveProgress)).stop();
                 if (response.toLowerCase().contains("success")) {
-
-                    NetworkRequests.getRequest(CITY_STORE_URL + model.getBuAreaCode(), new Interfaces.NetworkListeners() {
-                        @Override
-                        public void onResponse(String response, String tag) {
-                            if (response.startsWith("[") && response.endsWith("]")) {
-                                Snippets.setSP(model.getBuAreaCode() + STORE_LIST, response);
-                                NetworkRequests.getRequest(BRAND_LIST_URL, new Interfaces.NetworkListeners() {
-                                    @Override
-                                    public void onResponse(String response, String tag) {
-                                        if (response.startsWith("[") && response.endsWith("]")) {
-                                            Snippets.setSP(BRAND_LIST, response);
-                                            StaticData.setBrandModelList(null);
-                                        }
-                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
-                                        Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
-                                    }
-
-                                    @Override
-                                    public void onError(VolleyError error, String tag) {
-                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
-                                        Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
-                                    }
-
-                                    @Override
-                                    public void onOffline(String tag) {
-                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
-                                        Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
-                                    }
-                                }, BRAND_LIST_DOWNLOAD);
-                            }
-                        }
-
-                        @Override
-                        public void onError(VolleyError error, String tag) {
-                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
-                            Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void onOffline(String tag) {
-                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
-                            Snackbar.make(view.findViewById(R.id.root), getString(R.string.discount_saved), Snackbar.LENGTH_LONG).show();
-                        }
-                    }, DOWNLOAD);
+                    updateCityStores(model.getBuAreaCode(), view.findViewById(R.id.root),
+                            ((ProgressView) view.findViewById(R.id.saveProgress)), getString(R.string.discount_saved));
                 } else {
                     Snackbar.make(view.findViewById(R.id.root), getString(R.string.connection_error), Snackbar.LENGTH_LONG).show();
+                    ((ProgressView) view.findViewById(R.id.saveProgress)).stop();
                 }
             }
 
@@ -530,22 +535,82 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         }, ADD_DISCOUNT, JSON.toJSONString(saveDiscountModel));
     }
 
+    public static void updateCityStores(final String cityCode, final View root, final ProgressView progressView, final String messageToShow) {
+        NetworkRequests.getRequest(CITY_STORE_URL + cityCode, new Interfaces.NetworkListeners() {
+            @Override
+            public void onResponse(String response, String tag) {
+                if (response.startsWith("[") && response.endsWith("]")) {
+                    Snippets.setSP(cityCode + STORE_LIST, response);
+                    NetworkRequests.getRequest(BRAND_LIST_URL, new Interfaces.NetworkListeners() {
+                        @Override
+                        public void onResponse(String response, String tag) {
+                            if (response.startsWith("[") && response.endsWith("]")) {
+                                Snippets.setSP(BRAND_LIST, response);
+                                StaticData.setBrandModelList(null);
+                            }
+                            if (progressView != null) {
+                                progressView.stop();
+                                Snackbar.make(root, messageToShow, Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onError(VolleyError error, String tag) {
+                            if (progressView != null) {
+                                progressView.stop();
+                                Snackbar.make(root, messageToShow, Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onOffline(String tag) {
+                            if (progressView != null) {
+                                progressView.stop();
+                                Snackbar.make(root, messageToShow, Snackbar.LENGTH_LONG).show();
+                            }
+                        }
+                    }, BRAND_LIST_DOWNLOAD);
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error, String tag) {
+                if (progressView != null) {
+                    progressView.stop();
+                    Snackbar.make(root, messageToShow, Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onOffline(String tag) {
+                if (progressView != null) {
+                    progressView.stop();
+                    Snackbar.make(root, messageToShow, Snackbar.LENGTH_LONG).show();
+                }
+            }
+        }, DOWNLOAD);
+    }
+
     private void fixMonthsAndDaysNumbers() {
         TextView tv;
         tv = (TextView) view.findViewById(R.id.saleDay);
-        if (Integer.parseInt(tv.getText().toString()) < 10) {
+        if (Integer.parseInt(tv.getText().toString()) < 10
+                && !tv.getText().toString().startsWith("0")) {
             tv.setText("0" + tv.getText());
         }
         tv = (TextView) view.findViewById(R.id.saleEndDay);
-        if (Integer.parseInt(tv.getText().toString()) < 10) {
+        if (Integer.parseInt(tv.getText().toString()) < 10
+                && !tv.getText().toString().startsWith("0")) {
             tv.setText("0" + tv.getText());
         }
         tv = (TextView) view.findViewById(R.id.saleMonth);
-        if (Integer.parseInt(tv.getText().toString()) < 10) {
+        if (Integer.parseInt(tv.getText().toString()) < 10
+                && !tv.getText().toString().startsWith("0")) {
             tv.setText("0" + tv.getText());
         }
         tv = (TextView) view.findViewById(R.id.saleEndMonth);
-        if (Integer.parseInt(tv.getText().toString()) < 10) {
+        if (Integer.parseInt(tv.getText().toString()) < 10
+                && !tv.getText().toString().startsWith("0")) {
             tv.setText("0" + tv.getText());
         }
     }
@@ -710,6 +775,10 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 logOut();
                 break;
 
+            case R.id.deleteUser:
+                deleteUser();
+                break;
+
             case R.id.passwordLay:
                 showChangePasswordDialog();
                 break;
@@ -737,6 +806,37 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         }
     }
 
+    private void deleteUser() {
+        ((ProgressView) view.findViewById(R.id.deleteUserProgress)).start();
+        NetworkRequests.getRequest(DELETE_USER + model.getBuEmail() + "/" + model.getBuAreaCode(), new Interfaces.NetworkListeners() {
+            @Override
+            public void onResponse(String response, String tag) {
+
+                if (response.toLowerCase().contains("success")) {
+                    updateCityStores(model.getBuAreaCode(), view.findViewById(R.id.root),
+                            ((ProgressView) view.findViewById(R.id.deleteUserProgress)),
+                            getString(R.string.user_deleted));
+                    logOut();
+                } else {
+                    Snackbar.make(view.findViewById(R.id.root), R.string.connection_error,
+                            Snackbar.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onError(VolleyError error, String tag) {
+                Snackbar.make(view.findViewById(R.id.root), R.string.connection_error,
+                        Snackbar.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onOffline(String tag) {
+                Snackbar.make(view.findViewById(R.id.root), R.string.you_are_offline,
+                        Snackbar.LENGTH_LONG).show();
+            }
+        }, "");
+    }
+
     private void saveUserChanges() {
         EditText et = (EditText) view.findViewById(R.id.storeNameEdit);
         if (et.getText().length() > 2) {
@@ -754,7 +854,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         }
         et = (EditText) view.findViewById(R.id.distributorEdit);
         if (et.getText().length() > 2) {
-            model.setBuStoreName(et.getText().toString());
+            model.setBuDistributor(et.getText().toString());
         }
         saveEdit();
     }
@@ -767,89 +867,13 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
 
                 if (response.toLowerCase().contains("success")) {
                     if (!prevAreaCode.equals(model.getBuAreaCode())) {
-                        NetworkRequests.getRequest(CITY_STORE_URL + prevAreaCode, new Interfaces.NetworkListeners() {
-                            @Override
-                            public void onResponse(String response, String tag) {
-                                if (response.startsWith("[") && response.endsWith("]")) {
-                                    Snippets.setSP(prevAreaCode + STORE_LIST, response);
-                                    NetworkRequests.getRequest(BRAND_LIST_URL, new Interfaces.NetworkListeners() {
-                                        @Override
-                                        public void onResponse(String response, String tag) {
-                                            if (response.startsWith("[") && response.endsWith("]")) {
-                                                Snippets.setSP(BRAND_LIST, response);
-                                                StaticData.setBrandModelList(null);
-                                            }
-                                            prevAreaCode = model.getBuAreaCode();
-                                        }
-
-                                        @Override
-                                        public void onError(VolleyError error, String tag) {
-                                            prevAreaCode = model.getBuAreaCode();
-                                        }
-
-                                        @Override
-                                        public void onOffline(String tag) {
-                                            prevAreaCode = model.getBuAreaCode();
-                                        }
-                                    }, BRAND_LIST_DOWNLOAD);
-                                }
-                            }
-
-                            @Override
-                            public void onError(VolleyError error, String tag) {
-                                prevAreaCode = model.getBuAreaCode();
-                            }
-
-                            @Override
-                            public void onOffline(String tag) {
-                                prevAreaCode = model.getBuAreaCode();
-                            }
-                        }, DOWNLOAD);
+                        updateCityStores(prevAreaCode, null, null, null);
                     }
 
-                    NetworkRequests.getRequest(CITY_STORE_URL + model.getBuAreaCode(), new Interfaces.NetworkListeners() {
-                        @Override
-                        public void onResponse(String response, String tag) {
-                            if (response.startsWith("[") && response.endsWith("]")) {
-                                Snippets.setSP(model.getBuAreaCode() + STORE_LIST, response);
-                                NetworkRequests.getRequest(BRAND_LIST_URL, new Interfaces.NetworkListeners() {
-                                    @Override
-                                    public void onResponse(String response, String tag) {
-                                        if (response.startsWith("[") && response.endsWith("]")) {
-                                            Snippets.setSP(BRAND_LIST, response);
-                                            StaticData.setBrandModelList(null);
-                                        }
-                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
-                                        Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
-                                    }
+                    updateCityStores(model.getBuAreaCode(), view.findViewById(R.id.root),
+                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)),
+                            getString(R.string.edited_sucssecfully));
 
-                                    @Override
-                                    public void onError(VolleyError error, String tag) {
-                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
-                                        Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
-                                    }
-
-                                    @Override
-                                    public void onOffline(String tag) {
-                                        ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
-                                        Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
-                                    }
-                                }, BRAND_LIST_DOWNLOAD);
-                            }
-                        }
-
-                        @Override
-                        public void onError(VolleyError error, String tag) {
-                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
-                            Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
-                        }
-
-                        @Override
-                        public void onOffline(String tag) {
-                            ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
-                            Snackbar.make(view.findViewById(R.id.root), R.string.edited_sucssecfully, Snackbar.LENGTH_LONG).show();
-                        }
-                    }, DOWNLOAD);
                 } else {
                     ((ProgressView) view.findViewById(R.id.saveUserEditProgress)).stop();
                     Snackbar.make(view.findViewById(R.id.root), R.string.connection_error, Snackbar.LENGTH_LONG).show();

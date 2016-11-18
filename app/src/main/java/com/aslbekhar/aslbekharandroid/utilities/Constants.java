@@ -55,9 +55,17 @@ public class Constants {
     public static String ADD_DISCOUNT =
             WEB_SERVER + "services/v1/dev/stores/adddiscount";
 
+    // WS8
+    public static String DELETE_DISCOUNT =
+            WEB_SERVER + "services/v1/dev/stores/deletediscount";
+
     // WS11
     public static String UPDATE_USER_URL =
             WEB_SERVER + "services/v1/dev/users/business/updateuser";
+
+    // WS12
+    public static String DELETE_USER =
+            WEB_SERVER + "services/v1/dev/users/business/deleteuser/";
 
     // WS13
     public static String RECOVER_PASSWORD =
