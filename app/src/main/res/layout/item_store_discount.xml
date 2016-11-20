@@ -51,6 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/calendarIcon"
             android:layout_alignTop="@id/calendarIcon"
+            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/calendarIcon"
             android:gravity="right|center_vertical"
             android:maxLines="1"
@@ -73,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/distanceIcon"
             android:layout_alignTop="@id/distanceIcon"
-            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/calendarIcon"
             android:gravity="right|center_vertical"
             android:maxLines="1"
@@ -97,6 +98,7 @@
             android:layout_alignBottom="@id/saleNoteIcon"
             android:layout_alignTop="@id/saleNoteIcon"
             android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/calendarIcon"
             android:gravity="right|center_vertical"
             android:maxLines="1"
@@ -106,6 +108,7 @@
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:scaleType="fitXY"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/back_discount" />
@@ -119,6 +122,15 @@
             android:rotation="315"
             android:textColor="@color/white"
             android:textSize="18dp" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:background="@color/gray"/>
 
     </RelativeLayout>
 

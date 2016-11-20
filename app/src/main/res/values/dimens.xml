@@ -20,7 +20,7 @@
 
     // store list
     <dimen name="item_store_h">190dp</dimen>
-    <dimen name="item_store_h_sale">130dp</dimen>
+    <dimen name="item_store_h_sale">150dp</dimen>
     <dimen name="item_store_image_h">80dp</dimen>
     <dimen name="item_store_image_h_sale">60dp</dimen>
     <dimen name="item_store_sale_percentage_ts">60dp</dimen>

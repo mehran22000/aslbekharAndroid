@@ -1,6 +1,7 @@
 package com.aslbekhar.aslbekharandroid.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,14 +23,25 @@ import com.aslbekhar.aslbekharandroid.utilities.Interfaces;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.ADDRESS;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_ID;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.BRAND_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_BANNER_AD;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NAME;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CAT_NUMBER;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.CITY_CODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.DISCOUNT;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LATITUDE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LIST_OR_SINGLE_STORE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LOGO;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.LONGITUDE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.OFFLINE_MODE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.SINGLE_STORE;
 import static com.aslbekhar.aslbekharandroid.utilities.Constants.STORE_DETAILS;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.TELL;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.TITLE;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.VERIFIED;
+import static com.aslbekhar.aslbekharandroid.utilities.Constants.WORK_HOUR;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setFontForActivity;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showSlideUp;
 
@@ -103,14 +115,9 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView workHour = (TextView) view.findViewById(R.id.workHour);
         TextView tell = (TextView) view.findViewById(R.id.tell);
-        TextView tell2 = (TextView) view.findViewById(R.id.tell2);
         TextView address = (TextView) view.findViewById(R.id.address);
-        TextView discountPercentage = (TextView) view.findViewById(R.id.discountPercentage);
-        TextView saleStart = (TextView) view.findViewById(R.id.saleStart);
-        TextView saleEnd = (TextView) view.findViewById(R.id.saleEnd);
-        TextView distance = (TextView) view.findViewById(R.id.distance);
+        TextView saleNote = (TextView) view.findViewById(R.id.saleNote);
         image = (ImageView) view.findViewById(R.id.image);
-        brandLogo = (ImageView) view.findViewById(R.id.brandLogo);
 
         title.setText(model.getsName());
         if (model.getsHour() != null && model.getsHour().length() > 1) {
@@ -121,33 +128,16 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
         } else {
             tell.setVisibility(View.GONE);
         }
-        if (model.getsTel2() != null && model.getsTel2().length() > 1) {
-            tell2.setText("تلفن: " + Constants.persianNumbers(model.getsTel2()));
-        } else {
-            tell2.setVisibility(View.GONE);
-        }
+
         if (model.getsAddress() != null && model.getsAddress().length() > 1) {
-            address.setText("آدرس: " + model.getsAddress());
+            address.setText(model.getsAddress());
         }
-        if (discount > 0) {
-            if (model.getdStartDateFa() != null && model.getdStartDateFa().length() > 1) {
-                saleStart.setText(getString(R.string.sale_start) + " " + Constants.persianNumbers(model.getdStartDateFa()));
-            }
-            if (model.getdEndDateFa() != null && model.getdEndDateFa().length() > 1) {
-                saleEnd.setText(getString(R.string.sale_end) + " " + Constants.persianNumbers(model.getdEndDateFa()));
-            }
-            if (model.getDistance() != null && model.getDistance().length() > 0) {
-                distance.setText(getString(R.string.store_distance) + " " + model.getDistance());
-            } else {
-                distance.setVisibility(View.GONE);
-            }
-            discountPercentage.setText(String.valueOf(discount) + "%");
+        if (model.getdNote() != null) {
+            saleNote.setText(model.getdNote());
         } else {
-            saleStart.setVisibility(View.GONE);
-            saleEnd.setVisibility(View.GONE);
-            distance.setVisibility(View.GONE);
-            discountPercentage.setVisibility(View.GONE);
+            view.findViewById(R.id.saleNoteLay).setVisibility(View.GONE);
         }
+
 
         if (model.getsVerified().equals(Constants.YES)) {
             if (discount > 0) {
@@ -160,21 +150,43 @@ public class StoreFragment extends Fragment implements Interfaces.NetworkListene
         }
 
 
-        Picasso.with(getContext())
-                .load(Uri.parse("file:///android_asset/logos/" + BrandModel.getBrandLogo(model.getbName()) + ".png"))
-                .into(brandLogo, new Callback() {
-                    @Override
-                    public void onSuccess() {
 
-                    }
+        view.findViewById(R.id.mapBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOnMap();
+            }
+        });
+        view.findViewById(R.id.callBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                    @Override
-                    public void onError() {
-                        Picasso.with(getContext())
-                                .load(Constants.BRAND_LOGO_URL + BrandModel.getBrandLogo(model.getbName()) + ".png")
-                                .into(brandLogo);
-                    }
-                });
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:"+ cityCode + model.getsTel1()));
+                getActivity().startActivity(intent);
+            }
+        });
+
+    }
+
+    private void showOnMap() {
+        Bundle bundle = new Bundle();
+        bundle.putString(CITY_CODE, cityCode);
+        bundle.putString(LATITUDE, model.getsLat());
+        bundle.putString(LONGITUDE, model.getsLong());
+        bundle.putString(TITLE, model.getsName());
+        bundle.putString(WORK_HOUR, model.getsHour());
+        bundle.putString(ADDRESS, model.getsAddress());
+        bundle.putString(TELL, model.getsTel1());
+        bundle.putInt(DISCOUNT, model.getdPrecentageInt());
+        bundle.putString(VERIFIED, model.getsVerified());
+        bundle.putString(LOGO, model.getbName());
+        bundle.putInt(LIST_OR_SINGLE_STORE, SINGLE_STORE);
+
+        MapNearByFragment fragment = new MapNearByFragment();
+        fragment.setArguments(bundle);
+
+        callBack.openNewContentFragment(fragment);
     }
 
     private void checkForBannerAdvertise() {

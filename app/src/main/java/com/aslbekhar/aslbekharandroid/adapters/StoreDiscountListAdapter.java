@@ -77,6 +77,11 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
         }
         holder.percentage.setText(model.getdPrecentage() + "%");
         holder.percentage.setTypeface(tf);
+
+        if (model.getdNote() != null){
+            holder.saleNote.setText(model.getdNote());
+            holder.saleNote.setTypeface(tf);
+        }
 //
 //        if (model.getsVerified().equals(Constants.YES)) {
 //            holder.image.setImageResource(R.drawable.discountverified);
@@ -120,6 +125,7 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
         TextView distance;
         TextView saleStart;
         TextView percentage;
+        TextView saleNote;
         ImageView image;
         ImageView brandLogo;
 
@@ -129,6 +135,7 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
             distance = (TextView) itemView.findViewById(R.id.distanceTxt);
             saleStart = (TextView) itemView.findViewById(R.id.saleDateTxt);
             percentage = (TextView) itemView.findViewById(R.id.salePercentage);
+            saleNote = (TextView) itemView.findViewById(R.id.saleNoteTxt);
             image = (ImageView) itemView.findViewById(R.id.image);
             brandLogo = (ImageView) itemView.findViewById(R.id.brandLogo);
         }

@@ -66,8 +66,6 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/bannerAdvertise"
         android:layout_below="@+id/sliderLay"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
         android:visibility="visible" />
 
     <LinearLayout
