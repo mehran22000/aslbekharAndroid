@@ -62,44 +62,28 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
     public void onBindViewHolder(final GroupViewHolder holder, int position) {
         final StoreModel model = modelList.get(position);
         Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/theme.ttf");
-        holder.title.setText(model.getsName());
-        holder.title.setTypeface(tf);
         if (model.getDistance() != null && model.getDistance().length() > 1) {
             holder.distance.setText("فاصله شما تا فروشگاه: " + Constants.persianNumbers(model.getDistance()) + " کیلومتر");
             holder.distance.setTypeface(tf);
         } else {
             holder.distance.setVisibility(View.INVISIBLE);
         }
-        if (model.getdStartDate() != null && model.getdStartDate().length() > 1) {
-            holder.saleStart.setText("شروع حراج: " + Constants.persianNumbers(model.getdStartDateFa()));
+        if (model.getdStartDate() != null && model.getdStartDateFa().length() > 1
+                && model.getdEndDateFa() != null && model.getdEndDateFa().length() > 1) {
+            holder.saleStart.setText(model.getdStartDateFa() + " - " + model.getdEndDateFa());
             holder.saleStart.setTypeface(tf);
         } else {
             holder.saleStart.setVisibility(View.INVISIBLE);
         }
-        holder.percentage.setText("حراج: " + Constants.persianNumbers(model.getdPrecentage()) + "%");
+        holder.percentage.setText(model.getdPrecentage() + "%");
         holder.percentage.setTypeface(tf);
+//
+//        if (model.getsVerified().equals(Constants.YES)) {
+//            holder.image.setImageResource(R.drawable.discountverified);
+//        } else {
+//            holder.image.setImageResource(R.drawable.discount);
+//        }
 
-        if (model.getsVerified().equals(Constants.YES)) {
-            holder.image.setImageResource(R.drawable.discountverified);
-        } else {
-            holder.image.setImageResource(R.drawable.discount);
-        }
-
-        holder.callBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:" + cityCode + model.getsTel1()));
-                context.startActivity(intent);
-            }
-        });
-
-        holder.showOnMapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragment.showOnMap(model);
-            }
-        });
 
 
         Glide.with(fragment)
@@ -132,27 +116,21 @@ public class StoreDiscountListAdapter extends RecyclerView.Adapter<StoreDiscount
     }
 
     public static class GroupViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView title;
+        View cv;
         TextView distance;
         TextView saleStart;
         TextView percentage;
         ImageView image;
         ImageView brandLogo;
-        View callBtn;
-        View showOnMapBtn;
 
         GroupViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView) itemView.findViewById(R.id.itemCV);
-            title = (TextView) itemView.findViewById(R.id.title);
-            distance = (TextView) itemView.findViewById(R.id.distance);
-            saleStart = (TextView) itemView.findViewById(R.id.sale_start);
-            percentage = (TextView) itemView.findViewById(R.id.salePercentageTxt);
+            cv =  itemView.findViewById(R.id.itemCV);
+            distance = (TextView) itemView.findViewById(R.id.distanceTxt);
+            saleStart = (TextView) itemView.findViewById(R.id.saleDateTxt);
+            percentage = (TextView) itemView.findViewById(R.id.salePercentage);
             image = (ImageView) itemView.findViewById(R.id.image);
             brandLogo = (ImageView) itemView.findViewById(R.id.brandLogo);
-            callBtn = itemView.findViewById(R.id.callLay);
-            showOnMapBtn = itemView.findViewById(R.id.showOnMapLay);
         }
     }
 
