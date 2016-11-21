@@ -102,5 +102,11 @@
     <string name="discount_deleted">حراچ شما پاک شد</string>
     <string name="delete_user">پاک کردن حساب کاربری</string>
     <string name="user_deleted">حساب کاربری پاک شد</string>
+    <string name="are_you_sure_to">آیا اطمینان دارید می خواهید</string>
+    <string name="to_delete_user">با پاک کردن حساب کاربری اکانت و فروشگاه شما از سیستم اصل بخر حذف می شود</string>
+    <string name="yes">بله</string>
+    <string name="confirm">تأیید</string>
+    <string name="no">نه</string>
+    <string name="to_delete_discount">با لغو حراج، حراج شما از سیستم اصل بخر حذف می شود</string>
 
 </resources>

@@ -2,6 +2,7 @@ package com.aslbekhar.aslbekharandroid.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -393,7 +394,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         view.findViewById(R.id.deleteDiscount).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteDiscount();
+                showDeleteDiscountConfirmation();
             }
         });
 
@@ -412,6 +413,14 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
             public void onResponse(String response, String tag) {
 
                 if (response.toLowerCase().contains("success")) {
+                    ((TextView) view.findViewById(R.id.saleDay)).setText("");
+                    ((TextView) view.findViewById(R.id.saleMonth)).setText("");
+                    ((TextView) view.findViewById(R.id.saleYear)).setText("");
+                    ((TextView) view.findViewById(R.id.saleEndDay)).setText("");
+                    ((TextView) view.findViewById(R.id.saleEndMonth)).setText("");
+                    ((TextView) view.findViewById(R.id.saleEndYear)).setText("");
+                    ((TextView) view.findViewById(R.id.discountPercentageValue)).setText("");
+                    ((TextView) view.findViewById(R.id.saleNote)).setText("");
                     updateCityStores(model.getBuAreaCode(), view.findViewById(R.id.root),
                             ((ProgressView) view.findViewById(R.id.deleteDiscountProgress)),
                             getString(R.string.discount_deleted));
@@ -776,7 +785,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 break;
 
             case R.id.deleteUser:
-                deleteUser();
+                showDeleteUserConfirmation();
                 break;
 
             case R.id.passwordLay:
@@ -806,9 +815,37 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         }
     }
 
+    private void showDeleteDiscountConfirmation() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle);
+        builder.setMessage(getString(R.string.to_delete_discount));
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteDiscount();
+            }
+        });
+        builder.setNegativeButton(R.string.back, null);
+        builder.show();
+    }
+
+    private void showDeleteUserConfirmation() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle);
+        builder.setMessage(getString(R.string.to_delete_user));
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteUser();
+            }
+        });
+        builder.setNegativeButton(R.string.back, null);
+        builder.show();
+    }
+
     private void deleteUser() {
         ((ProgressView) view.findViewById(R.id.deleteUserProgress)).start();
-        NetworkRequests.getRequest(DELETE_USER + model.getBuEmail() + "/" + model.getBuAreaCode(), new Interfaces.NetworkListeners() {
+        NetworkRequests.getRequest(DELETE_USER + model.getBuEmail() + "/" + model.getBuStoreId(), new Interfaces.NetworkListeners() {
             @Override
             public void onResponse(String response, String tag) {
 
