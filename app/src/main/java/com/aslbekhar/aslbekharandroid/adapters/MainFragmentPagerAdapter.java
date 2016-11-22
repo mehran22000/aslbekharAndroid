@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.aslbekhar.aslbekharandroid.activities.MainActivity;
 import com.aslbekhar.aslbekharandroid.fragments.CitiesFragment;
 import com.aslbekhar.aslbekharandroid.fragments.HostFragment;
 import com.aslbekhar.aslbekharandroid.fragments.ListNearByFragment;
@@ -26,12 +27,14 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
  * This class will be used for
  */
 public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
+    private MainActivity activity;
     private final List<String> tabTitles;
 
     private List<Fragment> tabs = new ArrayList<>();
 
-    public MainFragmentPagerAdapter(FragmentManager fragmentManager, List<String> tabTitles) {
+    public MainFragmentPagerAdapter(MainActivity activity,FragmentManager fragmentManager, List<String> tabTitles) {
         super(fragmentManager);
+        this.activity = activity;
         this.tabTitles = tabTitles;
 
         initializeTabs();
@@ -40,15 +43,20 @@ public class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
     private void initializeTabs() {
         tabs.add(HostFragment.newInstance(new CitiesFragment()));
         if (getSP(PLAY_SERVICES_ON_OR_OFF).equals(TRUE)) {
-            tabs.add(HostFragment.newInstance(new MapNearByFragment()));
+            MapNearByFragment fragment = new MapNearByFragment();
+            tabs.add(HostFragment.newInstance(fragment));
+            activity.storesTab = fragment;
         } else {
             Bundle bundle = new Bundle();
             bundle.putString(NORMAL_OR_DEAL, NORMAL);
             ListNearByFragment fragment = new ListNearByFragment();
             fragment.setArguments(bundle);
+            activity.storesTab = fragment;
             tabs.add(fragment);
         }
-        tabs.add(HostFragment.newInstance(new ListNearByFragment()));
+        ListNearByFragment fragment = new ListNearByFragment();
+        tabs.add(HostFragment.newInstance(fragment));
+        activity.salesTab = fragment;
         tabs.add(HostFragment.newInstance(new MyStoreAccountFragment()));
     }
 

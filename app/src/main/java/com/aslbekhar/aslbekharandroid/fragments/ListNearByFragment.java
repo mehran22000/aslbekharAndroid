@@ -3,6 +3,7 @@ package com.aslbekhar.aslbekharandroid.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.android.volley.VolleyError;
@@ -95,7 +97,8 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.showFade;
  */
 public class ListNearByFragment extends android.support.v4.app.Fragment
         implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener, Interfaces.NetworkListeners {
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener, Interfaces.NetworkListeners, Interfaces.RefreshMapAndListAroundYou {
 
     View view;
     Interfaces.MainActivityInterface callBack;
@@ -232,7 +235,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
 
     private void checkForAdvertisement(final StoreModel model) {
 
-        if (!Snippets.isOnline(getActivity())){
+        if (!Snippets.isOnline(getActivity())) {
             openStoreFragment(model);
             return;
         }
@@ -374,7 +377,8 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
 
     private void getDealsNearBy() {
 
-        if (recyclerView.getVisibility() == View.VISIBLE && listOverLay.getVisibility() != View.VISIBLE) {
+        if (recyclerView.getVisibility() == View.VISIBLE && listOverLay.getVisibility()
+                != View.VISIBLE && lastLocation != null) {
             listOverLay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -479,11 +483,14 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
                         getDealsNearBy();
                     }
 
-                    public void onStatusChanged(String provider, int status, Bundle extras) {}
+                    public void onStatusChanged(String provider, int status, Bundle extras) {
+                    }
 
-                    public void onProviderEnabled(String provider) {}
+                    public void onProviderEnabled(String provider) {
+                    }
 
-                    public void onProviderDisabled(String provider) {}
+                    public void onProviderDisabled(String provider) {
+                    }
                 };
 
                 // Register the listener with the Location Manager to receive location updates
@@ -526,7 +533,7 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
     @Override
     public void onResume() {
         super.onResume();
-        if (getActivity() != null){
+        if (getActivity() != null) {
             callBack = (Interfaces.MainActivityInterface) getActivity();
         }
         if (!isDownloading) {
@@ -598,6 +605,11 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
             progressBar.stop();
             isDownloading = false;
             if (modelList.size() == 0) {
+                if (normalOrDeal) {
+                    ((TextView) nodata.findViewById(R.id.nodataTxt)).setText(R.string.no_stores_around_you);
+                }
+                Typeface tf = Typeface.createFromAsset(getActivity().getAssets(), "fonts/theme.ttf");
+                ((TextView) nodata.findViewById(R.id.nodataTxt)).setTypeface(tf);
                 showFade(nodata, true, 500);
             } else {
                 if (nodata.getVisibility() == View.VISIBLE) {
@@ -623,5 +635,10 @@ public class ListNearByFragment extends android.support.v4.app.Fragment
         isDownloading = false;
         view.findViewById(R.id.offlineLay).setVisibility(View.VISIBLE);
         offlineCallBack.offlineMode(true);
+    }
+
+    @Override
+    public void refreshMapAndListAroundYou(String sId) {
+        getDealsNearBy();
     }
 }

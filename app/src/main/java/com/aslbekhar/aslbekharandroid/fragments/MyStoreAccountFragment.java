@@ -544,7 +544,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
         }, ADD_DISCOUNT, JSON.toJSONString(saveDiscountModel));
     }
 
-    public static void updateCityStores(final String cityCode, final View root, final ProgressView progressView, final String messageToShow) {
+    public void updateCityStores(final String cityCode, final View root, final ProgressView progressView, final String messageToShow) {
         NetworkRequests.getRequest(CITY_STORE_URL + cityCode, new Interfaces.NetworkListeners() {
             @Override
             public void onResponse(String response, String tag) {
@@ -598,6 +598,7 @@ public class MyStoreAccountFragment extends android.support.v4.app.Fragment impl
                 }
             }
         }, DOWNLOAD);
+        ((Interfaces.RefreshMapAndListAroundYou) getActivity()).refreshMapAndListAroundYou(model.getBuStoreName());
     }
 
     private void fixMonthsAndDaysNumbers() {

@@ -26,6 +26,8 @@ import com.android.volley.VolleyError;
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.adapters.MainFragmentPagerAdapter;
 import com.aslbekhar.aslbekharandroid.fragments.HostFragment;
+import com.aslbekhar.aslbekharandroid.fragments.ListNearByFragment;
+import com.aslbekhar.aslbekharandroid.fragments.MapNearByFragment;
 import com.aslbekhar.aslbekharandroid.models.VersionCheckModel;
 import com.aslbekhar.aslbekharandroid.utilities.BackStackFragment;
 import com.aslbekhar.aslbekharandroid.utilities.Constants;
@@ -57,8 +59,12 @@ import static com.aslbekhar.aslbekharandroid.utilities.Snippets.getSP;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.hideKeyboard;
 import static com.aslbekhar.aslbekharandroid.utilities.Snippets.setSP;
 
-public class MainActivity extends AppCompatActivity implements Interfaces.MainActivityInterface,
-        Interfaces.OfflineInterface, Interfaces.NetworkListeners, Interfaces.showProgressBar {
+public class MainActivity extends AppCompatActivity
+        implements Interfaces.MainActivityInterface,
+        Interfaces.OfflineInterface,
+        Interfaces.NetworkListeners,
+        Interfaces.showProgressBar,
+        Interfaces.RefreshMapAndListAroundYou {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
@@ -76,9 +82,12 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
     // for keeping record of previous tabs, for clicking on back
     Stack<Integer> tabStack = new Stack<>();
     int currentTab = 0;
-    private boolean exitOnBackPress;
     Snackbar snackbar;
     Dialog dialog;
+    public Interfaces.RefreshMapAndListAroundYou storesTab;
+    public Interfaces.RefreshMapAndListAroundYou salesTab;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
             add(getResources().getString(R.string.tabSale));
             add(getResources().getString(R.string.tabMyStore));
         }};
-        mainFragmentPagerAdapter = new MainFragmentPagerAdapter(getSupportFragmentManager(), tabTitles);
+        mainFragmentPagerAdapter = new MainFragmentPagerAdapter(this, getSupportFragmentManager(), tabTitles);
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(mainFragmentPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -206,6 +215,28 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
         }
         HostFragment hostFragment = (HostFragment) mainFragmentPagerAdapter.getItem(viewPager.getCurrentItem());
         hostFragment.replaceFragment(targetFragment, true);
+        if (viewPager.getCurrentItem() == 1){
+            if (targetFragment instanceof ListNearByFragment
+                    || targetFragment instanceof MapNearByFragment){
+
+                try {
+                    storesTab = (Interfaces.RefreshMapAndListAroundYou) targetFragment;
+                } catch (Exception ignored) {
+                }
+
+            }
+        }
+        if (viewPager.getCurrentItem() == 2){
+            if (targetFragment instanceof ListNearByFragment
+                    || targetFragment instanceof MapNearByFragment){
+
+                try {
+                    salesTab = (Interfaces.RefreshMapAndListAroundYou) targetFragment;
+                } catch (Exception ignored) {
+                }
+
+            }
+        }
     }
 
     public void openNewContentFragment(Fragment targetFragment, int position) {
@@ -316,6 +347,16 @@ public class MainActivity extends AppCompatActivity implements Interfaces.MainAc
             ((ProgressView) findViewById(R.id.toolbar).findViewById(R.id.toolbarProgressBar)).start();
         } else {
             ((ProgressView) findViewById(R.id.toolbar).findViewById(R.id.toolbarProgressBar)).stop();
+        }
+    }
+
+    @Override
+    public void refreshMapAndListAroundYou(String sId) {
+        if (storesTab != null){
+            storesTab.refreshMapAndListAroundYou(sId);
+        }
+        if (salesTab != null){
+            storesTab.refreshMapAndListAroundYou(sId);
         }
     }
 }

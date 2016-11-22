@@ -120,7 +120,8 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         GoogleMap.OnMapClickListener,
         OnMapReadyCallback,
         LocationListener,
-        Interfaces.NetworkListeners {
+        Interfaces.NetworkListeners,
+        Interfaces.RefreshMapAndListAroundYou {
 
 
     int type = 1;
@@ -833,4 +834,18 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         offlineCallBack.offlineMode(true);
     }
 
+    @Override
+    public void refreshMapAndListAroundYou(String storeTitle) {
+        if (markerList != null) {
+            for (Marker marker : markerList) {
+                if (marker.getTitle().equals(storeTitle)) {
+                    marker.remove();
+                    break;
+                }
+            }
+        }
+        if (lastLocation != null) {
+            getStoresNearBy(lastLocation);
+        }
+    }
 }

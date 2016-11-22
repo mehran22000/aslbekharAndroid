@@ -108,5 +108,6 @@
     <string name="confirm">تأیید</string>
     <string name="no">نه</string>
     <string name="to_delete_discount">با لغو حراج، حراج شما از سیستم اصل بخر حذف می شود</string>
+    <string name="no_stores_around_you">فروشگاهی در نزدیمی شما پیدا نشد.</string>
 
 </resources>

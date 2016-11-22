@@ -83,6 +83,7 @@
             android:src="@drawable/sad" />
 
         <TextView
+            android:id="@+id/nodataTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

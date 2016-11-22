@@ -19,6 +19,10 @@ public class Interfaces {
         public void offlineMode(boolean offline);
     }
 
+    public interface RefreshMapAndListAroundYou {
+        public void refreshMapAndListAroundYou(String sId);
+    }
+
     public interface showProgressBar {
         public void showProgressBar(boolean showOrHide);
     }
