@@ -16,7 +16,7 @@ android {
         }
 
     }
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion "24.0.3"
     dexOptions {
         maxProcessCount 2
@@ -26,7 +26,7 @@ android {
     defaultConfig {
         applicationId "com.ionicframework.aslbekhar192325"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 203
         versionName "2.1.0"
     }
@@ -45,10 +45,10 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.2.0'
-    compile 'com.android.support:support-v4:24.2.0'
-    compile 'com.android.support:design:24.2.0'
-    compile 'com.android.support:cardview-v7:24.2.0'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.android.support:design:25.0.1'
+    compile 'com.android.support:cardview-v7:25.0.1'
 
     // Google Volley for network
     compile 'com.android.volley:volley:1.0.0'
