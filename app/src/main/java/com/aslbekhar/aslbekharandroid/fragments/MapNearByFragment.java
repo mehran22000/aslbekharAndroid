@@ -825,7 +825,7 @@ public class MapNearByFragment extends Fragment implements GoogleApiClient.Conne
         progressbar.showProgressBar(false);
         view.findViewById(R.id.offlineLay).setVisibility(View.GONE);
         offlineCallBack.offlineMode(false);
-        Snackbar.make(view.findViewById(R.id.root), R.string.connection_error, Snackbar.LENGTH_INDEFINITE).show();
+        Snackbar.make(view, R.string.connection_error, Snackbar.LENGTH_INDEFINITE).show();
     }
 
     @Override

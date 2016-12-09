@@ -9,7 +9,10 @@ import android.view.ViewGroup;
 
 import com.aslbekhar.aslbekharandroid.R;
 import com.aslbekhar.aslbekharandroid.activities.MainActivity;
+import com.aslbekhar.aslbekharandroid.utilities.AppController;
 import com.aslbekhar.aslbekharandroid.utilities.BackStackFragment;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by Amin on 15/05/2016.
@@ -40,10 +43,26 @@ public class HostFragment extends BackStackFragment {
             }
         } catch (Exception e) {
             if (getActivity() != null) {
-                Intent intent = new Intent(getActivity(), MainActivity.class);
+                Intent intent = new Intent();
+                intent.setClass(AppController.getInstance(), MainActivity.class);
                 startActivity(intent);
-                getActivity().finish();
             }
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 

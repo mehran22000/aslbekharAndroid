@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import com.aslbekhar.aslbekharandroid.R;
 
+import java.lang.reflect.Field;
+
 /**
  * Created by Amin on 15/05/2016.
  * <p/>
@@ -52,6 +54,23 @@ public class ContentFragment extends Fragment {
         FloatingActionButton floatingActionButton = (FloatingActionButton) view.findViewById(R.id.fab);
 
         return view;
+    }
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        try {
+            Field childFragmentManager = Fragment.class.getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static ContentFragment newInstance(int depth, int fontSize) {
