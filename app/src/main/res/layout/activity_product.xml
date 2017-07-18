@@ -1,0 +1,222 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/productlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.n55.jsonandvally.ProductActivity">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/rootLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:fitsSystemWindows="true">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+
+            <LinearLayout
+                    android:id="@+id/productDetailsLay"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/silver_light_2"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <com.android.volley.toolbox.NetworkImageView
+                            android:id="@+id/headerImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp"
+                            android:layout_marginTop="?attr/actionBarSize"
+                            android:background="@color/white"
+                            android:gravity="center"
+                            android:text="PARALLAXED"
+                            android:src="@drawable/noimage"
+                            android:textSize="50sp"
+                            tools:ignore="HardcodedText" />
+
+                        <ImageView
+                            android:id="@+id/ImageView_usecamera"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:paddingBottom="15dp"
+                            android:paddingTop="15dp"
+                            android:src="@drawable/plus"
+                            android:layout_alignBottom="@+id/headerImage"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true" />
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="2px"
+                            android:layout_alignParentBottom="true"
+                            android:background="@color/gray" />
+
+                    </RelativeLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/email_login_form"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="2px"
+                            android:background="@color/gray_light_2" />
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:foregroundGravity="right"
+                            android:paddingLeft="@dimen/productactivity_padding_right_left"
+                            android:paddingRight="@dimen/productactivity_padding_right_left"
+                            android:paddingTop="@dimen/activity_vertical_margin"
+
+                            >
+
+                            <AutoCompleteTextView
+                                android:id="@+id/persiantitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_name"
+                                android:inputType="textEmailAddress"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:layout_gravity="right"
+                                android:foregroundGravity="right"
+                                android:gravity="right"
+                                android:textSize="@dimen/signup_edittext_ts" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/productactivity_padding_right_left"
+                            android:paddingRight="@dimen/productactivity_padding_right_left"
+                            >
+
+                            <AutoCompleteTextView
+                                android:id="@+id/englishtitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_englishname"
+                                android:inputType="textPersonName"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textSize="@dimen/signup_edittext_ts" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/productactivity_padding_right_left"
+                            android:paddingRight="@dimen/productactivity_padding_right_left"
+                            >
+
+                            <AutoCompleteTextView
+                                android:id="@+id/priceValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/prompt_price"
+                                android:inputType="textPostalAddress"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textColor="@color/green"
+                                android:textSize="@dimen/signup_edittext_ts" />
+
+                        </android.support.design.widget.TextInputLayout>
+
+                        <!--<HorizontalScrollView-->
+                            <!--android:id="@+id/sizeLay"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:foregroundGravity="right"-->
+                            <!--android:visibility="gone"-->
+                            <!--android:layout_margin="2dp"-->
+                            <!--android:layout_below="@+id/colorLay">-->
+
+                            <!--<LinearLayout-->
+                                <!--android:id="@+id/sizeLinLay"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_gravity="right"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:orientation="horizontal" />-->
+
+                        <!--</HorizontalScrollView>-->
+
+                        <!--<ScrollView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content">-->
+                            <android.support.design.widget.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="@dimen/productactivity_padding_right_left"
+                                android:paddingRight="@dimen/productactivity_padding_right_left"
+                                >
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/shortDescription"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="250dp"
+                                    android:hint="@string/prompt_desc"
+                                    android:layout_below="@+id/sizeLay"
+                                    android:gravity="right"
+                                    android:padding="5dp"
+                                    android:textColor="@color/primary_dark"
+                                    android:textSize="@dimen/signup_edittext_ts" />
+
+                            </android.support.design.widget.TextInputLayout>
+
+                        <!--</ScrollView>-->
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </ScrollView>
+
+            <include
+                android:id="@+id/toolbar_product"
+                layout="@layout/toolbar_main" />
+
+            <Button
+                android:id="@+id/saveBtn"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:onClick="onClick"
+                android:text="@string/action_save"
+                android:textColor="@color/white"
+                android:background="@color/green"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</android.support.v4.widget.DrawerLayout>

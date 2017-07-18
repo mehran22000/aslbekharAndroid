@@ -7,49 +7,30 @@
     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-        <item name="android:fitsSystemWindows">true</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-
-    //for splash screen fast background
-
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen_default</item>
-    </style>
-
-    <style name="TextAppearance.App.TextInputLayout" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/dark_gray</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="CircularProgressWhite" parent="Material.Drawable.CircularProgress">
-        <item name="cpd_strokeColor">@color/white</item>
-        <item name="cpd_strokeSize">1dp</item>
-    </style>
-
-    <style name="CircularProgressTheme" parent="Material.Drawable.CircularProgress">
-        <item name="cpd_strokeColor">@color/colorPrimary</item>
-    </style>
-
-    <style name="AccountInfoTextStyle" parent="MyMaterialTheme">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
-    </style>
-
-    <style name="SimpleDialogLight" parent="Material.App.Dialog.Simple.Light">
-        <item name="di_inAnimation">@anim/anim_scale_in</item>
-        <item name="di_outAnimation">@anim/anim_scale_out</item>
-        <item name="di_cancelable">false</item>
-        <item name="di_layoutDirection">rtl</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="colorControlNormal">@color/gray_light</item>
+        <item name="colorControlActivated">@color/primary</item>
+        <item name="colorControlHighlight">@color/gray_light</item>
     </style>
 
 
-    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/textColorPrimaryInverse</item>
-        <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
-        <item name="android:background">@color/white</item>
+    <style name="Base.Widget.Design.TabLayout" parent="android:Widget">
+        <item name="tabMaxWidth">@dimen/tab_max_width</item>
+        <item name="tabIndicatorColor">?attr/colorAccent</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabPaddingStart">12dp</item>
+        <item name="tabPaddingEnd">12dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
+        <item name="tabSelectedTextColor">?android:textColorPrimary</item>
     </style>
+
+    <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 
 </resources>

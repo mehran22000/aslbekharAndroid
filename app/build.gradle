@@ -1,43 +1,20 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        release {
-            keyAlias 'alias_name'
-            keyPassword 'original4all'
-            storeFile file('aslbekhar.keystore')
-            storePassword 'original4all'
-        }
-        debug {
-            keyAlias 'alias_name'
-            keyPassword 'original4all'
-            storeFile file('aslbekhar.keystore')
-            storePassword 'original4all'
-        }
-
-    }
-    compileSdkVersion 25
-    buildToolsVersion "24.0.3"
-    dexOptions {
-        maxProcessCount 2
-        javaMaxHeapSize "3g"
-    }
+    compileSdkVersion 23
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
-        applicationId "com.ionicframework.aslbekhar192325"
-        minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 203
-        versionName "2.1.0"
+        applicationId "com.example.n55.jsonandvally"
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-        }
-        debug {
-            signingConfig signingConfigs.debug
         }
     }
 }
@@ -45,40 +22,21 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.0.1'
-    compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.android.support:design:25.0.1'
-    compile 'com.android.support:cardview-v7:25.0.1'
-
-    // Google Volley for network
+    compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.volley:volley:1.0.0'
-    // Alibaba fastjson Library for json parsing
-    compile 'com.alibaba:fastjson:1.2.11'
-    // Google Gson, alternative json parsing
-    compile 'com.google.code.gson:gson:2.6.2'
-    // Glide for image loading
-    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
 
-    // View Animator
-    compile 'com.github.florent37:viewanimator:1.0.4'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
 
-    // Google Maps
-    compile 'com.google.android.gms:play-services-maps:9.0.0'
-    compile 'com.google.android.gms:play-services-location:9.0.0'
-
-    // Material widgets
-    compile 'com.github.rey5137:material:1.2.4'
-    // Picasso image downloading
-    compile 'com.squareup.picasso:picasso:2.5.2'
-
-    //Round corner images
-    compile 'com.makeramen:roundedimageview:2.2.1'
-
-//     Firebase
-    compile 'com.google.firebase:firebase-core:9.0.2'
-    compile 'com.google.firebase:firebase-messaging:9.0.2'
-    compile 'com.google.firebase:firebase-crash:9.0.2'
-    compile 'com.google.firebase:firebase-analytics:9.0.2'
+    compile 'com.google.code.gson:gson:2.7'
 }
 
-apply plugin: 'com.google.gms.google-services'
+android {
+    lintOptions {
+        checkReleaseBuilds false
+    }
+}
