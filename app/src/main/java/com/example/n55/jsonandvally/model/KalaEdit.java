@@ -1,10 +1,6 @@
 package com.example.n55.jsonandvally.model;
 
-import java.util.ArrayList;
-import java.util.List;
 //import android.support.annotation.Dimension;
-
-import static com.example.n55.jsonandvally.Constants.WEB_SERVER;
 
 /**
  * Created by N55 on 7/14/2017.

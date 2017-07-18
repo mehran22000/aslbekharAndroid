@@ -1,7 +1,9 @@
 package com.example.n55.jsonandvally.model;
 
 import android.content.Context;
+
 import com.example.n55.jsonandvally.MySharedPreferences;
+
 import java.util.ArrayList;
 
 public class Kala {
